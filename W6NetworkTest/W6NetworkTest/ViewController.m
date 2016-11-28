@@ -121,8 +121,8 @@ NSArray *testResult;
     
     
     //TableDelegate를 선언한다.
-//    self.tableView.delegate = self;   //  <UITableViewDelegate>
-    self.tableView.dataSource = self;
+//    self.tableView.delegate = self;   //  <UITableViewDelegate> -> 이건 눌렀을 때 뷰가 어떻게 바뀌는지 등등
+    self.tableView.dataSource = self; // -> 셀에 버튼이 있고 그걸 동작하게하려면 셀클레스를 만들어서 동작하게 해야함
 }
 
 
