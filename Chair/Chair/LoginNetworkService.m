@@ -33,7 +33,7 @@
     _password = password;
     
     //URL String을 토대로 URL 객체를 만든 뒤, 이를 토대로 Request 객체를 생성한다.
-    _aURLString = @"http://172.30.1.43:3000/customer/selectone";
+    _aURLString = @"http://192.168.1.238:3000/customer/selectone";
     _aURL = [NSURL URLWithString:_aURLString];
     _aRequest = [NSMutableURLRequest requestWithURL:_aURL];
     
