@@ -42,6 +42,9 @@ RandomCardSupplyFactory *randomCardSupplyFactory;
 }
 
 
+/**
+ *  viewDidLoad
+ **/
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -61,7 +64,12 @@ RandomCardSupplyFactory *randomCardSupplyFactory;
     // Dispose of any resources that can be recreated.
 }
 
+
 /**
  *  VC가 끝나면, NSNotificationCenter를 제거하는 코드도 적어줘야한다.
  **/
+- (void)viewDidDisappear:(BOOL)animated {
+    
+}
+
 @end

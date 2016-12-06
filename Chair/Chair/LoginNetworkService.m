@@ -33,7 +33,7 @@
     _password = password;
     
     //URL String을 토대로 URL 객체를 만든 뒤, 이를 토대로 Request 객체를 생성한다.
-    _aURLString = @"http://192.168.1.238:3000/customer/selectone";
+    _aURLString = @"http://192.168.0.109:3000/customer/selectone";
     _aURL = [NSURL URLWithString:_aURLString];
     _aRequest = [NSMutableURLRequest requestWithURL:_aURL];
     
@@ -69,6 +69,98 @@
     //결과를 리턴한다.
     return dataDictionary;
     
+}
+
+
+/**
+ *  로그인을 위한 HTTP 요청
+ **/
+- (void)sendLoginAsynchronousRequest:(NSString*)email withPassword:(NSString*)password{
+    
+    
+    //받은 email과 password를 인스턴스 변수와 연결한다.
+    _email = email;
+    _password = password;
+    
+    //URL String을 토대로 URL 객체를 만든 뒤, 이를 토대로 Request 객체를 생성한다.
+    _aURLString = @"http://192.168.0.109:3000/customer/selectone";
+    _aURL = [NSURL URLWithString:_aURLString];
+    _aRequest = [NSMutableURLRequest requestWithURL:_aURL];
+    
+    //Request 객체를 Setting한다.
+    [_aRequest setHTTPMethod:@"POST"];
+    [_aRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [_aRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    //body에 전송할 변수를 넣는다.
+    NSDictionary* bodyObject = @{
+                                 @"email": _email,
+                                 @"password": _password
+                                 };
+    _aRequest.HTTPBody = [NSJSONSerialization dataWithJSONObject:bodyObject options:kNilOptions error:nil];
+    
+    // Create url connection and fire request
+    NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:_aRequest delegate:self];
+    
+    [conn start];
+
+}
+
+
+/**
+ *  [NSURLConnectionDelegate]Response에서 Header부분을 받고 호출되는 메소드
+ */
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    
+    //응답받을 데이터 변수를 초기화한다.
+    _responseData = [[NSMutableData alloc] init];
+}
+
+
+/**
+ *  [NSURLConnectionDelegate]Response에서 데이터를 받는 메소드
+ */
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+
+    //응답받은 데이터를 붙인다(데이터가 크면 여러번 실행될 수 있다)
+    [_responseData appendData:data];
+    
+    //결과를 파싱한다(여러번 실행될 수 있으므로, 밖으로 나가는게 좋겠다)
+    NSDictionary *dataDictionary = [NSJSONSerialization
+                                    JSONObjectWithData:_responseData
+                                    options:NSJSONReadingMutableContainers
+                                    error:nil];
+
+    //결과를 로그로 보여준다.
+    NSLog(@"login result = %@", dataDictionary);
+    
+}
+
+
+/**
+ *  [NSURLConnectionDelegate]
+ */
+- (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse*)cachedResponse {
+    // Return nil to indicate not necessary to store a cached response for this connection
+    return nil;
+}
+
+
+/**
+ *  [NSURLConnectionDelegate]
+ */
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    // The request is complete and data has been received
+    // You can parse the stuff in your instance variable now
+}
+
+
+/**
+ *  [NSURLConnectionDelegate]애러나면 실행되는 코드
+ */
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    // The request has failed for some reason!
+    // Check the error var
 }
 
 

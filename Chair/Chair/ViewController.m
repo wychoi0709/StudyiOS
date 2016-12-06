@@ -28,10 +28,15 @@ LoginNetworkService *loginNetworkService;
  **/
 - (IBAction)loginBtnTouched:(UIButton *)sender {
     
-    NSDictionary *loginResultDict = [loginNetworkService sendLoginRequest:_emailTextField.text withPassword:_passwordTextField.text];
+    //동기로 요청을 보내서 결과를 받아온다.
+//    NSDictionary *loginResultDict = [loginNetworkService sendLoginRequest:_emailTextField.text withPassword:_passwordTextField.text];
     
     //결과를 로그로 보여준다.
-    NSLog(@"login result = %@", loginResultDict);
+//    NSLog(@"login result = %@", loginResultDict);
+    
+    
+    //비동기로 요청을 보낸다.
+    [loginNetworkService sendLoginAsynchronousRequest:_emailTextField.text withPassword:_passwordTextField.text];
     
 }
 
