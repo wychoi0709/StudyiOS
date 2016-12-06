@@ -62,9 +62,12 @@
                                     options:NSJSONReadingMutableContainers
                                     error:nil];
     
-    //결과를 로그로 보여준다.
+    //결과를 로그로 보여준다(JSON에서 한글이 깨지는게 아니라 주소값이 보여지는 것 뿐이다)
     NSLog(@"login response = %ld", (long)aResponse.statusCode);
     NSLog(@"login result = %@", dataDictionary );
+    NSDictionary *loctaion = dataDictionary[@"location"];
+    NSLog(@"login result -> location -> city= %@", loctaion[@"city"] );
+
     
     //결과를 리턴한다.
     return dataDictionary;
@@ -125,15 +128,6 @@
     //응답받은 데이터를 붙인다(데이터가 크면 여러번 실행될 수 있다)
     [_responseData appendData:data];
     
-    //결과를 파싱한다(여러번 실행될 수 있으므로, 밖으로 나가는게 좋겠다)
-    NSDictionary *dataDictionary = [NSJSONSerialization
-                                    JSONObjectWithData:_responseData
-                                    options:NSJSONReadingMutableContainers
-                                    error:nil];
-
-    //결과를 로그로 보여준다.
-    NSLog(@"login result = %@", dataDictionary);
-    
 }
 
 
@@ -147,11 +141,20 @@
 
 
 /**
- *  [NSURLConnectionDelegate]
+ *  [NSURLConnectionDelegate] 모든 통신이 완료된 후 실행되는 메소드
  */
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     // The request is complete and data has been received
     // You can parse the stuff in your instance variable now
+    
+    //결과를 파싱한다.
+    NSDictionary *dataDictionary = [NSJSONSerialization
+                                    JSONObjectWithData:_responseData
+                                    options:NSJSONReadingMutableContainers
+                                    error:nil];
+    
+    //결과를 로그로 보여준다.
+    NSLog(@"sendLoginAsynchronousRequest result = %@", dataDictionary);
 }
 
 
