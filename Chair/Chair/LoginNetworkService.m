@@ -12,7 +12,7 @@
 
 /**
  *  초기화 함수(아직 초기화할게 없음)
- **/
+ */
 - (instancetype)init
 {
     self = [super init];
@@ -24,8 +24,8 @@
 
 
 /**
- *  로그인을 위한 HTTP 요청
- **/
+ *  로그인을 위한 HTTP 요청 (동기): 동기 방식은 쓰지 않음
+ */
 - (NSDictionary*)sendLoginRequest:(NSString*)email withPassword:(NSString*)password
 {
     //받은 email과 password를 인스턴스 변수와 연결한다.
@@ -33,7 +33,7 @@
     _password = password;
     
     //URL String을 토대로 URL 객체를 만든 뒤, 이를 토대로 Request 객체를 생성한다.
-    _aURLString = @"http://192.168.0.109:3000/customer/selectone";
+    _aURLString = @"http://10.73.43.40:3000/customer/selectone";
     _aURL = [NSURL URLWithString:_aURLString];
     _aRequest = [NSMutableURLRequest requestWithURL:_aURL];
     
@@ -76,17 +76,16 @@
 
 
 /**
- *  로그인을 위한 HTTP 요청
- **/
+ *  로그인을 위한 HTTP 요청 (비동기)
+ */
 - (void)sendLoginAsynchronousRequest:(NSString*)email withPassword:(NSString*)password{
-    
     
     //받은 email과 password를 인스턴스 변수와 연결한다.
     _email = email;
     _password = password;
     
     //URL String을 토대로 URL 객체를 만든 뒤, 이를 토대로 Request 객체를 생성한다.
-    _aURLString = @"http://192.168.0.109:3000/customer/selectone";
+    _aURLString = @"http://10.73.43.40:3000/customer/selectone";
     _aURL = [NSURL URLWithString:_aURLString];
     _aRequest = [NSMutableURLRequest requestWithURL:_aURL];
     
@@ -117,6 +116,7 @@
     
     //응답받을 데이터 변수를 초기화한다.
     _responseData = [[NSMutableData alloc] init];
+    
 }
 
 
@@ -153,8 +153,12 @@
                                     options:NSJSONReadingMutableContainers
                                     error:nil];
     
-    //결과를 로그로 보여준다.
-    NSLog(@"sendLoginAsynchronousRequest result = %@", dataDictionary);
+    //결과를 적절한 키로 매핑한다.
+    NSDictionary *resultData = [NSDictionary dictionaryWithObject:dataDictionary forKey:@"loginResult"];
+    
+    //결과를 NSNotificationCenter로 보낸다.
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"loginResult" object:self userInfo:resultData];
+    
 }
 
 
@@ -165,6 +169,5 @@
     // The request has failed for some reason!
     // Check the error var
 }
-
 
 @end

@@ -23,6 +23,7 @@
 @property NSString *email;
 @property NSString *password;
 
+//로그인하는 메소드
 - (NSDictionary*)sendLoginRequest:(NSString*)email withPassword:(NSString*)password;
 - (void)sendLoginAsynchronousRequest:(NSString*)email withPassword:(NSString*)password;
 

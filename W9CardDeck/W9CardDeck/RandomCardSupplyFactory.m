@@ -5,6 +5,7 @@
 //  Created by 최원영 on 2016. 11. 30..
 //  Copyright © 2016년 최원영. All rights reserved.
 //
+//  랜덤한 카드를 뽑아서 노티를 뿌려주는 공장
 
 #import "RandomCardSupplyFactory.h"
 
@@ -13,7 +14,7 @@
 
 /**
  *  랜덤한 카드를 뽑아서 노티를 보냅니다.
- **/
+ */
 - (void)randomize
 {
     //카드에 넣을 숫자와, 심볼을 랜덤으로 하나 생성한다.
@@ -34,7 +35,7 @@
 
 /**
  *  랜덤한 숫자를 뽑아줍니다.
- **/
+ */
 - (int)getRandomNumber
 {
     return (arc4random() % 13) + 1;
@@ -43,7 +44,7 @@
 
 /**
  *  랜덤한 심볼을 뽑아줍니다.
- **/
+ */
 - (NSString*)getRandomSimbol
 {
     NSString *randomSimbol;

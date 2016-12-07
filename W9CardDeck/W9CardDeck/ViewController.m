@@ -5,6 +5,7 @@
 //  Created by 최원영 on 2016. 11. 30..
 //  Copyright © 2016년 최원영. All rights reserved.
 //
+//  메인 ViewController
 
 #import "ViewController.h"
 #import "RandomCardSupplyFactory.h"
@@ -22,7 +23,7 @@ RandomCardSupplyFactory *randomCardSupplyFactory;
 
 /**
  *  카드 선택 버튼을 클릭한 경우
- **/
+ */
 - (IBAction)randomlySelectCardBtnTouchUp:(UIButton *)sender {
     [randomCardSupplyFactory randomize];
 }
@@ -30,7 +31,7 @@ RandomCardSupplyFactory *randomCardSupplyFactory;
 
 /**
  *  observer가 변경된 값을 받아오면, 라벨을 변경시켜주는 메소드
- **/
+ */
 - (void)showRandomCardIntoLabel:(NSNotification *)noti {
     
     //노티에 담겨온 카드를 빼낸다.
@@ -44,7 +45,7 @@ RandomCardSupplyFactory *randomCardSupplyFactory;
 
 /**
  *  viewDidLoad
- **/
+ */
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -66,10 +67,22 @@ RandomCardSupplyFactory *randomCardSupplyFactory;
 
 
 /**
- *  VC가 끝나면, NSNotificationCenter를 제거하는 코드도 적어줘야한다.
- **/
+ *  생명주기 상 얘는 view가 없어질 때 등장한다. 문제는 얘가 실행되고 난 다음 view가 다시 등장했을 때, viewDidLoad가 실행되지 않는다(옵저버 등록에 주의)
+ */
 - (void)viewDidDisappear:(BOOL)animated {
     
+}
+
+
+/**
+ *  VC가 끝나면, NSNotificationCenter를 제거함.
+ */
+- (void)dealloc {
+    //지금 달려있는 VC의 모든 옵저버를 없앰
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    //어떤 옵저버를 없앨 것인지 구체적으로 명시
+    //    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"randomizeCard" object:randomCardSupplyFactory];
 }
 
 @end
