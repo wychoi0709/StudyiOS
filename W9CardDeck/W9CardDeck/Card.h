@@ -10,9 +10,9 @@
 
 @interface Card : NSObject
 
-@property int cardNumber;
+@property NSString* cardNumber;
 @property NSString* cardSimbol;
 
--(id)initWithCardNumber:(int)cardNumber withCardSimbol:(NSString*)cardSimbol;
+-(id)initWithCardNumber:(NSString*)cardNumber withCardSimbol:(NSString*)cardSimbol;
 
 @end

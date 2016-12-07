@@ -12,8 +12,9 @@
 
 @interface ViewController ()
 
-//카드선택의 결과가 보여지는 라벨
+//카드선택의 결과가 보여지는 라벨과 이미지뷰
 @property (weak, nonatomic) IBOutlet UILabel *randomlySelectedLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *randomlySelectedImage;
 
 @end
 
@@ -38,8 +39,12 @@ RandomCardSupplyFactory *randomCardSupplyFactory;
     Card *card = [[noti userInfo] objectForKey:@"card"];
     
     //받아온 카드에서 결과 텍스트를 만든 후, 라벨에 입력한다.
-    NSString *resultString = [[NSString stringWithFormat:@"%d",card.cardNumber] stringByAppendingString:card.cardSimbol];
+    NSString *resultString = [[card.cardSimbol stringByAppendingString:card.cardNumber ] stringByAppendingString:@".png"];
     _randomlySelectedLabel.text = resultString;
+    
+    //결과 텍스트를 토대로 이미지를 보여준다.
+    UIImage *img = [UIImage imageNamed:resultString];
+    [_randomlySelectedImage setImage:img];
 }
 
 

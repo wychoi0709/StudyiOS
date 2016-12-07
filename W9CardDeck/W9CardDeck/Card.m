@@ -14,7 +14,7 @@
 /**
  *  초기화 함수(숫자와 심볼을 만들 때 받는다)
  */
--(instancetype)initWithCardNumber:(int)cardNumber withCardSimbol:(NSString*)cardSimbol
+-(instancetype)initWithCardNumber:(NSString*)cardNumber withCardSimbol:(NSString*)cardSimbol
 {
     self = [super init];
     if (self) {
