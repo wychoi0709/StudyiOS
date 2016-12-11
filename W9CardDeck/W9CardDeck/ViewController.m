@@ -59,6 +59,7 @@ RandomCardSupplyFactory *randomCardSupplyFactory;
     
     //NotificationCenter 생성
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+    
     //VC에 Noti를 등록. Obsesrver로 등록할 대상은 self, 콜백(샐렉터)은 showRandomCardIntoLabel, 관찰한 노티 이름은 randomizeCard, object는 누가 보내는지를 명시(nil은 '누구든 보내면'이라는 의미)
     [notificationCenter addObserver:self selector:@selector(showRandomCardIntoLabel:) name:@"randomizeCard" object:randomCardSupplyFactory];
     

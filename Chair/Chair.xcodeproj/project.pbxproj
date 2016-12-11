@@ -9,12 +9,19 @@
 /* Begin PBXBuildFile section */
 		546318DF1DE545F9005A3F4C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 546318DE1DE545F9005A3F4C /* main.m */; };
 		546318E21DE545F9005A3F4C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 546318E11DE545F9005A3F4C /* AppDelegate.m */; };
-		546318E51DE545F9005A3F4C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 546318E41DE545F9005A3F4C /* ViewController.m */; };
 		546318E81DE545F9005A3F4C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 546318E61DE545F9005A3F4C /* Main.storyboard */; };
 		546318EA1DE545F9005A3F4C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 546318E91DE545F9005A3F4C /* Assets.xcassets */; };
 		546318ED1DE545F9005A3F4C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 546318EB1DE545F9005A3F4C /* LaunchScreen.storyboard */; };
 		546318F71DE546B9005A3F4C /* LoginNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 546318F61DE546B9005A3F4C /* LoginNetworkService.m */; };
 		546318FC1DE54981005A3F4C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 546318FB1DE54981005A3F4C /* Foundation.framework */; };
+		6F0AC1601DFBD69000988A0F /* NotoSansKR-Bold-Hestia.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6F0AC1591DFBD69000988A0F /* NotoSansKR-Bold-Hestia.otf */; };
+		6F0AC1611DFBD69000988A0F /* NotoSansKR-DemiLight-Hestia.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6F0AC15A1DFBD69000988A0F /* NotoSansKR-DemiLight-Hestia.otf */; };
+		6F0AC1621DFBD69000988A0F /* NotoSansKR-Light-Hestia.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6F0AC15B1DFBD69000988A0F /* NotoSansKR-Light-Hestia.otf */; };
+		6F0AC1631DFBD69000988A0F /* NotoSansKR-Medium-Hestia.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6F0AC15C1DFBD69000988A0F /* NotoSansKR-Medium-Hestia.otf */; };
+		6F0AC1641DFBD69000988A0F /* NotoSansKR-Regular-Hestia.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6F0AC15D1DFBD69000988A0F /* NotoSansKR-Regular-Hestia.otf */; };
+		6F0AC1681DFBDC4B00988A0F /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0AC1671DFBDC4B00988A0F /* SplashViewController.m */; };
+		6F0AC16C1DFBE01600988A0F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0AC16B1DFBE01600988A0F /* LoginViewController.m */; };
+		6F0AC16F1DFBE9FF00988A0F /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0AC16E1DFBE9FF00988A0F /* Location.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,8 +29,6 @@
 		546318DE1DE545F9005A3F4C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		546318E01DE545F9005A3F4C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		546318E11DE545F9005A3F4C /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		546318E31DE545F9005A3F4C /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		546318E41DE545F9005A3F4C /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		546318E71DE545F9005A3F4C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		546318E91DE545F9005A3F4C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		546318EC1DE545F9005A3F4C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -31,6 +36,17 @@
 		546318F51DE546B9005A3F4C /* LoginNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginNetworkService.h; sourceTree = "<group>"; };
 		546318F61DE546B9005A3F4C /* LoginNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginNetworkService.m; sourceTree = "<group>"; };
 		546318FB1DE54981005A3F4C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		6F0AC1591DFBD69000988A0F /* NotoSansKR-Bold-Hestia.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Bold-Hestia.otf"; sourceTree = "<group>"; };
+		6F0AC15A1DFBD69000988A0F /* NotoSansKR-DemiLight-Hestia.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-DemiLight-Hestia.otf"; sourceTree = "<group>"; };
+		6F0AC15B1DFBD69000988A0F /* NotoSansKR-Light-Hestia.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Light-Hestia.otf"; sourceTree = "<group>"; };
+		6F0AC15C1DFBD69000988A0F /* NotoSansKR-Medium-Hestia.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Medium-Hestia.otf"; sourceTree = "<group>"; };
+		6F0AC15D1DFBD69000988A0F /* NotoSansKR-Regular-Hestia.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NotoSansKR-Regular-Hestia.otf"; sourceTree = "<group>"; };
+		6F0AC1661DFBDC4B00988A0F /* SplashViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplashViewController.h; sourceTree = "<group>"; };
+		6F0AC1671DFBDC4B00988A0F /* SplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashViewController.m; sourceTree = "<group>"; };
+		6F0AC16A1DFBE01600988A0F /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		6F0AC16B1DFBE01600988A0F /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		6F0AC16D1DFBE9FF00988A0F /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
+		6F0AC16E1DFBE9FF00988A0F /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,10 +81,10 @@
 		546318DC1DE545F9005A3F4C /* Chair */ = {
 			isa = PBXGroup;
 			children = (
+				6F8D34721DF855250045B579 /* VO */,
 				546318E01DE545F9005A3F4C /* AppDelegate.h */,
 				546318E11DE545F9005A3F4C /* AppDelegate.m */,
-				546318E31DE545F9005A3F4C /* ViewController.h */,
-				546318E41DE545F9005A3F4C /* ViewController.m */,
+				6F0AC1691DFBDFED00988A0F /* ViewController */,
 				546318F41DE5467A005A3F4C /* Network */,
 				546318E61DE545F9005A3F4C /* Main.storyboard */,
 				546318E91DE545F9005A3F4C /* Assets.xcassets */,
@@ -82,6 +98,11 @@
 		546318DD1DE545F9005A3F4C /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				6F0AC1591DFBD69000988A0F /* NotoSansKR-Bold-Hestia.otf */,
+				6F0AC15A1DFBD69000988A0F /* NotoSansKR-DemiLight-Hestia.otf */,
+				6F0AC15B1DFBD69000988A0F /* NotoSansKR-Light-Hestia.otf */,
+				6F0AC15C1DFBD69000988A0F /* NotoSansKR-Medium-Hestia.otf */,
+				6F0AC15D1DFBD69000988A0F /* NotoSansKR-Regular-Hestia.otf */,
 				546318DE1DE545F9005A3F4C /* main.m */,
 			);
 			name = "Supporting Files";
@@ -102,6 +123,26 @@
 				546318FB1DE54981005A3F4C /* Foundation.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6F0AC1691DFBDFED00988A0F /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				6F0AC1661DFBDC4B00988A0F /* SplashViewController.h */,
+				6F0AC1671DFBDC4B00988A0F /* SplashViewController.m */,
+				6F0AC16A1DFBE01600988A0F /* LoginViewController.h */,
+				6F0AC16B1DFBE01600988A0F /* LoginViewController.m */,
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
+		6F8D34721DF855250045B579 /* VO */ = {
+			isa = PBXGroup;
+			children = (
+				6F0AC16D1DFBE9FF00988A0F /* Location.h */,
+				6F0AC16E1DFBE9FF00988A0F /* Location.m */,
+			);
+			name = VO;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -163,8 +204,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F0AC1621DFBD69000988A0F /* NotoSansKR-Light-Hestia.otf in Resources */,
 				546318ED1DE545F9005A3F4C /* LaunchScreen.storyboard in Resources */,
 				546318EA1DE545F9005A3F4C /* Assets.xcassets in Resources */,
+				6F0AC1611DFBD69000988A0F /* NotoSansKR-DemiLight-Hestia.otf in Resources */,
+				6F0AC1601DFBD69000988A0F /* NotoSansKR-Bold-Hestia.otf in Resources */,
+				6F0AC1641DFBD69000988A0F /* NotoSansKR-Regular-Hestia.otf in Resources */,
+				6F0AC1631DFBD69000988A0F /* NotoSansKR-Medium-Hestia.otf in Resources */,
 				546318E81DE545F9005A3F4C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -176,9 +222,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F0AC1681DFBDC4B00988A0F /* SplashViewController.m in Sources */,
 				546318F71DE546B9005A3F4C /* LoginNetworkService.m in Sources */,
-				546318E51DE545F9005A3F4C /* ViewController.m in Sources */,
+				6F0AC16C1DFBE01600988A0F /* LoginViewController.m in Sources */,
 				546318E21DE545F9005A3F4C /* AppDelegate.m in Sources */,
+				6F0AC16F1DFBE9FF00988A0F /* Location.m in Sources */,
 				546318DF1DE545F9005A3F4C /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
