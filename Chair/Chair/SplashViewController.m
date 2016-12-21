@@ -29,7 +29,8 @@
     //서버에서 Location 정보를 받아온 뒤, 노티 센터로 노티를 쏜다.
     
     //URL String을 토대로 URL 객체를 만든 뒤, 이를 토대로 Request 객체를 생성한다.
-    _aURLString = @"http://192.168.1.101:3000/location/selectlocations";
+    _aURLString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UrlInfoByYoung"];
+    _aURLString = [_aURLString stringByAppendingString:@"/location/selectlocations"];
     _aURL = [NSURL URLWithString:_aURLString];
     _aRequest = [NSMutableURLRequest requestWithURL:_aURL];
     
@@ -100,7 +101,7 @@
     [standardDefault synchronize];
     
     //딜레이를 1초간 주고, moveloginViewController 메소드를 실행한다.
-    [self performSelector:@selector(moveLoginViewController) withObject:nil afterDelay:1];
+    [self performSelector:@selector(moveLoginViewController) withObject:nil afterDelay:0.3];
     
 }
 
@@ -109,8 +110,8 @@
  *  [NSURLConnectionDelegate]애러나면 실행되는 코드
  */
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    // The request has failed for some reason!
-    // Check the error var
+
+    //네트워크 연결이 안되어 있다고 다이얼로그 띄우고, 확인 누르면 위에 코드 재시도
 }
 
 

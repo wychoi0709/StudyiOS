@@ -26,6 +26,8 @@ LoginNetworkService *loginNetworkService;
  */
 - (IBAction)loginBtnTouched:(UIButton *)sender {
     
+    NSLog(@"로그인 전송 요청 함");
+    
     //비동기로 요청을 보낸다.
     [loginNetworkService sendLoginAsynchronousRequest:_emailTextField.text withPassword:_passwordTextField.text];
     
@@ -58,8 +60,8 @@ LoginNetworkService *loginNetworkService;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didFinishLoginRequest:) name:@"loginResult" object:loginNetworkService];
     
     //각 요소에 폰트를 적용합니다.
-    _emailTextField.font = [UIFont fontWithName:@"NotoSansKR-Bold" size:35];
-    _passwordTextField.font = [UIFont fontWithName:@"NotoSansKR-Medium" size:13];
+//    _emailTextField.font = [UIFont fontWithName:@"NotoSansKR-Bold" size:35];
+//    _passwordTextField.font = [UIFont fontWithName:@"NotoSansKR-Medium" size:13];
 }
 
 

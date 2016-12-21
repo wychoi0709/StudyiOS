@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1EA066A141E366C74B4EDB58 /* libPods-Chair.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F1EC83188A38E86B2952270D /* libPods-Chair.a */; };
 		546318DF1DE545F9005A3F4C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 546318DE1DE545F9005A3F4C /* main.m */; };
 		546318E21DE545F9005A3F4C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 546318E11DE545F9005A3F4C /* AppDelegate.m */; };
 		546318E81DE545F9005A3F4C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 546318E61DE545F9005A3F4C /* Main.storyboard */; };
@@ -22,9 +23,13 @@
 		6F0AC1681DFBDC4B00988A0F /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0AC1671DFBDC4B00988A0F /* SplashViewController.m */; };
 		6F0AC16C1DFBE01600988A0F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0AC16B1DFBE01600988A0F /* LoginViewController.m */; };
 		6F0AC16F1DFBE9FF00988A0F /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0AC16E1DFBE9FF00988A0F /* Location.m */; };
+		6FD890D91E0A2822002F01C4 /* LocationSelectModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FD890D81E0A2822002F01C4 /* LocationSelectModalViewController.m */; };
+		6FD890DC1E0A2A5B002F01C4 /* LocationCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FD890DB1E0A2A5B002F01C4 /* LocationCollectionViewCell.m */; };
+		6FE6EF0B1E0976820017FE95 /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FE6EF0A1E0976820017FE95 /* SignUpViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		389B981473414EC7CE682DB1 /* Pods-Chair.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chair.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Chair/Pods-Chair.debug.xcconfig"; sourceTree = "<group>"; };
 		546318DA1DE545F9005A3F4C /* Chair.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Chair.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		546318DE1DE545F9005A3F4C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		546318E01DE545F9005A3F4C /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -47,6 +52,14 @@
 		6F0AC16B1DFBE01600988A0F /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		6F0AC16D1DFBE9FF00988A0F /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
 		6F0AC16E1DFBE9FF00988A0F /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
+		6FD890D71E0A2822002F01C4 /* LocationSelectModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationSelectModalViewController.h; sourceTree = "<group>"; };
+		6FD890D81E0A2822002F01C4 /* LocationSelectModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationSelectModalViewController.m; sourceTree = "<group>"; };
+		6FD890DA1E0A2A5B002F01C4 /* LocationCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationCollectionViewCell.h; sourceTree = "<group>"; };
+		6FD890DB1E0A2A5B002F01C4 /* LocationCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationCollectionViewCell.m; sourceTree = "<group>"; };
+		6FE6EF091E0976820017FE95 /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
+		6FE6EF0A1E0976820017FE95 /* SignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpViewController.m; sourceTree = "<group>"; };
+		C4FA7C5C53E7EA4CCC56AB6C /* Pods-Chair.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chair.release.xcconfig"; path = "Pods/Target Support Files/Pods-Chair/Pods-Chair.release.xcconfig"; sourceTree = "<group>"; };
+		F1EC83188A38E86B2952270D /* libPods-Chair.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Chair.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +68,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				546318FC1DE54981005A3F4C /* Foundation.framework in Frameworks */,
+				1EA066A141E366C74B4EDB58 /* libPods-Chair.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -67,6 +81,7 @@
 				546318DC1DE545F9005A3F4C /* Chair */,
 				546318DB1DE545F9005A3F4C /* Products */,
 				546318FA1DE54980005A3F4C /* Frameworks */,
+				8BBA568ADB08AE91F1B214A9 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -91,6 +106,7 @@
 				546318EB1DE545F9005A3F4C /* LaunchScreen.storyboard */,
 				546318EE1DE545F9005A3F4C /* Info.plist */,
 				546318DD1DE545F9005A3F4C /* Supporting Files */,
+				6FD890DD1E0A2A64002F01C4 /* Cell */,
 			);
 			path = Chair;
 			sourceTree = "<group>";
@@ -121,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				546318FB1DE54981005A3F4C /* Foundation.framework */,
+				F1EC83188A38E86B2952270D /* libPods-Chair.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -132,6 +149,10 @@
 				6F0AC1671DFBDC4B00988A0F /* SplashViewController.m */,
 				6F0AC16A1DFBE01600988A0F /* LoginViewController.h */,
 				6F0AC16B1DFBE01600988A0F /* LoginViewController.m */,
+				6FE6EF091E0976820017FE95 /* SignUpViewController.h */,
+				6FE6EF0A1E0976820017FE95 /* SignUpViewController.m */,
+				6FD890D71E0A2822002F01C4 /* LocationSelectModalViewController.h */,
+				6FD890D81E0A2822002F01C4 /* LocationSelectModalViewController.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -145,6 +166,24 @@
 			name = VO;
 			sourceTree = "<group>";
 		};
+		6FD890DD1E0A2A64002F01C4 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				6FD890DA1E0A2A5B002F01C4 /* LocationCollectionViewCell.h */,
+				6FD890DB1E0A2A5B002F01C4 /* LocationCollectionViewCell.m */,
+			);
+			name = Cell;
+			sourceTree = "<group>";
+		};
+		8BBA568ADB08AE91F1B214A9 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				389B981473414EC7CE682DB1 /* Pods-Chair.debug.xcconfig */,
+				C4FA7C5C53E7EA4CCC56AB6C /* Pods-Chair.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -152,9 +191,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 546318F11DE545F9005A3F4C /* Build configuration list for PBXNativeTarget "Chair" */;
 			buildPhases = (
+				E1EC6FAB6E0157793FEF3E76 /* [CP] Check Pods Manifest.lock */,
 				546318D61DE545F9005A3F4C /* Sources */,
 				546318D71DE545F9005A3F4C /* Frameworks */,
 				546318D81DE545F9005A3F4C /* Resources */,
+				EA5B9285A89470CAA76339E1 /* [CP] Embed Pods Frameworks */,
+				DFB1DF20B5BBEAB9677A6BCD /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -217,6 +259,54 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		DFB1DF20B5BBEAB9677A6BCD /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Chair/Pods-Chair-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E1EC6FAB6E0157793FEF3E76 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		EA5B9285A89470CAA76339E1 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Chair/Pods-Chair-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		546318D61DE545F9005A3F4C /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -225,9 +315,12 @@
 				6F0AC1681DFBDC4B00988A0F /* SplashViewController.m in Sources */,
 				546318F71DE546B9005A3F4C /* LoginNetworkService.m in Sources */,
 				6F0AC16C1DFBE01600988A0F /* LoginViewController.m in Sources */,
+				6FD890D91E0A2822002F01C4 /* LocationSelectModalViewController.m in Sources */,
 				546318E21DE545F9005A3F4C /* AppDelegate.m in Sources */,
 				6F0AC16F1DFBE9FF00988A0F /* Location.m in Sources */,
+				6FE6EF0B1E0976820017FE95 /* SignUpViewController.m in Sources */,
 				546318DF1DE545F9005A3F4C /* main.m in Sources */,
+				6FD890DC1E0A2A5B002F01C4 /* LocationCollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -347,6 +440,7 @@
 		};
 		546318F21DE545F9005A3F4C /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 389B981473414EC7CE682DB1 /* Pods-Chair.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = ZNRXYK6RS7;
@@ -360,6 +454,7 @@
 		};
 		546318F31DE545F9005A3F4C /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C4FA7C5C53E7EA4CCC56AB6C /* Pods-Chair.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = ZNRXYK6RS7;
