@@ -22,7 +22,8 @@
 		6F0AC1641DFBD69000988A0F /* NotoSansKR-Regular-Hestia.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6F0AC15D1DFBD69000988A0F /* NotoSansKR-Regular-Hestia.otf */; };
 		6F0AC1681DFBDC4B00988A0F /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0AC1671DFBDC4B00988A0F /* SplashViewController.m */; };
 		6F0AC16C1DFBE01600988A0F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0AC16B1DFBE01600988A0F /* LoginViewController.m */; };
-		6F0AC16F1DFBE9FF00988A0F /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0AC16E1DFBE9FF00988A0F /* Location.m */; };
+		6F240CDE1E164062002C42EE /* ColorValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F240CDD1E164062002C42EE /* ColorValue.m */; };
+		6FCABAD31E18072F0091ED9F /* LocationCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FCABAD21E18072F0091ED9F /* LocationCollectionReusableView.m */; };
 		6FD890D91E0A2822002F01C4 /* LocationSelectModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FD890D81E0A2822002F01C4 /* LocationSelectModalViewController.m */; };
 		6FD890DC1E0A2A5B002F01C4 /* LocationCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FD890DB1E0A2A5B002F01C4 /* LocationCollectionViewCell.m */; };
 		6FE6EF0B1E0976820017FE95 /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FE6EF0A1E0976820017FE95 /* SignUpViewController.m */; };
@@ -50,8 +51,10 @@
 		6F0AC1671DFBDC4B00988A0F /* SplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashViewController.m; sourceTree = "<group>"; };
 		6F0AC16A1DFBE01600988A0F /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		6F0AC16B1DFBE01600988A0F /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		6F0AC16D1DFBE9FF00988A0F /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
-		6F0AC16E1DFBE9FF00988A0F /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
+		6F240CDC1E164062002C42EE /* ColorValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorValue.h; sourceTree = "<group>"; };
+		6F240CDD1E164062002C42EE /* ColorValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorValue.m; sourceTree = "<group>"; };
+		6FCABAD11E18072F0091ED9F /* LocationCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationCollectionReusableView.h; sourceTree = "<group>"; };
+		6FCABAD21E18072F0091ED9F /* LocationCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationCollectionReusableView.m; sourceTree = "<group>"; };
 		6FD890D71E0A2822002F01C4 /* LocationSelectModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationSelectModalViewController.h; sourceTree = "<group>"; };
 		6FD890D81E0A2822002F01C4 /* LocationSelectModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationSelectModalViewController.m; sourceTree = "<group>"; };
 		6FD890DA1E0A2A5B002F01C4 /* LocationCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationCollectionViewCell.h; sourceTree = "<group>"; };
@@ -101,12 +104,15 @@
 				546318E11DE545F9005A3F4C /* AppDelegate.m */,
 				6F0AC1691DFBDFED00988A0F /* ViewController */,
 				546318F41DE5467A005A3F4C /* Network */,
-				546318E61DE545F9005A3F4C /* Main.storyboard */,
 				546318E91DE545F9005A3F4C /* Assets.xcassets */,
+				546318E61DE545F9005A3F4C /* Main.storyboard */,
 				546318EB1DE545F9005A3F4C /* LaunchScreen.storyboard */,
 				546318EE1DE545F9005A3F4C /* Info.plist */,
 				546318DD1DE545F9005A3F4C /* Supporting Files */,
 				6FD890DD1E0A2A64002F01C4 /* Cell */,
+				6F240CDB1E163F58002C42EE /* ConstantValue */,
+				6FCABAD11E18072F0091ED9F /* LocationCollectionReusableView.h */,
+				6FCABAD21E18072F0091ED9F /* LocationCollectionReusableView.m */,
 			);
 			path = Chair;
 			sourceTree = "<group>";
@@ -157,11 +163,18 @@
 			name = ViewController;
 			sourceTree = "<group>";
 		};
+		6F240CDB1E163F58002C42EE /* ConstantValue */ = {
+			isa = PBXGroup;
+			children = (
+				6F240CDC1E164062002C42EE /* ColorValue.h */,
+				6F240CDD1E164062002C42EE /* ColorValue.m */,
+			);
+			name = ConstantValue;
+			sourceTree = "<group>";
+		};
 		6F8D34721DF855250045B579 /* VO */ = {
 			isa = PBXGroup;
 			children = (
-				6F0AC16D1DFBE9FF00988A0F /* Location.h */,
-				6F0AC16E1DFBE9FF00988A0F /* Location.m */,
 			);
 			name = VO;
 			sourceTree = "<group>";
@@ -218,7 +231,7 @@
 				TargetAttributes = {
 					546318D91DE545F9005A3F4C = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = ZNRXYK6RS7;
+						DevelopmentTeam = CBHNBA65SH;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -317,10 +330,11 @@
 				6F0AC16C1DFBE01600988A0F /* LoginViewController.m in Sources */,
 				6FD890D91E0A2822002F01C4 /* LocationSelectModalViewController.m in Sources */,
 				546318E21DE545F9005A3F4C /* AppDelegate.m in Sources */,
-				6F0AC16F1DFBE9FF00988A0F /* Location.m in Sources */,
+				6FCABAD31E18072F0091ED9F /* LocationCollectionReusableView.m in Sources */,
 				6FE6EF0B1E0976820017FE95 /* SignUpViewController.m in Sources */,
 				546318DF1DE545F9005A3F4C /* main.m in Sources */,
 				6FD890DC1E0A2A5B002F01C4 /* LocationCollectionViewCell.m in Sources */,
+				6F240CDE1E164062002C42EE /* ColorValue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -443,7 +457,7 @@
 			baseConfigurationReference = 389B981473414EC7CE682DB1 /* Pods-Chair.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = ZNRXYK6RS7;
+				DEVELOPMENT_TEAM = CBHNBA65SH;
 				INFOPLIST_FILE = Chair/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -457,7 +471,7 @@
 			baseConfigurationReference = C4FA7C5C53E7EA4CCC56AB6C /* Pods-Chair.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = ZNRXYK6RS7;
+				DEVELOPMENT_TEAM = CBHNBA65SH;
 				INFOPLIST_FILE = Chair/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

@@ -8,6 +8,7 @@
 
 #import "SplashViewController.h"
 #import "LoginViewController.h"
+#import "Location.h"
 
 @interface SplashViewController ()
 
@@ -26,6 +27,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    
     //서버에서 Location 정보를 받아온 뒤, 노티 센터로 노티를 쏜다.
     
     //URL String을 토대로 URL 객체를 만든 뒤, 이를 토대로 Request 객체를 생성한다.
@@ -40,7 +43,9 @@
     //커넥션을 만든 뒤, 실행시킨다.
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:_aRequest delegate:self];
     [conn start];
-
+    
+    [self performSelector:@selector(moveLoginViewController) withObject:nil afterDelay:0.3];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -68,6 +73,7 @@
     
     //응답받을 데이터 변수를 초기화한다.
     _responseData = [[NSMutableData alloc] init];
+
     
 }
 
@@ -94,6 +100,7 @@
                                     options:NSJSONReadingMutableContainers
                                     error:nil];
     NSLog(@"Location result = %@", dataDictionary);
+    
 
     //결과를 NSUserDefaults에 저장하거나 업데이트한다(추후에는 버전만 확인하고 업데이트는 선별적으로)
     NSUserDefaults *standardDefault = [NSUserDefaults standardUserDefaults];
@@ -112,6 +119,10 @@
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
 
     //네트워크 연결이 안되어 있다고 다이얼로그 띄우고, 확인 누르면 위에 코드 재시도
+    //딜레이를 1초간 주고, moveloginViewController 메소드를 실행한다.
+    [self performSelector:@selector(moveLoginViewController) withObject:nil afterDelay:0.3];
+    
+    
 }
 
 

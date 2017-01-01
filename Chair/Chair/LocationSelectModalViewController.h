@@ -11,4 +11,6 @@
 //화면에 뿌리는건 ViewDataSource, 인터렉션(애니메이션 등)은 ViewDelegate
 @interface LocationSelectModalViewController : UIViewController<UICollectionViewDelegate, UICollectionViewDataSource>
 
+
+
 @end
