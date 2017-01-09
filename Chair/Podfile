@@ -9,5 +9,6 @@ target 'Chair' do
 
   pod 'Realm', '~> 2.1'
   pod 'SDWebImage', '~>3.8'
+  pod 'LGSideMenuController'
 
 end

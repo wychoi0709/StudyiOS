@@ -29,11 +29,10 @@
     [super viewDidLoad];
     
     
-    //서버에서 Location 정보를 받아온 뒤, 노티 센터로 노티를 쏜다.
-    
     //URL String을 토대로 URL 객체를 만든 뒤, 이를 토대로 Request 객체를 생성한다.
     _aURLString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UrlInfoByYoung"];
     _aURLString = [_aURLString stringByAppendingString:@"/location/selectlocations"];
+    NSLog(@"URL String 값: %@", _aURLString);
     _aURL = [NSURL URLWithString:_aURLString];
     _aRequest = [NSMutableURLRequest requestWithURL:_aURL];
     
@@ -44,7 +43,8 @@
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:_aRequest delegate:self];
     [conn start];
     
-    [self performSelector:@selector(moveLoginViewController) withObject:nil afterDelay:0.3];
+    //임시코드
+//    [self performSelector:@selector(moveLoginViewController) withObject:nil afterDelay:0.3];
     
 }
 

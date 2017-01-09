@@ -156,6 +156,10 @@
                                     options:NSJSONReadingMutableContainers
                                     error:nil];
     
+    //받은 값이 없으면 그냥 리턴한다(원래는 애러 코드에 맞는 다이얼로그를 보여줄 것)
+    if(dataDictionary == nil) return;
+    
+    
     //결과를 적절한 키로 매핑한다.
     NSDictionary *resultData = [NSDictionary dictionaryWithObject:dataDictionary forKey:@"loginResult"];
     

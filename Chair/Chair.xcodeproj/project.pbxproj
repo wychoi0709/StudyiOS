@@ -22,11 +22,19 @@
 		6F0AC1641DFBD69000988A0F /* NotoSansKR-Regular-Hestia.otf in Resources */ = {isa = PBXBuildFile; fileRef = 6F0AC15D1DFBD69000988A0F /* NotoSansKR-Regular-Hestia.otf */; };
 		6F0AC1681DFBDC4B00988A0F /* SplashViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0AC1671DFBDC4B00988A0F /* SplashViewController.m */; };
 		6F0AC16C1DFBE01600988A0F /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0AC16B1DFBE01600988A0F /* LoginViewController.m */; };
+		6F0C72C41E1D45B400995983 /* RankingBetterDesignerCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0C72C31E1D45B400995983 /* RankingBetterDesignerCollectionViewCell.m */; };
+		6F0C72C71E1D45C500995983 /* RankingNormalDesignerCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F0C72C61E1D45C500995983 /* RankingNormalDesignerCollectionViewCell.m */; };
 		6F240CDE1E164062002C42EE /* ColorValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F240CDD1E164062002C42EE /* ColorValue.m */; };
+		6F26D6991E18C0E900F0C03E /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F26D6981E18C0E900F0C03E /* Location.m */; };
+		6F26D69C1E18CDE500F0C03E /* SignUpNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F26D69B1E18CDE500F0C03E /* SignUpNetworkService.m */; };
+		6F26D6A31E19226E00F0C03E /* DesignerRankingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F26D6A21E19226E00F0C03E /* DesignerRankingViewController.m */; };
+		6F26D6A61E1922B400F0C03E /* SideMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F26D6A51E1922B400F0C03E /* SideMenuViewController.m */; };
+		6F4F3A8A1E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F4F3A891E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m */; };
 		6FCABAD31E18072F0091ED9F /* LocationCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FCABAD21E18072F0091ED9F /* LocationCollectionReusableView.m */; };
 		6FD890D91E0A2822002F01C4 /* LocationSelectModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FD890D81E0A2822002F01C4 /* LocationSelectModalViewController.m */; };
 		6FD890DC1E0A2A5B002F01C4 /* LocationCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FD890DB1E0A2A5B002F01C4 /* LocationCollectionViewCell.m */; };
 		6FE6EF0B1E0976820017FE95 /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FE6EF0A1E0976820017FE95 /* SignUpViewController.m */; };
+		6FEB0BB71E1E7D6600C9EBAB /* DesignerRankingNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FEB0BB61E1E7D6600C9EBAB /* DesignerRankingNetworkService.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,8 +59,22 @@
 		6F0AC1671DFBDC4B00988A0F /* SplashViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashViewController.m; sourceTree = "<group>"; };
 		6F0AC16A1DFBE01600988A0F /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		6F0AC16B1DFBE01600988A0F /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
+		6F0C72C21E1D45B400995983 /* RankingBetterDesignerCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingBetterDesignerCollectionViewCell.h; sourceTree = "<group>"; };
+		6F0C72C31E1D45B400995983 /* RankingBetterDesignerCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingBetterDesignerCollectionViewCell.m; sourceTree = "<group>"; };
+		6F0C72C51E1D45C500995983 /* RankingNormalDesignerCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingNormalDesignerCollectionViewCell.h; sourceTree = "<group>"; };
+		6F0C72C61E1D45C500995983 /* RankingNormalDesignerCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingNormalDesignerCollectionViewCell.m; sourceTree = "<group>"; };
 		6F240CDC1E164062002C42EE /* ColorValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorValue.h; sourceTree = "<group>"; };
 		6F240CDD1E164062002C42EE /* ColorValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorValue.m; sourceTree = "<group>"; };
+		6F26D6971E18C0E900F0C03E /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
+		6F26D6981E18C0E900F0C03E /* Location.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Location.m; sourceTree = "<group>"; };
+		6F26D69A1E18CDE500F0C03E /* SignUpNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpNetworkService.h; sourceTree = "<group>"; };
+		6F26D69B1E18CDE500F0C03E /* SignUpNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpNetworkService.m; sourceTree = "<group>"; };
+		6F26D6A11E19226E00F0C03E /* DesignerRankingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesignerRankingViewController.h; sourceTree = "<group>"; };
+		6F26D6A21E19226E00F0C03E /* DesignerRankingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesignerRankingViewController.m; sourceTree = "<group>"; };
+		6F26D6A41E1922B400F0C03E /* SideMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SideMenuViewController.h; sourceTree = "<group>"; };
+		6F26D6A51E1922B400F0C03E /* SideMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SideMenuViewController.m; sourceTree = "<group>"; };
+		6F4F3A881E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingSectionHeaderCollectionReusableView.h; sourceTree = "<group>"; };
+		6F4F3A891E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingSectionHeaderCollectionReusableView.m; sourceTree = "<group>"; };
 		6FCABAD11E18072F0091ED9F /* LocationCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationCollectionReusableView.h; sourceTree = "<group>"; };
 		6FCABAD21E18072F0091ED9F /* LocationCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationCollectionReusableView.m; sourceTree = "<group>"; };
 		6FD890D71E0A2822002F01C4 /* LocationSelectModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationSelectModalViewController.h; sourceTree = "<group>"; };
@@ -61,6 +83,8 @@
 		6FD890DB1E0A2A5B002F01C4 /* LocationCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationCollectionViewCell.m; sourceTree = "<group>"; };
 		6FE6EF091E0976820017FE95 /* SignUpViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignUpViewController.h; sourceTree = "<group>"; };
 		6FE6EF0A1E0976820017FE95 /* SignUpViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignUpViewController.m; sourceTree = "<group>"; };
+		6FEB0BB51E1E7D6600C9EBAB /* DesignerRankingNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesignerRankingNetworkService.h; sourceTree = "<group>"; };
+		6FEB0BB61E1E7D6600C9EBAB /* DesignerRankingNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesignerRankingNetworkService.m; sourceTree = "<group>"; };
 		C4FA7C5C53E7EA4CCC56AB6C /* Pods-Chair.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Chair.release.xcconfig"; path = "Pods/Target Support Files/Pods-Chair/Pods-Chair.release.xcconfig"; sourceTree = "<group>"; };
 		F1EC83188A38E86B2952270D /* libPods-Chair.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Chair.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -111,8 +135,7 @@
 				546318DD1DE545F9005A3F4C /* Supporting Files */,
 				6FD890DD1E0A2A64002F01C4 /* Cell */,
 				6F240CDB1E163F58002C42EE /* ConstantValue */,
-				6FCABAD11E18072F0091ED9F /* LocationCollectionReusableView.h */,
-				6FCABAD21E18072F0091ED9F /* LocationCollectionReusableView.m */,
+				6F4F3A871E20C741005BF0B8 /* Section */,
 			);
 			path = Chair;
 			sourceTree = "<group>";
@@ -135,6 +158,10 @@
 			children = (
 				546318F51DE546B9005A3F4C /* LoginNetworkService.h */,
 				546318F61DE546B9005A3F4C /* LoginNetworkService.m */,
+				6F26D69A1E18CDE500F0C03E /* SignUpNetworkService.h */,
+				6F26D69B1E18CDE500F0C03E /* SignUpNetworkService.m */,
+				6FEB0BB51E1E7D6600C9EBAB /* DesignerRankingNetworkService.h */,
+				6FEB0BB61E1E7D6600C9EBAB /* DesignerRankingNetworkService.m */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -159,6 +186,10 @@
 				6FE6EF0A1E0976820017FE95 /* SignUpViewController.m */,
 				6FD890D71E0A2822002F01C4 /* LocationSelectModalViewController.h */,
 				6FD890D81E0A2822002F01C4 /* LocationSelectModalViewController.m */,
+				6F26D6A11E19226E00F0C03E /* DesignerRankingViewController.h */,
+				6F26D6A21E19226E00F0C03E /* DesignerRankingViewController.m */,
+				6F26D6A41E1922B400F0C03E /* SideMenuViewController.h */,
+				6F26D6A51E1922B400F0C03E /* SideMenuViewController.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -172,9 +203,22 @@
 			name = ConstantValue;
 			sourceTree = "<group>";
 		};
+		6F4F3A871E20C741005BF0B8 /* Section */ = {
+			isa = PBXGroup;
+			children = (
+				6FCABAD11E18072F0091ED9F /* LocationCollectionReusableView.h */,
+				6FCABAD21E18072F0091ED9F /* LocationCollectionReusableView.m */,
+				6F4F3A881E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.h */,
+				6F4F3A891E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m */,
+			);
+			name = Section;
+			sourceTree = "<group>";
+		};
 		6F8D34721DF855250045B579 /* VO */ = {
 			isa = PBXGroup;
 			children = (
+				6F26D6971E18C0E900F0C03E /* Location.h */,
+				6F26D6981E18C0E900F0C03E /* Location.m */,
 			);
 			name = VO;
 			sourceTree = "<group>";
@@ -184,6 +228,10 @@
 			children = (
 				6FD890DA1E0A2A5B002F01C4 /* LocationCollectionViewCell.h */,
 				6FD890DB1E0A2A5B002F01C4 /* LocationCollectionViewCell.m */,
+				6F0C72C21E1D45B400995983 /* RankingBetterDesignerCollectionViewCell.h */,
+				6F0C72C31E1D45B400995983 /* RankingBetterDesignerCollectionViewCell.m */,
+				6F0C72C51E1D45C500995983 /* RankingNormalDesignerCollectionViewCell.h */,
+				6F0C72C61E1D45C500995983 /* RankingNormalDesignerCollectionViewCell.m */,
 			);
 			name = Cell;
 			sourceTree = "<group>";
@@ -329,12 +377,20 @@
 				546318F71DE546B9005A3F4C /* LoginNetworkService.m in Sources */,
 				6F0AC16C1DFBE01600988A0F /* LoginViewController.m in Sources */,
 				6FD890D91E0A2822002F01C4 /* LocationSelectModalViewController.m in Sources */,
+				6F0C72C41E1D45B400995983 /* RankingBetterDesignerCollectionViewCell.m in Sources */,
+				6F26D6991E18C0E900F0C03E /* Location.m in Sources */,
+				6F26D6A31E19226E00F0C03E /* DesignerRankingViewController.m in Sources */,
 				546318E21DE545F9005A3F4C /* AppDelegate.m in Sources */,
+				6F26D69C1E18CDE500F0C03E /* SignUpNetworkService.m in Sources */,
 				6FCABAD31E18072F0091ED9F /* LocationCollectionReusableView.m in Sources */,
+				6FEB0BB71E1E7D6600C9EBAB /* DesignerRankingNetworkService.m in Sources */,
+				6F4F3A8A1E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m in Sources */,
 				6FE6EF0B1E0976820017FE95 /* SignUpViewController.m in Sources */,
 				546318DF1DE545F9005A3F4C /* main.m in Sources */,
 				6FD890DC1E0A2A5B002F01C4 /* LocationCollectionViewCell.m in Sources */,
+				6F26D6A61E1922B400F0C03E /* SideMenuViewController.m in Sources */,
 				6F240CDE1E164062002C42EE /* ColorValue.m in Sources */,
+				6F0C72C71E1D45C500995983 /* RankingNormalDesignerCollectionViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

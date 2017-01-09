@@ -9,6 +9,7 @@
 #import "LoginViewController.h"
 #import "LoginNetworkService.h"
 #import "SignUpViewController.h"
+#import "DesignerRankingViewController.h"
 
 @interface LoginViewController ()
 
@@ -39,11 +40,18 @@ LoginNetworkService *loginNetworkService;
  */
 - (void)didFinishLoginRequest:(NSNotification*) noti {
     
-    //결과를 빼온다.
+    //결과를 빼온 뒤, NSUserDefaults에 'userInfo'로 맵핑시켜놓는다.
     NSDictionary* resultData = [[noti userInfo] objectForKey:@"loginResult"];
+    NSUserDefaults *standardDefault = [NSUserDefaults standardUserDefaults];
+    [standardDefault setObject:resultData forKey:@"userInfo"];
+    [standardDefault synchronize];
     
     NSLog(@"sendLoginRequest result = %@", resultData);
     
+    //DesignerRanking 뷰 컨트롤러로 보낸다.
+    DesignerRankingViewController *designerRankingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"designerRankingViewController"];
+    [self presentViewController:designerRankingViewController animated:YES completion:nil];
+
 }
 
 

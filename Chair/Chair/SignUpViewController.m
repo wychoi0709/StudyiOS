@@ -9,6 +9,8 @@
 #import "SignUpViewController.h"
 #import "LocationSelectModalViewController.h"
 #import "Location.h"
+#import "SignUpNetworkService.h"
+#import "DesignerRankingViewController.h"
 
 
 @interface SignUpViewController ()
@@ -18,6 +20,8 @@
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (weak, nonatomic) IBOutlet UIButton *locationSelectBtn;
+@property Location *myLocation;
+@property SignUpNetworkService *signupNetworkService;
 
 @end
 
@@ -86,9 +90,27 @@
     //노티 옵저버를 만들어서 선택한 locataion 정보를 받는다.
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(changeMyLocationBtnLabel:) name:@"changeMyLocation" object:_locationModalContainerView];
+    [notificationCenter addObserver:self selector:@selector(didFinishSignUpRequest:) name:@"signUpResultNotification" object:_signupNetworkService];
     
     NSLog(@"SignUp의 뷰가 로드됨");
     
+}
+
+
+-(void)didFinishSignUpRequest: (NSNotification *)noti {
+    NSLog(@"changeMyLocationBtnLabel로 들어옴");
+    
+    //결과를 빼온 뒤, NSUserDefaults에 'userInfo'로 맵핑시켜놓는다.
+    NSDictionary* resultData = [[noti userInfo] objectForKey:@"signUpResult"];
+    NSUserDefaults *standardDefault = [NSUserDefaults standardUserDefaults];
+    [standardDefault setObject:resultData forKey:@"userInfo"];
+    [standardDefault synchronize];
+    
+    NSLog(@"sendSignUpRequest result = %@", resultData);
+    
+    //DesignerRanking 뷰 컨트롤러로 보낸다.
+    DesignerRankingViewController *designerRankingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"designerRankingViewController"];
+    [self presentViewController:designerRankingViewController animated:YES completion:nil];
 }
 
 
@@ -97,11 +119,22 @@
  */
 - (void)changeMyLocationBtnLabel: (NSNotification *)noti {
 
-    //realm에 담긴 myLocation 정보를 빼서 UI에 반영한다.
-    NSLog(@"우선 changeMyLocationBtnLabel로 들어옴");
+    NSLog(@"changeMyLocationBtnLabel로 들어옴");
     
-    Location *myLocation = [[Location allObjects] firstObject];
-    _locationSelectBtn.titleLabel.text = myLocation.location;
+    //노티에 담겨온 location 정보를 빼낸다.
+    _myLocation = [[noti userInfo] objectForKey:@"myLocation"];
+    
+    //버튼의 타이틀을 수정한다.
+    [_locationSelectBtn setTitle:_myLocation.location forState:UIControlStateNormal];
+    [_locationSelectBtn setTitle:_myLocation.location forState:UIControlStateSelected];
+    
+}
+
+- (IBAction)signUpBtnTouched:(UIButton *)sender {
+    
+    _signupNetworkService = [[SignUpNetworkService alloc] init];
+    
+    [_signupNetworkService sendSignUpAsynchronousRequest:_nameTextField.text withEmail:_emailTextField.text withPassword:_passwordTextField.text withLocationId:_myLocation.id];
     
 }
 

@@ -198,8 +198,14 @@ NSInteger sectionCount = 0;
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
 
     //여기 지금 안먹힘!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 왜인지 알아낼 것
-    _cell = [collectionView dequeueReusableCellWithReuseIdentifier:locationCell forIndexPath:indexPath];
-    _cell.backgroundColor = [[ColorValue getColorValueObject] blueColorChair];
+//    UIView * selectedBackgroundView = [[UIView alloc] initWithFrame:collectionView.frame];
+//    [selectedBackgroundView setBackgroundColor:[[ColorValue getColorValueObject] blueColorChair]];
+    UICollectionViewCell *selectedCell = [collectionView cellForItemAtIndexPath:indexPath];
+    [collectionView deselectItemAtIndexPath:indexPath animated:NO];
+//    [selectedCell setBackgroundColor:[[ColorValue getColorValueObject] blueColorChair]];
+    selectedCell.contentView.backgroundColor = [[ColorValue getColorValueObject] blueColorChair];
+    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    
     
     //Location 정보를 뽑기위해 index값을 구한다.
     NSString *correntCityDetail = [_sectionNumberWithCityDetail objectAtIndex:indexPath.section];
@@ -215,30 +221,20 @@ NSInteger sectionCount = 0;
     
     
     //Location을 만든다.
-    Location *myLocation = [[Location alloc] init];
-    myLocation.id = [[[_locationData objectAtIndex:(index + indexPath.row)] objectForKey:@"id"] integerValue];
-    myLocation.city = [[_locationData objectAtIndex:(index + indexPath.row)] objectForKey:@"city"];
-    myLocation.cityDetail = [[_locationData objectAtIndex:(index + indexPath.row)] objectForKey:@"cityDetail"];
-    myLocation.location = [[_locationData objectAtIndex:(index + indexPath.row)] objectForKey:@"location"];
-    myLocation.locationDetail = [[_locationData objectAtIndex:(index + indexPath.row)] objectForKey:@"locationDetail"];
+    NSInteger id = [[[_locationData objectAtIndex:(index + indexPath.row)] objectForKey:@"id"] integerValue];
+    NSString *city = [[_locationData objectAtIndex:(index + indexPath.row)] objectForKey:@"city"];
+    NSString *cityDetail = [[_locationData objectAtIndex:(index + indexPath.row)] objectForKey:@"cityDetail"];
+    NSString *location = [[_locationData objectAtIndex:(index + indexPath.row)] objectForKey:@"location"];
+    NSString *locationDetail = [[_locationData objectAtIndex:(index + indexPath.row)] objectForKey:@"locationDetail"];
     
+    Location *myLocation = [[Location alloc] initWithLocationInfo:id withCity:city withCityDetail:cityDetail withLocation:location withLocationDetail:locationDetail];
     
-    // Realm에 myLocation을 넣거나 업데이트한다(오직 하나만 존재하도록 한다)
-    RLMRealm *realm = [RLMRealm defaultRealm];
-    if(![realm isEmpty]){
-        [realm beginWriteTransaction];
-        [realm deleteObject:myLocation];
-        [realm commitWriteTransaction];
-    }
-    
-    [realm transactionWithBlock:^{
-        [realm addObject:myLocation];
-    }];
-    
+    //노티로 보낼 데이터를 담는다.
+    NSDictionary *locationDictionary = [NSDictionary dictionaryWithObject:myLocation forKey:@"myLocation"];
     
     //센터를 만들고, 노티를 보낸다.
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter postNotificationName:@"changeMyLocation" object:self userInfo:nil];
+    [notificationCenter postNotificationName:@"changeMyLocation" object:self userInfo:locationDictionary];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }

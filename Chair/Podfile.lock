@@ -1,4 +1,5 @@
 PODS:
+  - LGSideMenuController (2.0.4)
   - Realm (2.1.2):
     - Realm/Headers (= 2.1.2)
   - Realm/Headers (2.1.2)
@@ -7,13 +8,15 @@ PODS:
   - SDWebImage/Core (3.8.2)
 
 DEPENDENCIES:
+  - LGSideMenuController
   - Realm (~> 2.1)
   - SDWebImage (~> 3.8)
 
 SPEC CHECKSUMS:
+  LGSideMenuController: b9458c23b86cfe2a64d8b75504043dd231e32e6c
   Realm: efe855f4d977c8ce5a82d3116d9f1ff155a6550c
   SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
 
-PODFILE CHECKSUM: b97e5385582ea53c25147a36b61d4ecfe0f07c64
+PODFILE CHECKSUM: af2b9d5d7f5061691628f469632664ffdfd2c103
 
 COCOAPODS: 1.1.1
