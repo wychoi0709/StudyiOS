@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>UrlInfoByYoung</key>
-	<string>http://192.168.0.107:3000</string>
+	<string>http://10.73.39.35:3000</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>NotoSansKR-Bold-Hestia.otf</string>

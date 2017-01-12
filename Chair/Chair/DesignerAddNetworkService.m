@@ -1,30 +1,38 @@
 //
-//  DesignerRankingNetworkService.m
+//  DesignerAddNetworkService.m
 //  Chair
 //
-//  Created by 최원영 on 2017. 1. 5..
+//  Created by 최원영 on 2017. 1. 11..
 //  Copyright © 2017년 최원영. All rights reserved.
 //
 
-#import "DesignerRankingNetworkService.h"
+#import "DesignerAddNetworkService.h"
 
-@implementation DesignerRankingNetworkService
+@implementation DesignerAddNetworkService
 
-- (void)callDesignerListByLocationIdRequest:(NSInteger)customerId withLocationId:(NSInteger)locationId withGender:(NSString*)gender{
+- (void)addMyDesignerRequest:(NSInteger)customerId withDesignerId:(NSInteger)designerId withIndexPath:(NSIndexPath*)indexPath {
     NSLog(@"DesignerRankingNetworkService의 비동기 요청으로 들어옴");
+    
+    //indexPath 맵핑
+    _indexPath = indexPath;
     
     //URL String을 토대로 URL 객체를 만든 뒤, 이를 토대로 Request 객체를 생성한다.
     _aURLString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UrlInfoByYoung"];
-    _aURLString = [_aURLString stringByAppendingString:@"/designer/selectalldesigner"];
-    _aURLString = [_aURLString stringByAppendingString:[NSString stringWithFormat:@"?id=%ld&location_id=%ld&sex=%@", (long)customerId, (long)locationId, gender]];
-
+    _aURLString = [_aURLString stringByAppendingString:@"/designer/addmydesigner"];
     _aURL = [NSURL URLWithString:_aURLString];
     _aRequest = [NSMutableURLRequest requestWithURL:_aURL];
     
     //Request 객체를 Setting한다.
-    [_aRequest setHTTPMethod:@"GET"];
+    [_aRequest setHTTPMethod:@"POST"];
     [_aRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     [_aRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    
+    //body에 전송할 변수를 넣는다.
+    NSDictionary* bodyObject = @{
+                                 @"customer_id": [NSNumber numberWithInteger:customerId],
+                                 @"designer_id": [NSNumber numberWithInteger:designerId]
+                                 };
+    _aRequest.HTTPBody = [NSJSONSerialization dataWithJSONObject:bodyObject options:kNilOptions error:nil];
     
     // Create url connection and fire request
     NSURLConnection *conn = [[NSURLConnection alloc] initWithRequest:_aRequest delegate:self];
@@ -71,51 +79,39 @@
  *  [NSURLConnectionDelegate] 모든 통신이 완료된 후 실행되는 메소드
  */
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    NSLog(@"DesignerRankingNetworkService의 모든 통신이 완료됨");
-
+    NSLog(@"DesignerAddNetworkService의 모든 통신이 완료됨");
+    
     //결과를 파싱한다.
-    NSMutableArray *responseDataArray = [NSJSONSerialization
-                                    JSONObjectWithData:_responseData
-                                    options:NSJSONReadingMutableContainers
-                                    error:nil];
+    NSDictionary *responseDataDic = [NSJSONSerialization
+                                         JSONObjectWithData:_responseData
+                                         options:NSJSONReadingMutableContainers
+                                         error:nil];
     
     //결과가 있으면 적절한 키로 매핑하고, 없으면 없다는 메시지를 넣는다.
     NSDictionary *resultData;
-    if(responseDataArray == nil || [responseDataArray count] == 0) {
-        NSMutableArray *tempArray = [NSMutableArray arrayWithCapacity:0];
-        resultData = [NSDictionary dictionaryWithObject:tempArray forKey:@"designerListResult"];
+    if(responseDataDic == nil || [responseDataDic count] == 0) {
+        NSString *failString = @"fail";
+        resultData = [NSDictionary dictionaryWithObject:failString forKey:@"result"];
     } else {
-        //임시 MutableDic을 만들고 결과를 넣는다.
+        //resultData에 결과를 넣는다.
         NSMutableDictionary *tempResultDictionary = [[NSMutableDictionary alloc] init];
-        [tempResultDictionary setObject:        responseDataArray forKey:@"designerListResult"];
-
-        //내 선생님 리스트만 따로 빼서 저장하고 결과를 임시 MutableDic에 넣는다.
-        NSMutableArray *onlyMyDesignerList = [[NSMutableArray alloc] init];
-        NSInteger myDesignerCount = 0;
-        for(int i = 0 ; i < responseDataArray.count; i++) {
-            if([[responseDataArray[i] objectForKey:@"isMyDesigner"] boolValue]) {
-                [onlyMyDesignerList addObject:responseDataArray[i]];
-                myDesignerCount++;
-            }
-        }
-        [tempResultDictionary setObject:onlyMyDesignerList forKey:@"onlyMyDesignerlist"];
-        [tempResultDictionary setObject:[NSNumber numberWithInteger:myDesignerCount] forKey:@"myDesignerCount"];
+        [tempResultDictionary setObject:responseDataDic forKey:@"resultDic"];
+        [tempResultDictionary setObject:_indexPath forKey:@"indexPath"];
         
-        //임시 MutableDic을 결과 Dic에 맵핑한다.
         resultData = tempResultDictionary;
     }
+    
     //결과를 NSNotificationCenter로 보낸다.
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"designerListResult" object:self userInfo:resultData];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"addMyDesignerResult" object:self userInfo:resultData];
     
 }
 
 
 /**
- *  [NSURLConnectionDelegate]에러나면 실행되는 코드
+ *  [NSURLConnectionDelegate]애러나면 실행되는 코드
  */
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     // The request has failed for some reason!
     // Check the error var
 }
-
 @end

@@ -8,6 +8,7 @@
 
 #import "DesignerRankingViewController.h"
 #import "SideMenuViewController.h"
+
 #import "RankingBetterDesignerCollectionViewCell.h"
 #import "RankingNormalDesignerCollectionViewCell.h"
 #import "DesignerRankingNetworkService.h"
@@ -15,6 +16,10 @@
 #import "LocationSelectModalViewController.h"
 #import "Location.h"
 #import "ColorValue.h"
+
+#import "ConfirmChoiceAboutMyDesignerViewController.h"
+#import "FullChoiceAboutMyDesignerViewController.h"
+#import "ConfirmCancelAboutMyDesignerViewController.h"
 
 @interface DesignerRankingViewController ()
 
@@ -27,14 +32,22 @@
 
 @property DesignerRankingNetworkService *designerRankingNetworkService;
 @property LocationSelectModalViewController *locationSelectModalViewController;
+@property SideMenuViewController *mySideMenuViewController;
+@property ConfirmChoiceAboutMyDesignerViewController *confirmChoiceAboutMyDesignerViewController;
+@property FullChoiceAboutMyDesignerViewController *fullChoiceAboutMyDesignerViewController;
+
+@property NSNotificationCenter *notificationCenter;
 
 @property NSMutableDictionary *userInfo;
 
 @property NSMutableArray *designerList;
+@property NSMutableArray *onlyMyDesignerList;
 
 @property Boolean isMale;
 
 @property NSUserDefaults *standardDefault;
+
+@property NSInteger myDesignerCount;
 
 //디자이너 리스트 네트워크 요청을 위한 변수들
 @property NSInteger customerId;
@@ -83,16 +96,12 @@
     [tempDesignerInfo setValue:@"0" forKey:@"maleCustomerCount"];
     [tempDesignerInfo setValue:@"0" forKey:@"femaleCustomerCount"];
     [tempDesignerInfo setValue:@"월" forKey:@"closingDay"];
-    
     NSMutableDictionary *tempHairshopInfo = [[NSMutableDictionary alloc] init];
     [tempHairshopInfo setValue:@"임시 헤어샵" forKey:@"hairshopName"];
-    
     NSMutableDictionary *tempLocationInfo = [[NSMutableDictionary alloc] init];
     [tempLocationInfo setValue:@"홍대" forKey:@"location"];
-    
     [tempHairshopInfo setObject:tempLocationInfo forKey:@"location"];
     [tempDesignerInfo setObject:tempHairshopInfo forKey:@"hairshop"];
-    
     [_designerList addObject:tempDesignerInfo];
     
     //ranking 정보 불러오는 네트워크 요청을 실시한다
@@ -100,26 +109,27 @@
     [_designerRankingNetworkService callDesignerListByLocationIdRequest:_customerId withLocationId:_locationId withGender:_gender];
 
     //옵저버 지정(콜백에서 Array 갱신하고, collectionview도 갱신할 것)
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(designerListDidLoad:) name:@"designerListResult" object:_designerRankingNetworkService];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changeTempLocation:) name:@"changeMyLocation" object:_locationSelectModalViewController];
+    _notificationCenter = [NSNotificationCenter defaultCenter];
+    [_notificationCenter addObserver:self selector:@selector(designerListDidLoad:) name:@"designerListResult" object:_designerRankingNetworkService];
+    [_notificationCenter addObserver:self selector:@selector(changeTempLocation:) name:@"changeMyLocation" object:_locationSelectModalViewController];
+    [_notificationCenter addObserver:self selector:@selector(afterDesignerAddNetwork:) name:@"addMyDesignerResult" object:nil];
+    [_notificationCenter addObserver:self selector:@selector(afterDesignerCancelNetwork:) name:@"cancelMyDesignerResult" object:nil];
     
     //SideMenu 만들고 설정하기
-    SideMenuViewController *mySideMenuViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"SideMenuViewController"];
-    UIBlurEffectStyle regularStyle;
-    if (UIDevice.currentDevice.systemVersion.floatValue >= 10.0) {
-        regularStyle = UIBlurEffectStyleRegular;
-    }
-    else {
-        regularStyle = UIBlurEffectStyleLight;
-    }
+    _mySideMenuViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"SideMenuViewController"];
     self.leftViewPresentationStyle = LGSideMenuPresentationStyleSlideAbove;
-    self.leftViewBackgroundBlurEffect = [UIBlurEffect effectWithStyle:regularStyle];
-    [self setLeftViewController:mySideMenuViewController];
+    self.leftViewBackgroundBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
+    self.leftViewBackgroundColor = [UIColor colorWithRed:0.25098039215686 green:0.27843137254902 blue:0.34725490196078 alpha:0.47];
+    self.rootViewCoverColorForLeftView = [[ColorValue getColorValueObject]blackBlueColorChiar];
+    self.leftViewController = _mySideMenuViewController;
+    
+    //onlyMyDesignerList를 초기화한다.
+    _onlyMyDesignerList = [[NSMutableArray alloc] init];
+    
+    //collectionView의 selected 효과에 딜레이를 없애는 코드
+    self.rankingCollectionView.delaysContentTouches = NO;
     
 }
-
-
-
 
 /**
  *  메모리 경고 떴을 때 불리는 메소드
@@ -131,6 +141,15 @@
 
 - (instancetype)initWithRootViewController:(UIViewController *)rootViewController {
     return self;
+}
+
+/**
+ *  현 VC가 없어질 떄 실행되는 메소드
+ */
+- (void)dealloc {
+    //지금 달려있는 VC의 모든 옵저버를 없앰
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
 }
 
 
@@ -166,21 +185,18 @@
     
 }
 
-
 /**
  *  장소전환 버튼 터치(관심지역 모달창을 띄운다)
  */
 - (IBAction)locationButtonTouched:(UIButton *)sender {
-    
     //모달창을 만든다.
     _locationSelectModalViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"locationSelectModalViewController"];
     
     //배경이 투명한 모달 스타일로 만들어준 뒤, 뷰컨트롤러를 띄운다.
     _locationSelectModalViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    [_locationSelectModalViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
     [self presentViewController:_locationSelectModalViewController animated:YES completion:nil];
-    
 }
-
 
 /**
  *  임시 지역정보를 변경, 라벨 정보도 변경한 뒤, 리스트를 갱신한다.
@@ -197,17 +213,40 @@
     [_designerRankingNetworkService callDesignerListByLocationIdRequest:_customerId withLocationId:_locationId withGender:_gender];
 }
 
-
-
-
 /**
  *  사이드 메뉴 버튼 터치
  */
 - (IBAction)sideMenuButtonTouched:(UIButton *)sender {
     
+    //임시 MutableDic을 만든다.
+    NSMutableDictionary *tempDic = [[NSMutableDictionary alloc] init];
+    
+    //designerRankingViewController 라고 메시지를 담는다.
+    NSString *thisViewController = @"designerRankingViewController";
+    [tempDic setObject:thisViewController forKey:@"whereIsThisViewControllerComeFrom"];
+
+    //myDesignerCount를 담는다.
+    [tempDic setObject:[NSNumber numberWithInteger:_myDesignerCount] forKey:@"myDesignerCount"];
+    
+    //myDesignerCount가 0보다 크면, onlyMyDesignerList Array를 담고, 0이면 임시 값을 담는다.
+    if(_myDesignerCount > 0) {
+        [tempDic setObject:_onlyMyDesignerList forKey:@"onlyMyDesignerList"];
+    } else {
+        NSMutableArray *emptyMyDesignerList = [[NSMutableArray alloc] init];
+        [emptyMyDesignerList addObject:@"임시 값"];
+        [tempDic setObject:_onlyMyDesignerList forKey:@"onlyMyDesignerList"];
+    }
+    
+    //결과 Dic에 넣는다.
+    NSDictionary *whereIsThisViewControllerComeFrom = tempDic;
+    
+    //노티를 보낸다.
+    [_notificationCenter postNotificationName:@"guidingPreviousViewController" object:self userInfo:whereIsThisViewControllerComeFrom];
+    
+    //사이드메뉴를 띄운다.
     [self showLeftViewAnimated:YES completionHandler:^{
+        //사이드 메뉴 닫기 버튼 구역을 보이게 한다.
         _invisibleButtonForSideMenu.hidden = NO;
-        //메시지를 보내? 
     }];
     
 }
@@ -220,14 +259,11 @@
     _invisibleButtonForSideMenu.hidden = YES;
 }
 
-
-
 /**
  *  검색 버튼 터치
  */
 - (IBAction)searchButtonTouched:(UIButton *)sender {
 }
-
 
 /**
  *  _gender에 따라 성별전환 버튼의 텍스트를 수정하는 메소드('남성고객수'/'여성고객수')
@@ -247,7 +283,84 @@
 
 
 /**
- *  observer의 콜백 메소드
+ *  내 디자이너를 취소한다.
+ */
+- (void)cancelMyDesignerButton: (id)sender {
+    NSLog(@"touchDownMyDesignerButton");
+    CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.rankingCollectionView];
+    NSIndexPath *indexPath = [self.rankingCollectionView indexPathForItemAtPoint:buttonPosition];
+    if (indexPath != nil) {
+        //필요한 정보를 Dictionary에 담는다.
+        NSMutableDictionary *tempMutableDic = [[NSMutableDictionary alloc] init];
+        [tempMutableDic setObject:_userInfo forKey:@"userInfo"];
+        [tempMutableDic setObject:_designerList[indexPath.row] forKey:@"designerInfo"];
+        [tempMutableDic setObject:indexPath forKey:@"indexPath"];
+        
+        NSDictionary *userAndDesignerinfo = tempMutableDic;
+        
+        //모달 창을 띄우고, 정보를 NSNotificationCenter로 보낸다.
+        ConfirmCancelAboutMyDesignerViewController *confirmCancelAboutMyDesignerViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"confirmCancelAboutMyDesignerViewController"];
+        
+        //배경이 투명한 모달 스타일로 만들어준 뒤, 뷰컨트롤러를 띄우고, 노티를 보낸다.
+        confirmCancelAboutMyDesignerViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        [confirmCancelAboutMyDesignerViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+        [self presentViewController:confirmCancelAboutMyDesignerViewController animated:YES completion:^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"userAndDesignerInfo" object:self userInfo:userAndDesignerinfo];
+        }];
+    }
+}
+
+/**
+ *  내 디자이너 등록버튼을 클릭한다.
+ */
+- (void)addMyDesignerButton: (UIButton*)sender {
+    NSLog(@"touchDownNotMyDesignerButton");
+    if(_myDesignerCount > 2) {
+        
+        //3명이 가득찼다는 모달창 만들기
+        FullChoiceAboutMyDesignerViewController *fullChoiceAboutMyDesignerViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"fullChoiceAboutMyDesignerViewController"];
+        
+        //배경이 투명한 모달 스타일로 만들어준 뒤, 뷰컨트롤러를 띄운다.
+        fullChoiceAboutMyDesignerViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+        [fullChoiceAboutMyDesignerViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+        [self presentViewController:fullChoiceAboutMyDesignerViewController animated:YES completion:nil];
+
+        NSLog(@"3명 풀");
+        return;
+    } else {
+        
+        CGPoint buttonPosition = [sender convertPoint:CGPointZero toView:self.rankingCollectionView];
+        NSIndexPath *indexPath = [self.rankingCollectionView indexPathForItemAtPoint:buttonPosition];
+
+        if (indexPath != nil){
+            
+            //필요한 정보를 Dictionary에 담는다.
+            NSMutableDictionary *tempMutableDic = [[NSMutableDictionary alloc] init];
+            [tempMutableDic setObject:_userInfo forKey:@"userInfo"];
+            [tempMutableDic setObject:_designerList[indexPath.row] forKey:@"designerInfo"];
+            [tempMutableDic setObject:indexPath forKey:@"indexPath"];
+            
+            NSDictionary *userAndDesignerinfo = tempMutableDic;
+            
+            //모달 창을 띄우고, 정보를 NSNotificationCenter로 보낸다.
+            ConfirmChoiceAboutMyDesignerViewController *confirmChoiceAboutMyDesignerViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"confirmChoiceAboutMyDesignerViewController"];
+            
+            //배경이 투명한 모달 스타일로 만들어준 뒤, 뷰컨트롤러를 띄우고, 노티를 보낸다.
+            confirmChoiceAboutMyDesignerViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+            [confirmChoiceAboutMyDesignerViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+            [self presentViewController:confirmChoiceAboutMyDesignerViewController animated:YES completion:^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"userAndDesignerInfo" object:self userInfo:userAndDesignerinfo];
+            }];        
+        }
+    }
+}
+
+
+
+
+/**
+ *  << observer의 콜백 메소드!!!!!!!!!!!!!!!!!!! >>
+ *  디자이너 리스트 불러오는 메소드
  */
 - (void)designerListDidLoad: (NSNotification *) noti{
     
@@ -255,17 +368,87 @@
     
     //노티에 담겨온 Designer List 정보를 꺼내서 담는다.
     _designerList = [[noti userInfo] objectForKey:@"designerListResult"];
+    _myDesignerCount = [[[noti userInfo] objectForKey:@"myDesignerCount"] integerValue];
+    if(_myDesignerCount > 0) {
+        _onlyMyDesignerList = [[noti userInfo] objectForKey:@"onlyMyDesignerlist"];
+    }
     
     //만약 꺼내온 designerList가 비어있다면, 해당 지역에 등록된 디자이너가 없다는 Image를 덮어 씌우고 아니면 갱신한다.
     if(_designerList == nil || [_designerList count] == 0){
         //imagehidden 값을 변경하거나 애니메이션을 줄 것
-        _emptyDesignerImage.hidden = NO;
+        [UIView transitionWithView:_emptyDesignerImage
+                          duration:0.3
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^(void){
+                            _emptyDesignerImage.hidden = NO;
+                        }
+                        completion:nil];
     } else {
-        _emptyDesignerImage.hidden = YES;
+        [UIView transitionWithView:_emptyDesignerImage
+                          duration:0.3
+                           options:UIViewAnimationOptionTransitionCrossDissolve
+                        animations:^(void){
+                            _emptyDesignerImage.hidden = YES;
+                        }
+                        completion:nil];
         //collection view 갱신
         [self.rankingCollectionView reloadData];
     }
 }
+
+/**
+ *  디자이너 등록이 완료된 이후 콜백 메소드
+ */
+- (void) afterDesignerAddNetwork: (NSNotification *) noti {
+    NSIndexPath *indexPath = [[noti userInfo] objectForKey:@"indexPath"];
+    NSString *result = [[[noti userInfo] objectForKey:@"resultDic"] objectForKey:@"result"];
+    
+    if([result isEqualToString:@"success"]) {
+        _myDesignerCount++;
+        
+        if(indexPath.row < 10) {
+            RankingBetterDesignerCollectionViewCell *cell = (RankingBetterDesignerCollectionViewCell*)[self.rankingCollectionView cellForItemAtIndexPath:indexPath];
+            cell.myDesignerButton.hidden = NO;
+            cell.notMyDesignerButton.hidden = YES;
+        } else {
+            RankingNormalDesignerCollectionViewCell *cell = (RankingNormalDesignerCollectionViewCell*)[self.rankingCollectionView cellForItemAtIndexPath:indexPath];
+            cell.myDesignerButton.hidden = NO;
+            cell.notMyDesignerButton.hidden = YES;
+        }
+        
+        //등록이 완료되면, 디자이너리스트에 있는 디자이너를 내 디자이너 리스트에 담아
+        [_onlyMyDesignerList addObject:_designerList[indexPath.row]];
+    }
+}
+
+/**
+ *  내 디자이너 취소가 완료된 이후 콜백 메소드
+ */
+- (void) afterDesignerCancelNetwork: (NSNotification *) noti {
+    NSIndexPath *indexPath = [[noti userInfo] objectForKey:@"indexPath"];
+    NSString *result = [[[noti userInfo] objectForKey:@"resultDic"] objectForKey:@"result"];
+    
+    if([result isEqualToString:@"success"]) {
+        _myDesignerCount--;
+        if(indexPath.row < 10) {
+            RankingBetterDesignerCollectionViewCell *cell = (RankingBetterDesignerCollectionViewCell*)[self.rankingCollectionView cellForItemAtIndexPath:indexPath];
+            cell.myDesignerButton.hidden = YES;
+            cell.notMyDesignerButton.hidden = NO;
+        } else {
+            RankingNormalDesignerCollectionViewCell *cell = (RankingNormalDesignerCollectionViewCell*)[self.rankingCollectionView cellForItemAtIndexPath:indexPath];
+            cell.myDesignerButton.hidden = YES;
+            cell.notMyDesignerButton.hidden = NO;
+        }
+        
+        //취소한 디자이너를 onlyMyDesignerList에서 제거한다.
+        for(int i =0; i < _onlyMyDesignerList.count; i++) {
+            if([_onlyMyDesignerList[i] objectForKey:@"id"] == [_designerList[indexPath.row] objectForKey:@"id"]){
+                [_onlyMyDesignerList removeObject:_onlyMyDesignerList[i]];
+            }
+        }
+    }
+}
+
 
 
 /**
@@ -284,6 +467,7 @@
     NSString *hairshopName = [[_designerList[indexPath.row] objectForKey:@"hairshop"] objectForKey:@"hairshopName"];
     NSString *closingDay = [_designerList[indexPath.row] objectForKey:@"closingDay"];
     Boolean isMyDesigner = [[_designerList[indexPath.row] objectForKey:@"isMyDesigner"] boolValue];
+    
     
     //1위부터 10위까지는 betterDesignerCell
     if(indexPath.row < 10) {
@@ -309,6 +493,10 @@
             betterDesignerCell.myDesignerButton.hidden = YES;
             betterDesignerCell.notMyDesignerButton.hidden = NO;
         }
+        //버튼의 콜백 메소드를 등록한다.
+        [betterDesignerCell.myDesignerButton addTarget:self action:@selector(cancelMyDesignerButton:) forControlEvents:UIControlEventTouchUpInside];
+        [betterDesignerCell.notMyDesignerButton addTarget:self action:@selector(addMyDesignerButton:) forControlEvents:UIControlEventTouchUpInside];
+
         
         //betterDesigner는 순위를 세팅한다.
         switch (indexPath.row) {
@@ -380,14 +568,12 @@
     
 }
 
-
 /**
  *  Section 안에 몇개의 아이템이 들어가는지 설정(DataSrouce)
  */
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     return _designerList.count;
 }
-
 
 /**
  *  Section의 헤더 만들기(DataSource)
@@ -400,12 +586,19 @@
 ;
 }
 
-
 /**
  *  Section이 몇개인지(DataSource)
  */
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     return 1;
 }
+
+/**
+ *  item이 선택된 경우
+ */
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+}
+
 
 @end

@@ -37,6 +37,7 @@
 
     //배경이 투명한 모달 스타일로 만들어준 뒤, 뷰컨트롤러를 띄운다.
     locationSelectModalViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    [locationSelectModalViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
     [self presentViewController:locationSelectModalViewController animated:YES completion:nil];
     
 }

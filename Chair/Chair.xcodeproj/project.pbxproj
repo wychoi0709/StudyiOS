@@ -29,8 +29,14 @@
 		6F26D69C1E18CDE500F0C03E /* SignUpNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F26D69B1E18CDE500F0C03E /* SignUpNetworkService.m */; };
 		6F26D6A31E19226E00F0C03E /* DesignerRankingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F26D6A21E19226E00F0C03E /* DesignerRankingViewController.m */; };
 		6F26D6A61E1922B400F0C03E /* SideMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F26D6A51E1922B400F0C03E /* SideMenuViewController.m */; };
+		6F4D72FF1E261A06005F3730 /* DesignerAddNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F4D72FE1E261A06005F3730 /* DesignerAddNetworkService.m */; };
+		6F4D73021E2620B8005F3730 /* DesignerCancelNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F4D73011E2620B8005F3730 /* DesignerCancelNetworkService.m */; };
+		6F4D73051E2631AD005F3730 /* ConfirmCancelAboutMyDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F4D73041E2631AD005F3730 /* ConfirmCancelAboutMyDesignerViewController.m */; };
 		6F4F3A8A1E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F4F3A891E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m */; };
 		6FCABAD31E18072F0091ED9F /* LocationCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FCABAD21E18072F0091ED9F /* LocationCollectionReusableView.m */; };
+		6FCF1DF61E25489700CC91C6 /* FullChoiceAboutMyDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FCF1DF51E25489700CC91C6 /* FullChoiceAboutMyDesignerViewController.m */; };
+		6FCF1DF91E2548C900CC91C6 /* ConfirmChoiceAboutMyDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FCF1DF81E2548C900CC91C6 /* ConfirmChoiceAboutMyDesignerViewController.m */; };
+		6FD3A23C1E272EE20019123D /* DetailDesignerInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FD3A23B1E272EE20019123D /* DetailDesignerInfoViewController.m */; };
 		6FD890D91E0A2822002F01C4 /* LocationSelectModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FD890D81E0A2822002F01C4 /* LocationSelectModalViewController.m */; };
 		6FD890DC1E0A2A5B002F01C4 /* LocationCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FD890DB1E0A2A5B002F01C4 /* LocationCollectionViewCell.m */; };
 		6FE6EF0B1E0976820017FE95 /* SignUpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FE6EF0A1E0976820017FE95 /* SignUpViewController.m */; };
@@ -73,10 +79,22 @@
 		6F26D6A21E19226E00F0C03E /* DesignerRankingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesignerRankingViewController.m; sourceTree = "<group>"; };
 		6F26D6A41E1922B400F0C03E /* SideMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SideMenuViewController.h; sourceTree = "<group>"; };
 		6F26D6A51E1922B400F0C03E /* SideMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SideMenuViewController.m; sourceTree = "<group>"; };
+		6F4D72FD1E261A06005F3730 /* DesignerAddNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesignerAddNetworkService.h; sourceTree = "<group>"; };
+		6F4D72FE1E261A06005F3730 /* DesignerAddNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesignerAddNetworkService.m; sourceTree = "<group>"; };
+		6F4D73001E2620B8005F3730 /* DesignerCancelNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesignerCancelNetworkService.h; sourceTree = "<group>"; };
+		6F4D73011E2620B8005F3730 /* DesignerCancelNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesignerCancelNetworkService.m; sourceTree = "<group>"; };
+		6F4D73031E2631AD005F3730 /* ConfirmCancelAboutMyDesignerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmCancelAboutMyDesignerViewController.h; sourceTree = "<group>"; };
+		6F4D73041E2631AD005F3730 /* ConfirmCancelAboutMyDesignerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmCancelAboutMyDesignerViewController.m; sourceTree = "<group>"; };
 		6F4F3A881E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingSectionHeaderCollectionReusableView.h; sourceTree = "<group>"; };
 		6F4F3A891E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingSectionHeaderCollectionReusableView.m; sourceTree = "<group>"; };
 		6FCABAD11E18072F0091ED9F /* LocationCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationCollectionReusableView.h; sourceTree = "<group>"; };
 		6FCABAD21E18072F0091ED9F /* LocationCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationCollectionReusableView.m; sourceTree = "<group>"; };
+		6FCF1DF41E25489700CC91C6 /* FullChoiceAboutMyDesignerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FullChoiceAboutMyDesignerViewController.h; sourceTree = "<group>"; };
+		6FCF1DF51E25489700CC91C6 /* FullChoiceAboutMyDesignerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FullChoiceAboutMyDesignerViewController.m; sourceTree = "<group>"; };
+		6FCF1DF71E2548C900CC91C6 /* ConfirmChoiceAboutMyDesignerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfirmChoiceAboutMyDesignerViewController.h; sourceTree = "<group>"; };
+		6FCF1DF81E2548C900CC91C6 /* ConfirmChoiceAboutMyDesignerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmChoiceAboutMyDesignerViewController.m; sourceTree = "<group>"; };
+		6FD3A23A1E272EE20019123D /* DetailDesignerInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailDesignerInfoViewController.h; sourceTree = "<group>"; };
+		6FD3A23B1E272EE20019123D /* DetailDesignerInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailDesignerInfoViewController.m; sourceTree = "<group>"; };
 		6FD890D71E0A2822002F01C4 /* LocationSelectModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationSelectModalViewController.h; sourceTree = "<group>"; };
 		6FD890D81E0A2822002F01C4 /* LocationSelectModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationSelectModalViewController.m; sourceTree = "<group>"; };
 		6FD890DA1E0A2A5B002F01C4 /* LocationCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationCollectionViewCell.h; sourceTree = "<group>"; };
@@ -123,6 +141,7 @@
 		546318DC1DE545F9005A3F4C /* Chair */ = {
 			isa = PBXGroup;
 			children = (
+				6FCF1DF31E2547A400CC91C6 /* Popup */,
 				6F8D34721DF855250045B579 /* VO */,
 				546318E01DE545F9005A3F4C /* AppDelegate.h */,
 				546318E11DE545F9005A3F4C /* AppDelegate.m */,
@@ -157,11 +176,15 @@
 			isa = PBXGroup;
 			children = (
 				546318F51DE546B9005A3F4C /* LoginNetworkService.h */,
+				6F4D73001E2620B8005F3730 /* DesignerCancelNetworkService.h */,
+				6F4D73011E2620B8005F3730 /* DesignerCancelNetworkService.m */,
 				546318F61DE546B9005A3F4C /* LoginNetworkService.m */,
 				6F26D69A1E18CDE500F0C03E /* SignUpNetworkService.h */,
 				6F26D69B1E18CDE500F0C03E /* SignUpNetworkService.m */,
 				6FEB0BB51E1E7D6600C9EBAB /* DesignerRankingNetworkService.h */,
 				6FEB0BB61E1E7D6600C9EBAB /* DesignerRankingNetworkService.m */,
+				6F4D72FD1E261A06005F3730 /* DesignerAddNetworkService.h */,
+				6F4D72FE1E261A06005F3730 /* DesignerAddNetworkService.m */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -190,6 +213,8 @@
 				6F26D6A21E19226E00F0C03E /* DesignerRankingViewController.m */,
 				6F26D6A41E1922B400F0C03E /* SideMenuViewController.h */,
 				6F26D6A51E1922B400F0C03E /* SideMenuViewController.m */,
+				6FD3A23A1E272EE20019123D /* DetailDesignerInfoViewController.h */,
+				6FD3A23B1E272EE20019123D /* DetailDesignerInfoViewController.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -221,6 +246,19 @@
 				6F26D6981E18C0E900F0C03E /* Location.m */,
 			);
 			name = VO;
+			sourceTree = "<group>";
+		};
+		6FCF1DF31E2547A400CC91C6 /* Popup */ = {
+			isa = PBXGroup;
+			children = (
+				6FCF1DF41E25489700CC91C6 /* FullChoiceAboutMyDesignerViewController.h */,
+				6FCF1DF51E25489700CC91C6 /* FullChoiceAboutMyDesignerViewController.m */,
+				6FCF1DF71E2548C900CC91C6 /* ConfirmChoiceAboutMyDesignerViewController.h */,
+				6FCF1DF81E2548C900CC91C6 /* ConfirmChoiceAboutMyDesignerViewController.m */,
+				6F4D73031E2631AD005F3730 /* ConfirmCancelAboutMyDesignerViewController.h */,
+				6F4D73041E2631AD005F3730 /* ConfirmCancelAboutMyDesignerViewController.m */,
+			);
+			name = Popup;
 			sourceTree = "<group>";
 		};
 		6FD890DD1E0A2A64002F01C4 /* Cell */ = {
@@ -376,12 +414,15 @@
 				6F0AC1681DFBDC4B00988A0F /* SplashViewController.m in Sources */,
 				546318F71DE546B9005A3F4C /* LoginNetworkService.m in Sources */,
 				6F0AC16C1DFBE01600988A0F /* LoginViewController.m in Sources */,
+				6F4D73021E2620B8005F3730 /* DesignerCancelNetworkService.m in Sources */,
 				6FD890D91E0A2822002F01C4 /* LocationSelectModalViewController.m in Sources */,
 				6F0C72C41E1D45B400995983 /* RankingBetterDesignerCollectionViewCell.m in Sources */,
 				6F26D6991E18C0E900F0C03E /* Location.m in Sources */,
 				6F26D6A31E19226E00F0C03E /* DesignerRankingViewController.m in Sources */,
 				546318E21DE545F9005A3F4C /* AppDelegate.m in Sources */,
+				6F4D73051E2631AD005F3730 /* ConfirmCancelAboutMyDesignerViewController.m in Sources */,
 				6F26D69C1E18CDE500F0C03E /* SignUpNetworkService.m in Sources */,
+				6FCF1DF61E25489700CC91C6 /* FullChoiceAboutMyDesignerViewController.m in Sources */,
 				6FCABAD31E18072F0091ED9F /* LocationCollectionReusableView.m in Sources */,
 				6FEB0BB71E1E7D6600C9EBAB /* DesignerRankingNetworkService.m in Sources */,
 				6F4F3A8A1E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m in Sources */,
@@ -389,6 +430,9 @@
 				546318DF1DE545F9005A3F4C /* main.m in Sources */,
 				6FD890DC1E0A2A5B002F01C4 /* LocationCollectionViewCell.m in Sources */,
 				6F26D6A61E1922B400F0C03E /* SideMenuViewController.m in Sources */,
+				6FCF1DF91E2548C900CC91C6 /* ConfirmChoiceAboutMyDesignerViewController.m in Sources */,
+				6FD3A23C1E272EE20019123D /* DetailDesignerInfoViewController.m in Sources */,
+				6F4D72FF1E261A06005F3730 /* DesignerAddNetworkService.m in Sources */,
 				6F240CDE1E164062002C42EE /* ColorValue.m in Sources */,
 				6F0C72C71E1D45C500995983 /* RankingNormalDesignerCollectionViewCell.m in Sources */,
 			);
