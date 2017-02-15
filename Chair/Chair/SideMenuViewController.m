@@ -11,6 +11,7 @@
 #import "DesignerRankingViewController.h"
 #import "LoginViewController.h"
 #import "DetailDesignerInfoViewController.h"
+#import "MyDesignerList.h"
 
 @interface SideMenuViewController ()
 
@@ -36,7 +37,6 @@
 @property NSInteger myDesignerCount;
 @property NSMutableArray *onlyMyDesignerList;
 @property NSNotificationCenter *notificationCenter;
-
 @end
 
 @implementation SideMenuViewController
@@ -67,105 +67,67 @@
  */
 - (IBAction)firstDesignerTouched:(UIButton *)sender {
     
-    //임시 MutableDic을 만든다.
-    NSMutableDictionary *tempDic = [[NSMutableDictionary alloc] init];
+    //디테일 페이지로 이동한다.
+    [self moveDetailPage];
+
     
-    //myDesignerCount를 담는다.
-    [tempDic setObject:[NSNumber numberWithInteger:_myDesignerCount] forKey:@"myDesignerCount"];
-    
-    //myDesignerCount가 0보다 크면, onlyMyDesignerList Array를 담고, 0이면 임시 값을 담는다.
-    if(_myDesignerCount > 0) {
-        [tempDic setObject:_onlyMyDesignerList forKey:@"onlyMyDesignerList"];
-    } else {
-        NSMutableArray *emptyMyDesignerList = [[NSMutableArray alloc] init];
-        [emptyMyDesignerList addObject:@"임시 값"];
-        [tempDic setObject:_onlyMyDesignerList forKey:@"onlyMyDesignerList"];
-    }
-    
-    //첫번째 디자이너의 정보도 따로 넣는다.
-    [tempDic setObject:_onlyMyDesignerList[0] forKey:@"designerInfo"];
-    
-    //결과 Dic에 넣는다.
-    NSDictionary *whereIsThisViewControllerComeFrom = tempDic;
-    
-    //화면을 띄우고 노티를 보낸다.
-    DetailDesignerInfoViewController *detailDesignerInfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
-    [detailDesignerInfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-    [self presentViewController:detailDesignerInfoViewController animated:YES completion:^{
-        }];
-    
+    //첫번째 버튼이라는 정보를 넣고, 노티를 보낸다.
+    NSDictionary *whereIsThisViewControllerComeFrom = [NSDictionary dictionaryWithObject:@"firstDetailDesignerInfoViewController" forKey:@"whereIsThisViewControllerComeFrom"];
     [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
-    
+
 }
 
 
 - (IBAction)secondDesignerTouched:(UIButton *)sender {
-    //임시 MutableDic을 만든다.
-    NSMutableDictionary *tempDic = [[NSMutableDictionary alloc] init];
+
+    //디테일 페이지로 이동한다.
+    [self moveDetailPage];
     
-    //myDesignerCount를 담는다.
-    [tempDic setObject:[NSNumber numberWithInteger:_myDesignerCount] forKey:@"myDesignerCount"];
-    
-    //myDesignerCount가 0보다 크면, onlyMyDesignerList Array를 담고, 0이면 임시 값을 담는다.
-    if(_myDesignerCount > 0) {
-        [tempDic setObject:_onlyMyDesignerList forKey:@"onlyMyDesignerList"];
-    } else {
-        NSMutableArray *emptyMyDesignerList = [[NSMutableArray alloc] init];
-        [emptyMyDesignerList addObject:@"임시 값"];
-        [tempDic setObject:_onlyMyDesignerList forKey:@"onlyMyDesignerList"];
-    }
-    
-    //두번째 디자이너의 정보도 따로 넣는다.
-    [tempDic setObject:_onlyMyDesignerList[1] forKey:@"designerInfo"];
-    
-    //결과 Dic에 넣는다.
-    NSDictionary *whereIsThisViewControllerComeFrom = tempDic;
-    
-    //화면을 띄우고 노티를 보낸다.
-    DetailDesignerInfoViewController *detailDesignerInfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
-    [detailDesignerInfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-    [self presentViewController:detailDesignerInfoViewController animated:YES completion:^{
-    }];
-    
+    //두번째 버튼이라는 정보를 넣고, 노티를 보낸다.
+    NSDictionary *whereIsThisViewControllerComeFrom = [NSDictionary dictionaryWithObject:@"secondDetailDesignerInfoViewController" forKey:@"whereIsThisViewControllerComeFrom"];
     [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
+
 }
 
 
 - (IBAction)thirdDesignerTouched:(UIButton *)sender {
-    //임시 MutableDic을 만든다.
-    NSMutableDictionary *tempDic = [[NSMutableDictionary alloc] init];
     
-    //myDesignerCount를 담는다.
-    [tempDic setObject:[NSNumber numberWithInteger:_myDesignerCount] forKey:@"myDesignerCount"];
+    //디테일 페이지로 이동한다.
+    [self moveDetailPage];
     
-    //myDesignerCount가 0보다 크면, onlyMyDesignerList Array를 담고, 0이면 임시 값을 담는다.
-    if(_myDesignerCount > 0) {
-        [tempDic setObject:_onlyMyDesignerList forKey:@"onlyMyDesignerList"];
-    } else {
-        NSMutableArray *emptyMyDesignerList = [[NSMutableArray alloc] init];
-        [emptyMyDesignerList addObject:@"임시 값"];
-        [tempDic setObject:_onlyMyDesignerList forKey:@"onlyMyDesignerList"];
-    }
+    //세번째 버튼이라는 정보를 넣고, 노티를 보낸다.
+    NSDictionary *whereIsThisViewControllerComeFrom = [NSDictionary dictionaryWithObject:@"thirdDetailDesignerInfoViewController" forKey:@"whereIsThisViewControllerComeFrom"];
+    [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
+
+
+
+}
+
+- (void) moveDetailPage {
+
+    //사이드메뉴를 만든다.
+    DesignerRankingViewController *designerRankingViewController = (DesignerRankingViewController *)self.sideMenuController;
     
-    //세번째 디자이너의 정보도 따로 넣는다.
-    [tempDic setObject:_onlyMyDesignerList[2] forKey:@"designerInfo"];
     
-    //결과 Dic에 넣는다.
-    NSDictionary *whereIsThisViewControllerComeFrom = tempDic;
-    
-    //화면을 띄우고 노티를 보낸다.
+    //화면을 띄우고, 사이드 메뉴를 닫는다.
     DetailDesignerInfoViewController *detailDesignerInfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
     [detailDesignerInfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
     [self presentViewController:detailDesignerInfoViewController animated:YES completion:^{
+        [designerRankingViewController hideLeftViewAnimated:NO completionHandler:nil];
     }];
-    
-    [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
+
 }
+
 
 /**
  *  디자이너 랭킹 버튼 터치
  */
 - (IBAction)moveDesignerRankingPage:(UIButton *)sender {
+    
+    //옵저버를 없앤다.
+    [_notificationCenter removeObserver:self];
+
+    //해당 뷰컨트롤러를 없애고, 디자이너 랭킹 페이지로 이동.
     DesignerRankingViewController *designerRankingViewcontroller = [self.storyboard instantiateViewControllerWithIdentifier:@"designerRankingViewController"];
     [designerRankingViewcontroller setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
     [self presentViewController:designerRankingViewcontroller animated:YES completion:nil];
@@ -175,12 +137,20 @@
  *  내 정보 수정 버튼 터치
  */
 - (IBAction)moveMyInformationEditPage:(UIButton *)sender {
+    
+    //옵저버를 없앤다.
+    [_notificationCenter removeObserver:self];
 }
 
 /**
  *  로그아웃 버튼 터치
  */
 - (IBAction)logoutButtonTouched:(UIButton *)sender {
+    
+    //옵저버를 없앤다.
+    [_notificationCenter removeObserver:self];
+    
+    //현재 뷰 컨트롤러를 종료시키고, 로그인 뷰컨트롤러로 이동시킨다.
     LoginViewController *loginViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"loginViewController"];
     [self presentViewController:loginViewController animated:YES completion:nil];
 }
@@ -191,14 +161,8 @@
  */
 - (void)closedBtnAndPresentDesignerInfo: (NSNotification*) noti {
     
-    //내 디자이너 관련 정보를 넣는다.
-    _myDesignerCount = [[[noti userInfo] objectForKey:@"myDesignerCount"] integerValue];
-    if(_myDesignerCount > 0) {
-        _onlyMyDesignerList = [[noti userInfo] objectForKey:@"onlyMyDesignerList"];
-    }
-    
     //내 디자이너 관련 정보를 뷰에 띄운다.
-    switch (_myDesignerCount) {
+    switch (([MyDesignerList getMyDesignerListObject].myDesignerList).count) {
         case 0:
             _firstDesignerBtn.hidden = YES;
             _firstDesignerName.hidden = YES;
@@ -228,8 +192,8 @@
             _thirdDesignerCareer.hidden = YES;
             _thirdDesignerComma.hidden = YES;
             
-            _firstDesignerName.text = [_onlyMyDesignerList[0]  objectForKey:@"stageName"];
-            _firstDesignerCareer.text = [_onlyMyDesignerList[0] objectForKey:@"careerContents"];
+            _firstDesignerName.text = [[[MyDesignerList getMyDesignerListObject] myDesignerList][0] objectForKey:@"stageName"];
+            _firstDesignerCareer.text =[[[MyDesignerList getMyDesignerListObject] myDesignerList][0] objectForKey:@"careerContents"];
             break;
             
         case 2:
@@ -246,10 +210,10 @@
             _thirdDesignerCareer.hidden = YES;
             _thirdDesignerComma.hidden = YES;
             
-            _firstDesignerName.text = [_onlyMyDesignerList[0]  objectForKey:@"stageName"];
-            _firstDesignerCareer.text = [_onlyMyDesignerList[0] objectForKey:@"careerContents"];
-            _secondDesignerName.text = [_onlyMyDesignerList[1] objectForKey:@"stageName"];
-            _secondDesignerCareer.text = [_onlyMyDesignerList[1] objectForKey:@"careerContents"];
+            _firstDesignerName.text = [[[MyDesignerList getMyDesignerListObject] myDesignerList][0] objectForKey:@"stageName"];
+            _firstDesignerCareer.text =[[[MyDesignerList getMyDesignerListObject] myDesignerList][0] objectForKey:@"careerContents"];
+            _secondDesignerName.text = [[[MyDesignerList getMyDesignerListObject] myDesignerList][1] objectForKey:@"stageName"];
+            _secondDesignerCareer.text = [[[MyDesignerList getMyDesignerListObject] myDesignerList][1] objectForKey:@"careerContents"];
             break;
             
         case 3:
@@ -266,12 +230,13 @@
             _thirdDesignerCareer.hidden = NO;
             _thirdDesignerComma.hidden = NO;
             
-            _firstDesignerName.text = [_onlyMyDesignerList[0]  objectForKey:@"stageName"];
-            _firstDesignerCareer.text = [_onlyMyDesignerList[0] objectForKey:@"careerContents"];
-            _secondDesignerName.text = [_onlyMyDesignerList[1] objectForKey:@"stageName"];
-            _secondDesignerCareer.text = [_onlyMyDesignerList[1] objectForKey:@"careerContents"];
-            _thirdDesignerName.text = [_onlyMyDesignerList[2] objectForKey:@"stageName"];
-            _thirdDesignerCareer.text = [_onlyMyDesignerList[2] objectForKey:@"careerContents"];
+            _firstDesignerName.text = [[[MyDesignerList getMyDesignerListObject] myDesignerList][0] objectForKey:@"stageName"];
+            _firstDesignerCareer.text =[[[MyDesignerList getMyDesignerListObject] myDesignerList][0] objectForKey:@"careerContents"];
+            _secondDesignerName.text = [[[MyDesignerList getMyDesignerListObject] myDesignerList][1] objectForKey:@"stageName"];
+            _secondDesignerCareer.text = [[[MyDesignerList getMyDesignerListObject] myDesignerList][1] objectForKey:@"careerContents"];
+            _thirdDesignerName.text = [[[MyDesignerList getMyDesignerListObject] myDesignerList][2] objectForKey:@"stageName"];
+            _thirdDesignerCareer.text = [[[MyDesignerList getMyDesignerListObject] myDesignerList][2] objectForKey:@"careerContents"];
+            
             break;
 
         default:
@@ -287,7 +252,7 @@
         
         //버튼을 비활성화 시킨다
 //        _moveDesignerRankingBtn.hidden = YES;
-    } else if([previousViewController isEqualToString:@"detailDesignerInfoViewController"]){
+    } else if([previousViewController isEqualToString:@"firstDetailDesignerInfoViewController"]){
 
         //버튼을 모두 ON한다.
 //        _moveDesignerRankingBtn.hidden = NO;

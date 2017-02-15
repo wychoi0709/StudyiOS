@@ -10,9 +10,6 @@
 
 @interface DesignerAddNetworkService : NSObject<NSURLConnectionDelegate>
 
-//indexPath
-@property NSIndexPath *indexPath;
-
 //응답받은 변수
 @property NSMutableData *responseData;
 
@@ -23,6 +20,6 @@
 @property NSMutableURLRequest *aRequest;
 
 //내 디자이너를 추가하는 네트워크 요청(고객id, 디자이너id)
-- (void)addMyDesignerRequest:(NSInteger)customerId withDesignerId:(NSInteger)designerId withIndexPath:(NSIndexPath*)indexPath;
+- (void)addMyDesignerRequest:(NSInteger)customerId withDesignerId:(NSInteger)designerId;
 
 @end

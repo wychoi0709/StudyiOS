@@ -13,6 +13,11 @@
 #import "FullChoiceAboutMyDesignerViewController.h"
 #import "ConfirmChoiceAboutMyDesignerViewController.h"
 #import "ConfirmCancelAboutMyDesignerViewController.h"
+#import "MyDesignerList.h"
+#import "DesignerListInALocation.h"
+
+#import <SDWebImage/UIImageView+WebCache.h>
+
 
 @interface DetailDesignerInfoViewController ()
 
@@ -26,26 +31,21 @@
 @property (weak, nonatomic) IBOutlet UILabel *designerClosedDay;
 @property (weak, nonatomic) IBOutlet UIButton *myDesignerButton;
 @property (weak, nonatomic) IBOutlet UIButton *notMyDesignerButton;
-@property (weak, nonatomic) IBOutlet UIButton *invisibleButtonForSideMenu;
 
 @property NSMutableDictionary *userInfo;
 @property NSDictionary *designerInfo;
 @property Location *location;
 @property NSNotificationCenter *notificationCenter;
 
-@property NSInteger myDesignerCount;
-@property NSMutableArray *onlyMyDesignerList;
-
-@property SideMenuViewController *mySideMenuViewController;
-
 @property NSUserDefaults *standardDefault;
-@property NSIndexPath *indexPath;
 
 @property Boolean isMale;
 
 @property NSInteger customerId;
 @property NSInteger locationId;
 @property NSString *gender;
+
+@property NSInteger myDesignerSeq;
 
 @end
 
@@ -61,17 +61,8 @@
     //노티 옵저버를 등록한다.
     _notificationCenter = [NSNotificationCenter defaultCenter];
     [_notificationCenter addObserver:self selector:@selector(settingBasicDataForDetailPage:) name:@"informationsForDetailDesignerPage" object:nil];
-    
-    //SideMenu 만들고 설정하기
-    _mySideMenuViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"SideMenuViewController"];
-    self.leftViewPresentationStyle = LGSideMenuPresentationStyleSlideAbove;
-    self.leftViewBackgroundBlurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
-    self.leftViewBackgroundColor = [UIColor colorWithRed:0.25098039215686 green:0.27843137254902 blue:0.34725490196078 alpha:0.47];
-    self.rootViewCoverColorForLeftView = [[ColorValue getColorValueObject]blackBlueColorChiar];
-    self.leftViewController = _mySideMenuViewController;
-
-    //onlyMyDesignerList를 초기화한다.
-    _onlyMyDesignerList = [[NSMutableArray alloc] init];
+    [_notificationCenter addObserver:self selector:@selector(afterDesignerCancelNetwork:) name:@"cancelMyDesignerResult" object:nil];
+    [_notificationCenter addObserver:self selector:@selector(afterDesignerAddNetwork:) name:@"addMyDesignerResult" object:nil];
     
     //NSUserDefault의 customerId, LocationId, gender 값을 빼낸다.
     _userInfo = [[NSMutableDictionary alloc] init];
@@ -85,9 +76,6 @@
     } else {
         _isMale = false;
     }
-    
-    //임시 indexPath를 초기화한다.
-    _indexPath = [[NSIndexPath alloc] init];
 
 }
 
@@ -103,14 +91,19 @@
  */
 -(void) settingBasicDataForDetailPage:(NSNotification*)noti{
     
-    //내 디자이너 관련 정보를 넣는다.
-    _myDesignerCount = [[[noti userInfo] objectForKey:@"myDesignerCount"] integerValue];
-    if(_myDesignerCount > 0) {
-        _onlyMyDesignerList = [[noti userInfo] objectForKey:@"onlyMyDesignerList"];
+    //어떤 버튼인지 파악한 뒤, 설정한다.
+    NSString *whereIsThisViewControllerComeFrom = [[noti userInfo] objectForKey:@"whereIsThisViewControllerComeFrom"];
+    if([whereIsThisViewControllerComeFrom isEqualToString:@"firstDetailDesignerInfoViewController"]) {
+        _designerInfo = [[MyDesignerList getMyDesignerListObject] myDesignerList][0];
+    } else if([whereIsThisViewControllerComeFrom isEqualToString:@"secondDetailDesignerInfoViewController"]) {
+        _designerInfo = [[MyDesignerList getMyDesignerListObject] myDesignerList][1];
+    } else if([whereIsThisViewControllerComeFrom isEqualToString:@"thirdDetailDesignerInfoViewController"]) {
+        _designerInfo = [[MyDesignerList getMyDesignerListObject] myDesignerList][2];
+    } else {
+        _designerInfo = [[noti userInfo] objectForKey:@"designerInfo"];
     }
-    _designerInfo = [[noti userInfo] objectForKey:@"designerInfo"];
     
-    //라벨, 버튼, 이미지를 설정한다.
+    //라벨, 버튼을 설정한다.
     _designerName.text = [_designerInfo objectForKey:@"stageName"];
     _designerPosition.text = [_designerInfo objectForKey:@"careerContents"];
     _designerMaleCustomerNumber.text = [[_designerInfo objectForKey:@"maleCustomerCount"] stringValue];
@@ -118,7 +111,6 @@
     _designerHairShopName.text =[[_designerInfo objectForKey:@"hairshop"] objectForKey:@"hairshopName"];
     _designerClosedDay.text = [_designerInfo objectForKey:@"closingDay"];
     Boolean isMyDesigner = [[_designerInfo objectForKey:@"isMyDesigner"] boolValue];
-    
     if(isMyDesigner) {
         _myDesignerButton.hidden = NO;
         _notMyDesignerButton.hidden = YES;
@@ -126,6 +118,23 @@
         _myDesignerButton.hidden = YES;
         _notMyDesignerButton.hidden = NO;
     }
+    
+    //디자이너 이미지 URL, 헤어샵 이미지 URL을 추출하여 이미지를 설정한다.
+    NSString *urlString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UrlInfoByYoung"];
+    NSString *pictureUrl = [urlString stringByAppendingString:[_designerInfo objectForKey:@"filename"]];
+    NSLog(@"pictureUrl: %@", pictureUrl);
+    
+    NSString *hairshopPictureUrl = [urlString stringByAppendingString:[[_designerInfo objectForKey:@"hairshop"] objectForKey:@"filename"]];
+    NSLog(@"hairshopPictureUrl: %@", hairshopPictureUrl);
+    
+    [_designerImage sd_setImageWithURL:[NSURL URLWithString:pictureUrl]];
+    _designerImage.layer.borderWidth = 3.0f;
+    _designerImage.layer.borderColor = ([ColorValue getColorValueObject].brownColorChair).CGColor;
+    _designerImage.layer.cornerRadius = _designerImage.frame.size.width / 2;
+    
+    [_designerHairShopImage sd_setImageWithURL:[NSURL URLWithString:hairshopPictureUrl]];
+    _designerHairShopImage.layer.cornerRadius = _designerHairShopImage.frame.size.width / 2;
+
 }
 
 /**
@@ -135,12 +144,8 @@
     NSString *result = [[[noti userInfo] objectForKey:@"resultDic"] objectForKey:@"result"];
     
     if([result isEqualToString:@"success"]) {
-        _myDesignerCount++;
         _myDesignerButton.hidden = NO;
         _notMyDesignerButton.hidden = YES;
-        
-        //등록이 완료되면, 디자이너리스트에 있는 디자이너를 내 디자이너 리스트에 담아
-        [_onlyMyDesignerList addObject:_designerInfo];
         
         if(_isMale){
             NSInteger maleCount = [[_designerInfo objectForKey:@"maleCustomerCount"] integerValue];
@@ -158,19 +163,12 @@
  *  내 디자이너 취소가 완료된 이후 콜백 메소드
  */
 - (void) afterDesignerCancelNetwork: (NSNotification *) noti {
+    NSLog(@"afterDesignerCancelNetwork 진입");
     NSString *result = [[[noti userInfo] objectForKey:@"resultDic"] objectForKey:@"result"];
     
     if([result isEqualToString:@"success"]) {
-        _myDesignerCount--;
         _myDesignerButton.hidden = YES;
         _notMyDesignerButton.hidden = NO;
-        
-        //취소한 디자이너를 onlyMyDesignerList에서 제거한다.
-        for(int i =0; i < _onlyMyDesignerList.count; i++) {
-            if([_onlyMyDesignerList[i] objectForKey:@"id"] == [_designerInfo objectForKey:@"id"]){
-                [_onlyMyDesignerList removeObject:_onlyMyDesignerList[i]];
-            }
-        }
         
         if(_isMale){
             NSInteger maleCount = [[_designerInfo objectForKey:@"maleCustomerCount"] integerValue];
@@ -187,57 +185,11 @@
 
 /**
  *  << 버튼 관련 메소드 >>
- *  사이드 메뉴 버튼 터치
- */
-- (IBAction)sideMenuButtonTouched:(UIButton *)sender {
-    
-    //임시 MutableDic을 만든다.
-    NSMutableDictionary *tempDic = [[NSMutableDictionary alloc] init];
-    
-    //designerRankingViewController 라고 메시지를 담는다.
-    NSString *thisViewController = @"detailDesignerInfoViewController";
-    [tempDic setObject:thisViewController forKey:@"whereIsThisViewControllerComeFrom"];
-    
-    //myDesignerCount를 담는다.
-    [tempDic setObject:[NSNumber numberWithInteger:_myDesignerCount] forKey:@"myDesignerCount"];
-    
-    //myDesignerCount가 0보다 크면, onlyMyDesignerList Array를 담고, 0이면 임시 값을 담는다.
-    if(_myDesignerCount > 0) {
-        [tempDic setObject:_onlyMyDesignerList forKey:@"onlyMyDesignerList"];
-    } else {
-        NSMutableArray *emptyMyDesignerList = [[NSMutableArray alloc] init];
-        [emptyMyDesignerList addObject:@"임시 값"];
-        [tempDic setObject:_onlyMyDesignerList forKey:@"onlyMyDesignerList"];
-    }
-    
-    //결과 Dic에 넣는다.
-    NSDictionary *whereIsThisViewControllerComeFrom = tempDic;
-    
-    //노티를 보낸다.
-    [_notificationCenter postNotificationName:@"guidingPreviousViewController" object:self userInfo:whereIsThisViewControllerComeFrom];
-    
-    //사이드메뉴를 띄운다.
-    [self showLeftViewAnimated:YES completionHandler:^{
-        //사이드 메뉴 닫기 버튼 구역을 보이게 한다.
-        _invisibleButtonForSideMenu.hidden = NO;
-    }];
-    
-}
-
-/**
- *  사이드 메뉴를 없애는 버튼(안보임)
- */
-- (IBAction)hiddenLeftSideMenuBtnTouched:(UIButton *)sender {
-    [self hideLeftViewAnimated:YES completionHandler:nil];
-    _invisibleButtonForSideMenu.hidden = YES;
-}
-
-/**
- *  내 디자이너 등록버튼을 클릭한다.
+ *  내 디자이너 등록 버튼 터치
  */
 - (IBAction)addMyDesignerButton:(UIButton *)sender {
     NSLog(@"touchDownNotMyDesignerButton");
-    if(_myDesignerCount > 2) {
+    if([[MyDesignerList getMyDesignerListObject]myDesignerList].count > 2) {
         
         //3명이 가득찼다는 모달창 만들기
         FullChoiceAboutMyDesignerViewController *fullChoiceAboutMyDesignerViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"fullChoiceAboutMyDesignerViewController"];
@@ -256,7 +208,6 @@
         NSMutableDictionary *tempMutableDic = [[NSMutableDictionary alloc] init];
         [tempMutableDic setObject:_userInfo forKey:@"userInfo"];
         [tempMutableDic setObject:_designerInfo forKey:@"designerInfo"];
-        [tempMutableDic setObject:_indexPath forKey:@"indexPath"];
         
         NSDictionary *userAndDesignerinfo = tempMutableDic;
         
@@ -274,7 +225,7 @@
 
 
 /**
- *  내 디자이너를 취소한다.
+ *  내 디자이너 취소 버튼 터치
  */
 - (IBAction)cancelMyDesignerButton:(UIButton *)sender {
     NSLog(@"touchDownMyDesignerButton");
@@ -283,7 +234,6 @@
     NSMutableDictionary *tempMutableDic = [[NSMutableDictionary alloc] init];
     [tempMutableDic setObject:_userInfo forKey:@"userInfo"];
     [tempMutableDic setObject:_designerInfo forKey:@"designerInfo"];
-    [tempMutableDic setObject:_indexPath forKey:@"indexPath"];
     
     NSDictionary *userAndDesignerinfo = tempMutableDic;
     
@@ -296,6 +246,18 @@
     [self presentViewController:confirmCancelAboutMyDesignerViewController animated:YES completion:^{
         [[NSNotificationCenter defaultCenter] postNotificationName:@"userAndDesignerInfo" object:self userInfo:userAndDesignerinfo];
     }];
+}
+
+/**
+ *  닫기 버튼을 터치한다.
+ */
+- (IBAction)dismissThisViewController:(UIButton *)sender {
+    
+    //모든 옵저버를 지운다.
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    //닫는다.
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 @end

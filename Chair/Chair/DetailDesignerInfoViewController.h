@@ -6,8 +6,8 @@
 //  Copyright © 2017년 최원영. All rights reserved.
 //
 
-#import "LGSideMenuController.h"
+#import <UIKit/UIKit.h>
 
-@interface DetailDesignerInfoViewController : LGSideMenuController
+@interface DetailDesignerInfoViewController : UIViewController
 
 @end

@@ -8,12 +8,12 @@
 
 #import "ConfirmChoiceAboutMyDesignerViewController.h"
 #import "DesignerAddNetworkService.h"
+#import "MyDesignerList.h"
+#import "DesignerListInALocation.h"
 
 @interface ConfirmChoiceAboutMyDesignerViewController ()
 
-@property NSInteger customerId;
-@property NSInteger designerId;
-@property NSIndexPath *indexPath;
+@property NSDictionary *designerInfo;
 
 @end
 
@@ -34,6 +34,13 @@
     [super didReceiveMemoryWarning];
 }
 
+/**
+ *  현 VC가 없어질 떄 실행되는 메소드
+ */
+- (void)viewDidDisappear:(BOOL)animated{
+     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 
 /**
  *  << 버튼에 대한 메소드 >>
@@ -45,12 +52,16 @@
 
 
 /**
- *  확인 버튼을 클릭하면, 네트워크를 실행한다.
+ *  확인 버튼을 클릭하면, 내 디자이너에 추가하고 네트워크를 실행한다.
  */
 - (IBAction)confrimBtnTouched:(UIButton *)sender {
-    DesignerAddNetworkService *designerAddNetworkService = [[DesignerAddNetworkService alloc] init];
-    [designerAddNetworkService addMyDesignerRequest:_customerId withDesignerId:_designerId withIndexPath:_indexPath];
     
+    //만약 해당 지역의 디자이너 리스트에 현 디자이너가 있다면, DesignerListInALocation에 값을 넣고(MyDesignerList는 자동 갱신), 아니면 MyDesignerList에 넣는다.
+    if([[DesignerListInALocation getDesignerListObject] isMyDesignerInThisLocation:_designerInfo]) {
+        [[DesignerListInALocation getDesignerListObject] addMyDesignerInThisLocation:_designerInfo];
+    } else {
+        [[MyDesignerList getMyDesignerListObject] addMyDesigner:_designerInfo];
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -60,11 +71,7 @@
  *  확인 모달 창에 진입한 뒤 디자이너, 회원 정보를 받는 콜백 메소드
  */
 -(void) loadInformations:(NSNotification*) noti {
-    NSDictionary *userInfo = [[noti userInfo] objectForKey:@"userInfo"];
-    NSDictionary *designerInfo = [[noti userInfo] objectForKey:@"designerInfo"];
-    _indexPath = [[noti userInfo] objectForKey:@"indexPath"];
-    _customerId = [[userInfo objectForKey:@"id"] integerValue];
-    _designerId = [[designerInfo objectForKey:@"id"] integerValue];
+    _designerInfo = [[noti userInfo] objectForKey:@"designerInfo"];
 }
 
 @end

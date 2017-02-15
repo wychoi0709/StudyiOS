@@ -10,11 +10,8 @@
 
 @implementation DesignerAddNetworkService
 
-- (void)addMyDesignerRequest:(NSInteger)customerId withDesignerId:(NSInteger)designerId withIndexPath:(NSIndexPath*)indexPath {
-    NSLog(@"DesignerRankingNetworkService의 비동기 요청으로 들어옴");
-    
-    //indexPath 맵핑
-    _indexPath = indexPath;
+- (void)addMyDesignerRequest:(NSInteger)customerId withDesignerId:(NSInteger)designerId {
+    NSLog(@"DesignerAddNetworkService의 비동기 요청으로 들어옴");
     
     //URL String을 토대로 URL 객체를 만든 뒤, 이를 토대로 Request 객체를 생성한다.
     _aURLString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UrlInfoByYoung"];
@@ -95,9 +92,7 @@
     } else {
         //resultData에 결과를 넣는다.
         NSMutableDictionary *tempResultDictionary = [[NSMutableDictionary alloc] init];
-        [tempResultDictionary setObject:responseDataDic forKey:@"resultDic"];
-        [tempResultDictionary setObject:_indexPath forKey:@"indexPath"];
-        
+        [tempResultDictionary setObject:responseDataDic forKey:@"resultDic"];        
         resultData = tempResultDictionary;
     }
     

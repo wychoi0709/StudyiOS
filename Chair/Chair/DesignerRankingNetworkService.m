@@ -7,6 +7,7 @@
 //
 
 #import "DesignerRankingNetworkService.h"
+#import "DesignerListInALocation.h"
 
 @implementation DesignerRankingNetworkService
 
@@ -80,32 +81,19 @@
                                     error:nil];
     
     //결과가 있으면 적절한 키로 매핑하고, 없으면 없다는 메시지를 넣는다.
-    NSDictionary *resultData;
-    if(responseDataArray == nil || [responseDataArray count] == 0) {
-        NSMutableArray *tempArray = [NSMutableArray arrayWithCapacity:0];
-        resultData = [NSDictionary dictionaryWithObject:tempArray forKey:@"designerListResult"];
-    } else {
-        //임시 MutableDic을 만들고 결과를 넣는다.
-        NSMutableDictionary *tempResultDictionary = [[NSMutableDictionary alloc] init];
-        [tempResultDictionary setObject:        responseDataArray forKey:@"designerListResult"];
+    if(responseDataArray != nil || [responseDataArray count] != 0) {
 
-        //내 선생님 리스트만 따로 빼서 저장하고 결과를 임시 MutableDic에 넣는다.
-        NSMutableArray *onlyMyDesignerList = [[NSMutableArray alloc] init];
-        NSInteger myDesignerCount = 0;
-        for(int i = 0 ; i < responseDataArray.count; i++) {
-            if([[responseDataArray[i] objectForKey:@"isMyDesigner"] boolValue]) {
-                [onlyMyDesignerList addObject:responseDataArray[i]];
-                myDesignerCount++;
-            }
-        }
-        [tempResultDictionary setObject:onlyMyDesignerList forKey:@"onlyMyDesignerlist"];
-        [tempResultDictionary setObject:[NSNumber numberWithInteger:myDesignerCount] forKey:@"myDesignerCount"];
+        //리턴 결과를 DesignerList에 맵핑한다.
+        [DesignerListInALocation getDesignerListObject].designerList = responseDataArray;
         
-        //임시 MutableDic을 결과 Dic에 맵핑한다.
-        resultData = tempResultDictionary;
+    } else {
+        
+        //결과가 없으면 모든 리스트를 지운다.
+        [[DesignerListInALocation getDesignerListObject].designerList removeAllObjects];
     }
+
     //결과를 NSNotificationCenter로 보낸다.
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"designerListResult" object:self userInfo:resultData];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"designerListResult" object:self];
     
 }
 
