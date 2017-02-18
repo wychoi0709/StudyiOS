@@ -8,6 +8,9 @@
 
 #import "MyPageCustomerViewController.h"
 #import "LocationSelectModalViewController.h"
+#import "Location.h"
+#import "ImageResizeUtil.h"
+#import "EditMyPageNetworkService.h"
 
 @interface MyPageCustomerViewController ()
 
@@ -18,7 +21,9 @@
 @property NSInteger customerId;
 @property NSInteger locationId;
 @property NSString *gender;
-@property NSString *location;
+@property Location *location;
+@property NSString *locationText;
+@property NSData *myImageData;
 
 //페이지에 필요한 것들
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
@@ -26,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imageGenderSelecterMale;
 @property Boolean isMale;
 @property (weak, nonatomic) IBOutlet UILabel *locationLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *myPictureImageView;
 
 @end
 
@@ -39,7 +45,7 @@
     
     //노티 옵저버 등록(장소 선택 이후 콜백 / )
     _notificationCenter = [NSNotificationCenter defaultCenter];
-    [_notificationCenter addObserver:self selector:@selector(afterLocationSelect:) name:@"informationsForDetailDesignerPage" object:nil];
+    [_notificationCenter addObserver:self selector:@selector(afterLocationSelect:) name:@"changeMyLocation" object:nil];
     
     //데이터 로딩, UIView에 세팅
     [self basicDataLoading];
@@ -60,10 +66,28 @@
 - (void)afterLocationSelect:(NSNotification*)noti{
     
     //장소 정보를 바꾸고, 반영한다.
-    _location = [[noti userInfo] objectForKey:@"location"];
-    _locationId = [[[noti userInfo] objectForKey:@"locationId"] integerValue];
-    [self dataSettingInUIView];
+    _location = [[noti userInfo] objectForKey:@"myLocation"];
+    _locationId = _location.id;
+    _locationText = _location.location;
     
+    [self dataSettingInUIView];
+}
+
+/* 이미지 선택 이후 실행되는 콜백 메소드 */
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
+    
+    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+    UIImage *resizedImage = [ImageResizeUtil imageWithImage:chosenImage scaledToSize:CGSizeMake(100, 100)];
+    
+    self.myPictureImageView.image = resizedImage;
+    _myImageData = UIImagePNGRepresentation(resizedImage);
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+}
+
+/* 이미지 선택을 취소했을때 콜백 메소드 */
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker{
+    [picker dismissViewControllerAnimated:YES completion:NULL];
 }
 
 
@@ -75,33 +99,63 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+/* 사진 수정 버튼 터치 */
 - (IBAction)pictureEditBtnTouched:(UIButton *)sender {
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"사진 선택"
+                                                                   message:@"사진을 선택해주세요."
+                                                            preferredStyle:UIAlertControllerStyleAlert];
     
+    UIAlertAction* albumAction = [UIAlertAction actionWithTitle:@"앨범" style:UIAlertActionStyleDefault
+                                                        handler:^(UIAlertAction * action) {
+                                                            [self doAfterAlbumChoice];
+                                                        }];
+    [alert addAction:albumAction];
+    
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        
+        UIAlertAction* cameraAction = [UIAlertAction actionWithTitle:@"카메라" style:UIAlertActionStyleDefault
+                                                             handler:^(UIAlertAction * action) {
+                                                                 [self doAfterCameraChoice];
+                                                             }];
+        [alert addAction:cameraAction];
+    }
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
+/* 이름 수정 버튼 터치 */
 - (IBAction)nameEditBtnTouched:(UIButton *)sender {
 }
 
+/* 여성 라디오 버튼 터치 */
 - (IBAction)femaleGenderSelectBtnTouched:(UIButton *)sender {
     _imageGenderSelecterFemale.hidden = NO;
     _imageGenderSelecterMale.hidden = YES;
     _isMale = false;
 }
 
+/* 남성 라디오 버튼 터치 */
 - (IBAction)maleGenderSelectBtnTouched:(UIButton *)sender {
     _imageGenderSelecterFemale.hidden = YES;
     _imageGenderSelecterMale.hidden = NO;
     _isMale = true;
 }
 
-//locationSelectModal 열기 메소드
+/* locationSelectModal 열기 메소드 */
 - (IBAction)locationChangeBtnTouched:(UIButton *)sender {
     [self openLocationSelectModalVC];
 }
 
+/* 내 정보 수정 완료 버튼 터치 */
 - (IBAction)myInfoConfirmBtnTouched:(UIButton *)sender {
     //_isMale에 따라 gender를 설정하고, 사진, 이름, 지역id, 고객id 같이 다 네트워크 요청을 보낸다.
     //이후 콜백할 때는 Ranking과 Side 메뉴에도 적용되도록 해야한다. 거기서 나왔기 때문.
+    NSString *gender;
+    if(_isMale) { gender = @"M"; } else { gender = @"F"; }
+    EditMyPageNetworkService *editMyPageNetworkService = [[EditMyPageNetworkService alloc] init];
+    [editMyPageNetworkService editMyInfo:_customerId withLocationId:_locationId withGender:gender withName:_nameLabel.text withPicture:_myImageData];
+    
+    [self setLocationIntoUserInfo];
 }
 
 
@@ -118,9 +172,19 @@
     _locationId = [[_userInfo objectForKey:@"location_id"] integerValue];
     _gender = [_userInfo objectForKey:@"sex"];
     if([_gender isEqualToString:@"M"]) { _isMale = true; } else { _isMale = false; }
-    _location =[[_userInfo objectForKey:@"location"] objectForKey:@"location"];
+    _locationText =[[_userInfo objectForKey:@"location"] objectForKey:@"location"];
+    
+    //하아.. 로케이션 VO 괜히 만들어서 고생 중ㅠㅠ
+    _location = [[Location alloc] init];
+    _location.id = [[[_userInfo objectForKey:@"location"] objectForKey:@"id"] integerValue];
+    _location.city = [[_userInfo objectForKey:@"location"] objectForKey:@"city"];
+    _location.cityDetail = [[_userInfo objectForKey:@"location"] objectForKey:@"cityDetail"];
+    _location.location = [[_userInfo objectForKey:@"location"] objectForKey:@"location"];
+    _location.locationDetail = [[_userInfo objectForKey:@"location"] objectForKey:@"locationDetail"];
+
 }
 
+/* UIView에 데이터를 세팅한다. */
 - (void)dataSettingInUIView {
     _nameLabel.text = [_userInfo objectForKey:@"name"];
     if(_isMale) {
@@ -130,9 +194,10 @@
         _imageGenderSelecterFemale.hidden = NO;
         _imageGenderSelecterMale.hidden = YES;
     }
-    _locationLabel.text = _location;
+    _locationLabel.text = _locationText;
 }
 
+/* 장소 수정 모달 띄우기 */
 - (void)openLocationSelectModalVC {
     
     //모달창을 만든다.
@@ -145,10 +210,62 @@
 
 }
 
-//사진, 앨범 피커 샘플 찾아보기
-- (void)openCameraAndAlbumSelect {
+/* 내 장소 정보를 바꾸고, 반영한다. */
+- (void)setLocationIntoUserInfo {
+    
+    NSLog(@"작업 이전에 userInfo: %@", _userInfo);
+    NSMutableDictionary *locationForUserInfo = [[NSMutableDictionary alloc] init];
+    [locationForUserInfo setObject:[NSNumber numberWithInteger:_location.id] forKey:@"id"];
+    [locationForUserInfo setObject:_location.city forKey:@"city"];
+    [locationForUserInfo setObject:_location.cityDetail forKey:@"cityDetail"];
+    [locationForUserInfo setObject:_location.location forKey:@"location"];
+    [locationForUserInfo setObject:_location.locationDetail forKey:@"locationDetail"];
+    
+    [_userInfo setObject:locationForUserInfo forKey:@"location"];
+    [_userInfo setObject:@(_locationId) forKey:@"location_id"];
+    
+    NSLog(@"작업 이후의 userInfo: %@", _userInfo);
+    
+    [_standardDefault setObject:_userInfo forKey:@"userInfo"];
+    [_standardDefault synchronize];
+    
+}
+
+/* 앨범,카메라 피커에서 앨범 선택했을 때 */
+- (void)doAfterAlbumChoice{
+    NSLog(@"doAfterAlbumChoice");
+    UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    
+    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+        
+        NSLog(@"앨범이 있으니, 있다고 설정하고 알람을 띄움");
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        picker.allowsEditing = YES;
+        
+        [self presentViewController:picker animated:YES completion:nil];
+        
+    } else {
+        NSLog(@"앨범이 없음(오류)");
+    }
+}
+
+/* 앨범,카메라 피커에서 카메라 선택했을 때 */
+- (void)doAfterCameraChoice{
+    NSLog(@"doAfterCameraChoice");
+    UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    
     if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         
+        NSLog(@"카메라가 있으니 카메라를 띄움");
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        picker.allowsEditing = YES;
+        
+        [self presentViewController:picker animated:YES completion:nil];
+        
+    } else {
+        NSLog(@"카메라가 없음");
     }
 }
 @end

@@ -7,10 +7,13 @@
 //
 
 #import "ViewController.h"
+#import "ImageSendNetworkService.h"
+#import "ImageUtil.h"
 
 
 @interface ViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *targetImageView;
+@property NSData *image;
 
 @end
 
@@ -26,6 +29,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 
 - (IBAction)cameraBtnTouched:(UIButton *)sender {
@@ -50,6 +54,14 @@
     
     [self presentViewController:alert animated:YES completion:nil];
 }
+
+
+
+- (IBAction)sendImageBtnTouched:(UIButton *)sender {
+    ImageSendNetworkService *imageSendNetworkService = [[ImageSendNetworkService alloc] init];
+    [imageSendNetworkService sendImage:_image];
+}
+
 
 
 - (void)doSomethingAfterAlbum {
@@ -92,7 +104,11 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
     
     UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
-    self.targetImageView.image = chosenImage;
+    
+    
+    UIImage *resizedImage = [ImageUtil imageWithImage:chosenImage scaledToSize:CGSizeMake(150, 150)];
+    self.targetImageView.image = resizedImage;
+    _image = UIImagePNGRepresentation(resizedImage);
     
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }

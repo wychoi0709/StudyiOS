@@ -25,6 +25,7 @@
 #import "MyDesignerList.h"
 #import "DesignerListInALocation.h"
 #import "GetMyDesignerListNetworkService.h"
+#import "IsTempLocation.h"
 
 #import <SDWebImage/UIImageView+WebCache.h>
 
@@ -182,6 +183,10 @@
  *  장소전환 버튼 터치(관심지역 모달창을 띄운다)
  */
 - (IBAction)locationButtonTouched:(UIButton *)sender {
+    
+    //TempLocation이라고 설정한다.
+    [IsTempLocation getIsTempLocationObject].isTempLocation = true;
+    
     //모달창을 만든다.
     _locationSelectModalViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"locationSelectModalViewController"];
     
@@ -196,14 +201,19 @@
  */
 - (void)changeTempLocation: (NSNotification*) noti {
     
-    //noti에서 Location정보를 뽑아와서 임시지역정보를 갱신한다.
-    Location *myLocationInfo = [[noti userInfo] objectForKey:@"myLocation"];
-    _locationId = myLocationInfo.id;
+    //임시 로케이션이 맞다면, 아래를 실행하고 아니면 넘긴다.
+    if([IsTempLocation getIsTempLocationObject].isTempLocation) {
+        //noti에서 Location정보를 뽑아와서 임시지역정보를 갱신한다.
+        Location *myLocationInfo = [[noti userInfo] objectForKey:@"myLocation"];
+        _locationId = myLocationInfo.id;
 
-    //라벨정보를 갱신한다.
-    _locationLabel.text = myLocationInfo.location;
+        //라벨정보를 갱신한다.
+        _locationLabel.text = myLocationInfo.location;
     
-    [_designerRankingNetworkService callDesignerListByLocationIdRequest:_customerId withLocationId:_locationId withGender:_gender];
+        [_designerRankingNetworkService callDesignerListByLocationIdRequest:_customerId withLocationId:_locationId withGender:_gender];
+        
+        [IsTempLocation getIsTempLocationObject].isTempLocation = false;
+    }
 }
 
 /**

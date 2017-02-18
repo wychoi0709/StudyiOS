@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6F44A0D01E58052500BC8241 /* ImageUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F44A0CF1E58052500BC8241 /* ImageUtil.m */; };
 		6F5A0F701E4D359700650D01 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F5A0F6F1E4D359700650D01 /* main.m */; };
 		6F5A0F731E4D359700650D01 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F5A0F721E4D359700650D01 /* AppDelegate.m */; };
 		6F5A0F761E4D359700650D01 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F5A0F751E4D359700650D01 /* ViewController.m */; };
@@ -17,6 +18,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6F44A0CE1E58052500BC8241 /* ImageUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageUtil.h; sourceTree = "<group>"; };
+		6F44A0CF1E58052500BC8241 /* ImageUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageUtil.m; sourceTree = "<group>"; };
 		6F5A0F6B1E4D359700650D01 /* CameraPractice.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CameraPractice.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6F5A0F6F1E4D359700650D01 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		6F5A0F711E4D359700650D01 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -72,6 +75,8 @@
 				6F5A0F6E1E4D359700650D01 /* Supporting Files */,
 				6FF952091E4F0A4B00B89BB0 /* ImageSendNetworkService.h */,
 				6FF9520A1E4F0A4B00B89BB0 /* ImageSendNetworkService.m */,
+				6F44A0CE1E58052500BC8241 /* ImageUtil.h */,
+				6F44A0CF1E58052500BC8241 /* ImageUtil.m */,
 			);
 			path = CameraPractice;
 			sourceTree = "<group>";
@@ -160,6 +165,7 @@
 				6F5A0F761E4D359700650D01 /* ViewController.m in Sources */,
 				6F5A0F731E4D359700650D01 /* AppDelegate.m in Sources */,
 				6F5A0F701E4D359700650D01 /* main.m in Sources */,
+				6F44A0D01E58052500BC8241 /* ImageUtil.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

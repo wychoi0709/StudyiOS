@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MyPageCustomerViewController : UIViewController <UIImagePickerControllerDelegate>
+@interface MyPageCustomerViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @end

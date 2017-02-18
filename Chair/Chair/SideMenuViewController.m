@@ -12,6 +12,7 @@
 #import "LoginViewController.h"
 #import "DetailDesignerInfoViewController.h"
 #import "MyDesignerList.h"
+#import "MyPageCustomerViewController.h"
 
 @interface SideMenuViewController ()
 
@@ -37,6 +38,7 @@
 @property NSInteger myDesignerCount;
 @property NSMutableArray *onlyMyDesignerList;
 @property NSNotificationCenter *notificationCenter;
+@property DesignerRankingViewController *designerRankingViewController;
 @end
 
 @implementation SideMenuViewController
@@ -106,14 +108,14 @@
 - (void) moveDetailPage {
 
     //사이드메뉴를 만든다.
-    DesignerRankingViewController *designerRankingViewController = (DesignerRankingViewController *)self.sideMenuController;
+    _designerRankingViewController = (DesignerRankingViewController *)self.sideMenuController;
     
     
     //화면을 띄우고, 사이드 메뉴를 닫는다.
     DetailDesignerInfoViewController *detailDesignerInfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
     [detailDesignerInfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
     [self presentViewController:detailDesignerInfoViewController animated:YES completion:^{
-        [designerRankingViewController hideLeftViewAnimated:NO completionHandler:nil];
+        [_designerRankingViewController hideLeftViewAnimated:NO completionHandler:nil];
     }];
 
 }
@@ -127,7 +129,7 @@
     //옵저버를 없앤다.
     [_notificationCenter removeObserver:self];
 
-    //해당 뷰컨트롤러를 없애고, 디자이너 랭킹 페이지로 이동.
+    //디자이너 랭킹 페이지로 이동.
     DesignerRankingViewController *designerRankingViewcontroller = [self.storyboard instantiateViewControllerWithIdentifier:@"designerRankingViewController"];
     [designerRankingViewcontroller setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
     [self presentViewController:designerRankingViewcontroller animated:YES completion:nil];
@@ -140,6 +142,14 @@
     
     //옵저버를 없앤다.
     [_notificationCenter removeObserver:self];
+    
+    //내 정보 페이지로 이동.
+    MyPageCustomerViewController *myPageCustomerViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"myPageCustomerViewController"];
+    [myPageCustomerViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+    [self presentViewController:myPageCustomerViewController animated:YES completion:^{
+         [_designerRankingViewController hideLeftViewAnimated:NO completionHandler:nil];
+    }];
+
 }
 
 /**

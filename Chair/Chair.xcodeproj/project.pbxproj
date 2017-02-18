@@ -31,11 +31,14 @@
 		6F26D69C1E18CDE500F0C03E /* SignUpNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F26D69B1E18CDE500F0C03E /* SignUpNetworkService.m */; };
 		6F26D6A31E19226E00F0C03E /* DesignerRankingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F26D6A21E19226E00F0C03E /* DesignerRankingViewController.m */; };
 		6F26D6A61E1922B400F0C03E /* SideMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F26D6A51E1922B400F0C03E /* SideMenuViewController.m */; };
+		6F48C55A1E5573FC00105EF5 /* IsTempLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F48C5591E5573FC00105EF5 /* IsTempLocation.m */; };
+		6F48C55D1E5576F700105EF5 /* EditMyPageNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F48C55C1E5576F700105EF5 /* EditMyPageNetworkService.m */; };
 		6F4D72FF1E261A06005F3730 /* DesignerAddNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F4D72FE1E261A06005F3730 /* DesignerAddNetworkService.m */; };
 		6F4D73021E2620B8005F3730 /* DesignerCancelNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F4D73011E2620B8005F3730 /* DesignerCancelNetworkService.m */; };
 		6F4D73051E2631AD005F3730 /* ConfirmCancelAboutMyDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F4D73041E2631AD005F3730 /* ConfirmCancelAboutMyDesignerViewController.m */; };
 		6F4F3A8A1E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F4F3A891E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m */; };
 		6F6983BB1E2A119C00B36365 /* GetMyDesignerListNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F6983BA1E2A119C00B36365 /* GetMyDesignerListNetworkService.m */; };
+		6F99B9761E5868D900DA0250 /* ImageResizeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F99B9751E5868D900DA0250 /* ImageResizeUtil.m */; };
 		6FC52D361E27817200221319 /* MyDesignerList.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FC52D351E27817200221319 /* MyDesignerList.m */; };
 		6FCABAD31E18072F0091ED9F /* LocationCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FCABAD21E18072F0091ED9F /* LocationCollectionReusableView.m */; };
 		6FCF1DF61E25489700CC91C6 /* FullChoiceAboutMyDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FCF1DF51E25489700CC91C6 /* FullChoiceAboutMyDesignerViewController.m */; };
@@ -87,6 +90,10 @@
 		6F26D6A21E19226E00F0C03E /* DesignerRankingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesignerRankingViewController.m; sourceTree = "<group>"; };
 		6F26D6A41E1922B400F0C03E /* SideMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SideMenuViewController.h; sourceTree = "<group>"; };
 		6F26D6A51E1922B400F0C03E /* SideMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SideMenuViewController.m; sourceTree = "<group>"; };
+		6F48C5581E5573FC00105EF5 /* IsTempLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IsTempLocation.h; sourceTree = "<group>"; };
+		6F48C5591E5573FC00105EF5 /* IsTempLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IsTempLocation.m; sourceTree = "<group>"; };
+		6F48C55B1E5576F700105EF5 /* EditMyPageNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditMyPageNetworkService.h; sourceTree = "<group>"; };
+		6F48C55C1E5576F700105EF5 /* EditMyPageNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditMyPageNetworkService.m; sourceTree = "<group>"; };
 		6F4D72FD1E261A06005F3730 /* DesignerAddNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesignerAddNetworkService.h; sourceTree = "<group>"; };
 		6F4D72FE1E261A06005F3730 /* DesignerAddNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesignerAddNetworkService.m; sourceTree = "<group>"; };
 		6F4D73001E2620B8005F3730 /* DesignerCancelNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesignerCancelNetworkService.h; sourceTree = "<group>"; };
@@ -97,6 +104,8 @@
 		6F4F3A891E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingSectionHeaderCollectionReusableView.m; sourceTree = "<group>"; };
 		6F6983B91E2A119C00B36365 /* GetMyDesignerListNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetMyDesignerListNetworkService.h; sourceTree = "<group>"; };
 		6F6983BA1E2A119C00B36365 /* GetMyDesignerListNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetMyDesignerListNetworkService.m; sourceTree = "<group>"; };
+		6F99B9741E5868D900DA0250 /* ImageResizeUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageResizeUtil.h; sourceTree = "<group>"; };
+		6F99B9751E5868D900DA0250 /* ImageResizeUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageResizeUtil.m; sourceTree = "<group>"; };
 		6FC52D341E27817200221319 /* MyDesignerList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyDesignerList.h; sourceTree = "<group>"; };
 		6FC52D351E27817200221319 /* MyDesignerList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyDesignerList.m; sourceTree = "<group>"; };
 		6FCABAD11E18072F0091ED9F /* LocationCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationCollectionReusableView.h; sourceTree = "<group>"; };
@@ -153,6 +162,7 @@
 		546318DC1DE545F9005A3F4C /* Chair */ = {
 			isa = PBXGroup;
 			children = (
+				6F99B9731E5868C600DA0250 /* Util */,
 				6FCF1DF31E2547A400CC91C6 /* Popup */,
 				6F8D34721DF855250045B579 /* VO */,
 				546318E01DE545F9005A3F4C /* AppDelegate.h */,
@@ -199,6 +209,8 @@
 				6F4D72FE1E261A06005F3730 /* DesignerAddNetworkService.m */,
 				6F6983B91E2A119C00B36365 /* GetMyDesignerListNetworkService.h */,
 				6F6983BA1E2A119C00B36365 /* GetMyDesignerListNetworkService.m */,
+				6F48C55B1E5576F700105EF5 /* EditMyPageNetworkService.h */,
+				6F48C55C1E5576F700105EF5 /* EditMyPageNetworkService.m */,
 			);
 			name = Network;
 			sourceTree = "<group>";
@@ -240,6 +252,8 @@
 			children = (
 				6F240CDC1E164062002C42EE /* ColorValue.h */,
 				6F240CDD1E164062002C42EE /* ColorValue.m */,
+				6F48C5581E5573FC00105EF5 /* IsTempLocation.h */,
+				6F48C5591E5573FC00105EF5 /* IsTempLocation.m */,
 			);
 			name = ConstantValue;
 			sourceTree = "<group>";
@@ -266,6 +280,15 @@
 				6F1BE7CD1E28D9D10094A55A /* DesignerListInALocation.m */,
 			);
 			name = VO;
+			sourceTree = "<group>";
+		};
+		6F99B9731E5868C600DA0250 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				6F99B9741E5868D900DA0250 /* ImageResizeUtil.h */,
+				6F99B9751E5868D900DA0250 /* ImageResizeUtil.m */,
+			);
+			name = Util;
 			sourceTree = "<group>";
 		};
 		6FCF1DF31E2547A400CC91C6 /* Popup */ = {
@@ -448,6 +471,7 @@
 				6FCF1DF61E25489700CC91C6 /* FullChoiceAboutMyDesignerViewController.m in Sources */,
 				6FCABAD31E18072F0091ED9F /* LocationCollectionReusableView.m in Sources */,
 				6FEB0BB71E1E7D6600C9EBAB /* DesignerRankingNetworkService.m in Sources */,
+				6F48C55D1E5576F700105EF5 /* EditMyPageNetworkService.m in Sources */,
 				6F4F3A8A1E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m in Sources */,
 				6FE6EF0B1E0976820017FE95 /* SignUpViewController.m in Sources */,
 				546318DF1DE545F9005A3F4C /* main.m in Sources */,
@@ -456,9 +480,11 @@
 				6FCF1DF91E2548C900CC91C6 /* ConfirmChoiceAboutMyDesignerViewController.m in Sources */,
 				6FD3A23C1E272EE20019123D /* DetailDesignerInfoViewController.m in Sources */,
 				6F6983BB1E2A119C00B36365 /* GetMyDesignerListNetworkService.m in Sources */,
+				6F99B9761E5868D900DA0250 /* ImageResizeUtil.m in Sources */,
 				6F4D72FF1E261A06005F3730 /* DesignerAddNetworkService.m in Sources */,
 				6F240CDE1E164062002C42EE /* ColorValue.m in Sources */,
 				6F0C72C71E1D45C500995983 /* RankingNormalDesignerCollectionViewCell.m in Sources */,
+				6F48C55A1E5573FC00105EF5 /* IsTempLocation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
