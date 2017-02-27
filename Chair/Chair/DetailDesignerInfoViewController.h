@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface DetailDesignerInfoViewController : UIViewController
+@interface DetailDesignerInfoViewController : UIViewController<UICollectionViewDelegate, UICollectionViewDataSource>
 
 @end

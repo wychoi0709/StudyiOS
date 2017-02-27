@@ -10,5 +10,15 @@ target 'Chair' do
   pod 'Realm', '~> 2.1'
   pod 'SDWebImage', '~>3.8'
   pod 'LGSideMenuController'
+  
+  pod 'Firebase/Core'
+  pod 'Firebase/Messaging'
+  pod 'Firebase/Database'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Storage'
+  pod 'Firebase/Messaging'
+  pod 'Firebase/Crash'
+  
+  pod 'GoogleSignIn'
 
 end

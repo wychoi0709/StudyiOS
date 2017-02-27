@@ -10,7 +10,7 @@
 
 @interface LoginNetworkService : NSObject<NSURLConnectionDelegate>
 
-//ConnectionDelegate에서 쓸 변수(응답받은 변수인듯)
+//응답받을 변수
 @property NSMutableData *responseData;
 
 //로그인 네트워크 통신에 필요한 변수들
@@ -19,13 +19,10 @@
 @property NSURL *aURL;
 @property NSMutableURLRequest *aRequest;
 
-//email, password 인스턴스 변수
-@property NSString *email;
-@property NSString *password;
+//로그인을 위한 firebase uid 변수
+@property NSString *uid;
 
 //로그인하는 메소드
-- (NSDictionary*)sendLoginRequest:(NSString*)email withPassword:(NSString*)password;
-- (void)sendLoginAsynchronousRequest:(NSString*)email withPassword:(NSString*)password;
-
+- (void)sendLoginAsynchronousRequest:(NSString*)uid;
 
 @end

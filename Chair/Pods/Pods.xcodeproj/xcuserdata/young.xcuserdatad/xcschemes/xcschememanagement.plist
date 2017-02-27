@@ -4,12 +4,32 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
+		<key>GTMOAuth2.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>GTMSessionFetcher.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>GoogleToolboxForMac.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>LGSideMenuController.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
 		<key>Pods-Chair.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Protobuf.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -27,22 +47,42 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>025AC0066DC478B9EA49EDCAFDAE4867</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>26B5980F2302FEA9EBF8276CE51B16DC</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>3972EC557206359D743A9CB749115921</key>
+		<key>39A2BA6D8E8A9453BA2B15702E5F4FC0</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6C2AC0CB58BEEF3E657808FADEA66D99</key>
+		<key>58885A79D8F2FE6A57DF1D65A1A33E7E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>A020CC230CC540369FA024C951FC6A59</key>
+		<key>7AB46830B3334C5C82282A8A89C389D4</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>BB253938BDE63F5A1E9D99D06F897AF3</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>EAE45C123C22F83F258F201FDFBA835E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>F3B069BEFD81C756224C3B6CE6BA5696</key>
 		<dict>
 			<key>primary</key>
 			<true/>

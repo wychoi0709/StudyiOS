@@ -19,13 +19,12 @@
 @property NSURL *aURL;
 @property NSMutableURLRequest *aRequest;
 
-//name, email, password, location 인스턴스 변수
+//name, location 인스턴스 변수
 @property NSString *name;
-@property NSString *email;
-@property NSString *password;
 @property NSInteger locationId;
+@property NSString *uid;
 
 //회원가입하는 메소드
-- (void)sendSignUpAsynchronousRequest:(NSString*)name withEmail:(NSString*)email withPassword:(NSString*)password withLocationId:(NSInteger)locationId;
+- (void)sendSignUpAsynchronousRequest:(NSString*)name withLocationId:(NSInteger)locationId withUid:(NSString*)uid;
 
 @end

@@ -16,7 +16,6 @@
 -(instancetype) init;
 -(void) addMyDesignerInThisLocation:(NSDictionary*)designer ;
 -(void) removeMyDesignerInThisLocation:(NSDictionary*)designer;
--(NSMutableArray*) getMyDesignerlistInThisLocation;
 -(Boolean) isMyDesignerInThisLocation:(NSDictionary*)designer;
 
 @end

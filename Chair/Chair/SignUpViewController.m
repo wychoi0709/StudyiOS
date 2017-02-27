@@ -11,7 +11,10 @@
 #import "Location.h"
 #import "SignUpNetworkService.h"
 #import "DesignerRankingViewController.h"
+#import "MeasurementHelper.h"
+#import "CheckEmailFormatHelper.h"
 
+@import Firebase;
 
 @interface SignUpViewController ()
 
@@ -99,19 +102,8 @@
 
 
 -(void)didFinishSignUpRequest: (NSNotification *)noti {
-    NSLog(@"changeMyLocationBtnLabel로 들어옴");
-    
-    //결과를 빼온 뒤, NSUserDefaults에 'userInfo'로 맵핑시켜놓는다.
-    NSDictionary* resultData = [[noti userInfo] objectForKey:@"signUpResult"];
-    NSUserDefaults *standardDefault = [NSUserDefaults standardUserDefaults];
-    [standardDefault setObject:resultData forKey:@"userInfo"];
-    [standardDefault synchronize];
-    
-    NSLog(@"sendSignUpRequest result = %@", resultData);
-    
-    //DesignerRanking 뷰 컨트롤러로 보낸다.
-    DesignerRankingViewController *designerRankingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"designerRankingViewController"];
-    [self presentViewController:designerRankingViewController animated:YES completion:nil];
+    NSLog(@"signUpRequest가 끝났다는 노티");
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -133,9 +125,29 @@
 
 - (IBAction)signUpBtnTouched:(UIButton *)sender {
     
-    _signupNetworkService = [[SignUpNetworkService alloc] init];
+    if ([CheckEmailFormatHelper isValidEmailAddress:_emailTextField.text]) {
+        
+        //Firebase에 회원가입 요청 보내기
+        [[FIRAuth auth] createUserWithEmail:_emailTextField.text password:_passwordTextField.text completion:^(FIRUser *_Nullable user, NSError *_Nullable error) {
+        
+            //애러나면.. 코드 적기
+            if (error) {
+                NSLog(@"이메일 회원가입 중에 애러났어요.. %@", error);
+                
+                //비밀번호는 6자리 이상으로 만들기 팝업창 띄워주세요!!
+                
+                return;
+            }
+        
+            //성공하면, 우리 서버에도 정보 저장해두기
+            _signupNetworkService = [[SignUpNetworkService alloc] init];
+            [_signupNetworkService sendSignUpAsynchronousRequest:_nameTextField.text withLocationId:_myLocation.id withUid:user.uid];
+        }];
     
-    [_signupNetworkService sendSignUpAsynchronousRequest:_nameTextField.text withEmail:_emailTextField.text withPassword:_passwordTextField.text withLocationId:_myLocation.id];
+    } else {
+        NSLog(@"이메일 형식이 아닙니다. 팝업창 만들어주세요!");
+        //팝업을 띄운다.
+    }
     
 }
 

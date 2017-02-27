@@ -22,69 +22,15 @@
     return self;
 }
 
-
-/**
- *  로그인을 위한 HTTP 요청 (동기): 동기 방식은 쓰지 않음
- */
-- (NSDictionary*)sendLoginRequest:(NSString*)email withPassword:(NSString*)password
-{
-    //받은 email과 password를 인스턴스 변수와 연결한다.
-    _email = email;
-    _password = password;
-    
-    //URL String을 토대로 URL 객체를 만든 뒤, 이를 토대로 Request 객체를 생성한다.
-    _aURLString = @"http://10.73.38.203:3000/customer/selectone";
-    _aURL = [NSURL URLWithString:_aURLString];
-    _aRequest = [NSMutableURLRequest requestWithURL:_aURL];
-    
-    //Request 객체를 Setting한다.
-    [_aRequest setHTTPMethod:@"POST"];
-    [_aRequest setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-    [_aRequest setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-    
-    //body에 전송할 변수를 넣는다.
-    NSDictionary* bodyObject = @{
-                                 @"email": _email,
-                                 @"password": _password
-                                 };
-    _aRequest.HTTPBody = [NSJSONSerialization dataWithJSONObject:bodyObject options:kNilOptions error:nil];
-    
-    //Response에 필요한 객체들을 생성한다.
-    NSHTTPURLResponse *aResponse;
-    NSError *aError;
-    
-    //요청을 보내고, 결과를 받는다.
-    NSData *aResultData = [NSURLConnection sendSynchronousRequest:_aRequest returningResponse:&aResponse error:&aError];    //sendSychronousRequest는 동기화 방식이어서 갔다 올 때까지 기다린다. 네트워크 단에서 타이머가 결정되어 있기 때문에, 클라이언트에서 로직을 넣어줘야한다.
-    
-    //결과를 파싱한다.
-    NSDictionary *dataDictionary = [NSJSONSerialization
-                                    JSONObjectWithData:aResultData
-                                    options:NSJSONReadingMutableContainers
-                                    error:nil];
-    
-    //결과를 로그로 보여준다(JSON에서 한글이 깨지는게 아니라 주소값이 보여지는 것 뿐이다)
-    NSLog(@"login response = %ld", (long)aResponse.statusCode);
-    NSLog(@"login result = %@", dataDictionary );
-    NSDictionary *loctaion = dataDictionary[@"location"];
-    NSLog(@"login result -> location -> city= %@", loctaion[@"city"] );
-
-    
-    //결과를 리턴한다.
-    return dataDictionary;
-    
-}
-
-
 /**
  *  로그인을 위한 HTTP 요청 (비동기)
  */
-- (void)sendLoginAsynchronousRequest:(NSString*)email withPassword:(NSString*)password{
+- (void)sendLoginAsynchronousRequest:(NSString*)uid{
     
     NSLog(@"LoginNetworkService의 비동기 요청으로 들어옴");
     
-    //받은 email과 password를 인스턴스 변수와 연결한다.
-    _email = email;
-    _password = password;
+    //받은 uid를 인스턴스 변수와 연결한다.
+    _uid = uid;
     
     //URL String을 토대로 URL 객체를 만든 뒤, 이를 토대로 Request 객체를 생성한다.
     _aURLString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UrlInfoByYoung"];
@@ -99,8 +45,7 @@
     
     //body에 전송할 변수를 넣는다.
     NSDictionary* bodyObject = @{
-                                 @"email": _email,
-                                 @"password": _password
+                                 @"uid": _uid
                                  };
     _aRequest.HTTPBody = [NSJSONSerialization dataWithJSONObject:bodyObject options:kNilOptions error:nil];
     

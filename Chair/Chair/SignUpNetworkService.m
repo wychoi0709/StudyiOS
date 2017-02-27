@@ -13,14 +13,13 @@
 /**
  *  회원가입 요청을 날리는 메소드
  */
-- (void)sendSignUpAsynchronousRequest:(NSString*)name withEmail:(NSString*)email withPassword:(NSString*)password withLocationId:(NSInteger)locationId{
+- (void)sendSignUpAsynchronousRequest:(NSString*)name withLocationId:(NSInteger)locationId withUid:(NSString*)uid{
     NSLog(@"SignUpNetworkService의 비동기 요청으로 들어옴");
     
     //받은 name, email과 password, locationId를 인스턴스 변수와 연결한다.
     _name = name;
-    _email = email;
-    _password = password;
     _locationId = locationId;
+    _uid = uid;
     
     //임시로 생일, 폰번호, 성별을 설정한다.
     NSString *birthday = @"9999-01-01";
@@ -41,12 +40,11 @@
     //body에 전송할 변수를 넣는다.
     NSDictionary* bodyObject = @{
                                  @"name": _name,
-                                 @"email": _email,
-                                 @"password": _password,
                                  @"location_id": [NSNumber numberWithInteger:_locationId],
                                  @"birthday": birthday,
                                  @"phone": phone,
-                                 @"sex": sex
+                                 @"sex": sex,
+                                 @"uid": uid
                                  };
     _aRequest.HTTPBody = [NSJSONSerialization dataWithJSONObject:bodyObject options:kNilOptions error:nil];
     
@@ -107,11 +105,14 @@
     NSLog(@"SignUpRequest result = %@", signUpResultDic);
     
     //노티로 보내기 위해 Dic에 넣는다.
-    NSDictionary *signUpResultInNoti = [NSDictionary dictionaryWithObject:signUpResultDic forKey:@"signUpResult"];
+    NSDictionary *signUpResultInNoti = [NSDictionary dictionaryWithObject:signUpResultDic forKey:@"loginResult"];
     
-    //결과를 NSNotificationCenter로 보낸다.
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"signUpResultNotification" object:self userInfo:signUpResultInNoti];
+    //결과를 로그인, 사인업 둘다 보낸다.
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"signUpResultNotification" object:self userInfo:nil];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"loginResult" object:self userInfo:signUpResultInNoti];
+
 }
 
 

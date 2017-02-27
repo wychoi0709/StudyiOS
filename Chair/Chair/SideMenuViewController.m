@@ -14,6 +14,8 @@
 #import "MyDesignerList.h"
 #import "MyPageCustomerViewController.h"
 
+@import Firebase;
+
 @interface SideMenuViewController ()
 
 @property (weak, nonatomic) IBOutlet UILabel *userNameLabel;
@@ -157,12 +159,32 @@
  */
 - (IBAction)logoutButtonTouched:(UIButton *)sender {
     
-    //옵저버를 없앤다.
-    [_notificationCenter removeObserver:self];
+    //Firebase 인증관련 객체를 FIRAuth에서 받아옴. 이 FIRAuth는 Firebase 클래스인가봄.
+    FIRAuth *firebaseAuth = [FIRAuth auth];
     
-    //현재 뷰 컨트롤러를 종료시키고, 로그인 뷰컨트롤러로 이동시킨다.
-    LoginViewController *loginViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"loginViewController"];
-    [self presentViewController:loginViewController animated:YES completion:nil];
+    //objective C 문법인 듯 한데, 애러를 하나 만들어?
+    NSError *signOutError;
+    
+    //Firebase Auth에서 signOut을 하면서 애러가 난다면 아까 만든 애러에 넣어.
+    BOOL status = [firebaseAuth signOut:&signOutError];
+    
+    //만약 애러가 났다면 애러라고 알려줘.
+    if (!status) {
+        NSLog(@"Error signing out: %@", signOutError);
+        return;
+    } else {
+        //옵저버를 없앤다.
+        [_notificationCenter removeObserver:self];
+        
+        [_designerRankingViewController hideLeftViewAnimated:NO completionHandler:nil];
+        
+        //내 디자이너 선생님 리스트를 초기화시킨다.
+        [[MyDesignerList getMyDesignerListObject] refreshMyDesignerList];
+        
+        //로그인 창으로 돌아간다.
+        [self dismissViewControllerAnimated:YES completion:nil];
+        
+    }
 }
 
 /**

@@ -14,6 +14,7 @@
 
 +(MyDesignerList *) getMyDesignerListObject;
 -(instancetype) init;
+-(void) refreshMyDesignerList;
 -(void) addMyDesigner:(NSDictionary*)designer ;
 -(void) removeMyDesigner:(NSDictionary*)designer;
 - (Boolean)isMyDeisnger:(NSDictionary*)designer;

@@ -111,6 +111,16 @@
  */
 -(void) sortMyDesignerList {
 }
+
+
+-(void) refreshMyDesignerList{
+    _myDesignerList = [[NSMutableArray alloc] init];
     
+    //userInfo를 가져온다(customerId는 안변할 테니깐)
+    _userInfo = [[NSMutableDictionary alloc] init];
+    _standardDefault = [NSUserDefaults standardUserDefaults];
+    _userInfo = [[_standardDefault objectForKey:@"userInfo"] mutableCopy];
+    _customerId = [[_userInfo objectForKey:@"id"] integerValue];
+}
 
 @end

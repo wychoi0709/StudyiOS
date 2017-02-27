@@ -7,6 +7,11 @@
 //
 
 #import "AppDelegate.h"
+#import "LoginNetworkService.h"
+#import "MeasurementHelper.h"
+#import "SocialLoginNetworkService.h"
+
+@import Firebase;
 
 @interface AppDelegate ()
 
@@ -17,7 +22,35 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    [FIRApp configure];
+
+    //구글 로그인 인증 관련 코드
+    [GIDSignIn sharedInstance].clientID = [FIRApp defaultApp].options.clientID;
+    
     return YES;
+}
+
+//구글 로그인 인증 관련 코드
+- (BOOL)application:(nonnull UIApplication *)application
+            openURL:(nonnull NSURL *)url
+            options:(nonnull NSDictionary<NSString *, id> *)options {
+    
+    return [[GIDSignIn sharedInstance] handleURL:url
+                               sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+                                      annotation:options[UIApplicationOpenURLOptionsAnnotationKey]];
+    
+}
+
+//구글 로그인 인증 관련 코드
+- (BOOL)application:(UIApplication *)application
+            openURL:(NSURL *)url
+  sourceApplication:(NSString *)sourceApplication
+         annotation:(id)annotation {
+    
+    return [[GIDSignIn sharedInstance] handleURL:url
+                               sourceApplication:sourceApplication
+                                      annotation:annotation];
+    
 }
 
 
@@ -40,6 +73,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    
 }
 
 
