@@ -64,6 +64,8 @@
 
 @property NSIndexPath *targetIndexPath;
 
+@property NSString *urlString;
+
 @end
 
 @implementation DesignerRankingViewController
@@ -74,6 +76,9 @@
  */
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //이미지 처리를 위한 기본 URL 확보
+    _urlString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UrlInfoByYoung"];
     
     //delegate 지정
     _rankingCollectionView.delegate = self;
@@ -221,12 +226,21 @@
  */
 - (IBAction)sideMenuButtonTouched:(UIButton *)sender {
     
+    NSLog(@"sideMenuButton 터치");
+    
     //임시 MutableDic을 만든다.
     NSMutableDictionary *tempDic = [[NSMutableDictionary alloc] init];
     
-    //designerRankingViewController 라고 메시지를 담는다.
-    NSString *thisViewController = @"designerRankingViewController";
-    [tempDic setObject:thisViewController forKey:@"whereIsThisViewControllerComeFrom"];
+    //user이름과 사진 URL, userInfo을 메시지로 담는다.
+    [tempDic setObject:[_userInfo objectForKey:@"name"] forKey:@"name"];
+    
+    if([_userInfo objectForKey:@"filename"]) {
+        NSString *userPictureUrl = [_urlString stringByAppendingString:[_userInfo objectForKey:@"filename"]];
+        [tempDic setObject:userPictureUrl forKey:@"userPictureUrl"];
+    }
+    
+    [tempDic setObject:_userInfo forKey:@"userInfo"];
+    
     
     //결과 Dic에 넣는다.
     NSDictionary *whereIsThisViewControllerComeFrom = tempDic;
@@ -426,7 +440,6 @@
 }
 
 
-
 /**
  *  <지금부터 CollectionView 관련 메소드>
  *  각 인덱스에 맞는 셀을 설정해주는 메소드(DataSource)
@@ -445,11 +458,10 @@
     NSString *closingDay = [aDesigner objectForKey:@"closingDay"];
     Boolean isMyDesigner = [[aDesigner objectForKey:@"isMyDesigner"] boolValue];
     
-    NSString *urlString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UrlInfoByYoung"];
-    NSString *pictureUrl = [urlString stringByAppendingString:[aDesigner objectForKey:@"filename"]];
+    NSString *pictureUrl = [_urlString stringByAppendingString:[aDesigner objectForKey:@"filename"]];
     NSLog(@"pictureUrl: %@", pictureUrl);
     
-    NSString *hairshopPictureUrl = [urlString stringByAppendingString:[[aDesigner objectForKey:@"hairshop"] objectForKey:@"filename"]];
+    NSString *hairshopPictureUrl = [_urlString stringByAppendingString:[[aDesigner objectForKey:@"hairshop"] objectForKey:@"filename"]];
     NSLog(@"hairshopPictureUrl: %@", hairshopPictureUrl);
     
     
@@ -571,12 +583,14 @@
     
 }
 
+
 /**
  *  Section 안에 몇개의 아이템이 들어가는지 설정(DataSrouce)
  */
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     return ([DesignerListInALocation getDesignerListObject].designerList).count;
 }
+
 
 /**
  *  Section의 헤더 만들기(DataSource)
@@ -586,8 +600,8 @@
     RankingSectionHeaderCollectionReusableView *sectionHeader = [self.rankingCollectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"imageNotificationHeaderForRankingPage" forIndexPath:indexPath];
 
     return sectionHeader;
-;
 }
+
 
 /**
  *  Section이 몇개인지(DataSource)
@@ -596,12 +610,11 @@
     return 1;
 }
 
+
 /**
  *  item이 선택된 경우
  */
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    
-    [_notificationCenter removeObserver:self];
     
     //디자이너 디테일 뷰컨트롤러를 생성한다.
     DetailDesignerInfoViewController *detailDesignerinfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
@@ -618,6 +631,7 @@
     [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:resultDic];
     
 }
+
 
 /**
  *  화면 넓이에 따라서 셀의 크기를 조정해주는 코드

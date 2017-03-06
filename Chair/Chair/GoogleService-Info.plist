@@ -7,9 +7,9 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>812536159008-t7mnhsen48qljjuk8iuick1nlbdm4qdu.apps.googleusercontent.com</string>
+	<string>812536159008-kgkh6peaoo0j9crt6bucoaksetkn4pom.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.812536159008-t7mnhsen48qljjuk8iuick1nlbdm4qdu</string>
+	<string>com.googleusercontent.apps.812536159008-kgkh6peaoo0j9crt6bucoaksetkn4pom</string>
 	<key>API_KEY</key>
 	<string>AIzaSyDCV2Ypl-KztvLJZJHC_rDf4pmK6hXQ1OY</string>
 	<key>GCM_SENDER_ID</key>
@@ -17,7 +17,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.young.wychoi0709.Chair</string>
+	<string>kr.co.choosehair.young.chair</string>
 	<key>PROJECT_ID</key>
 	<string>chair-60af8</string>
 	<key>STORAGE_BUCKET</key>
@@ -33,7 +33,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:812536159008:ios:37af19e970ddc80a</string>
+	<string>1:812536159008:ios:99a7434e7c9c5d95</string>
 	<key>DATABASE_URL</key>
 	<string>https://chair-60af8.firebaseio.com</string>
 </dict>

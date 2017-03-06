@@ -21,6 +21,9 @@
 #import "DetailPriceDesignerCollectionReusableView.h"
 #import "GetPriceInfoOfDesigner.h"
 
+//채팅룸 관련 import
+#import "ChattingRoomViewController.h"
+
 #import <SDWebImage/UIImageView+WebCache.h>
 
 
@@ -184,6 +187,27 @@
     
     //닫는다.
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+//채팅방으로 이동하는 버튼을 터치했음.
+- (IBAction)moveChatroom:(UIButton *)sender {
+    
+    NSString *designerUid = [_designerInfo objectForKey:@"uid"];
+    NSString *customerUid = [_userInfo objectForKey:@"uid"];
+    Boolean isDesigner = NO;
+
+    
+    NSMutableDictionary *meta = [[NSMutableDictionary alloc] init];
+    [meta setObject:designerUid forKey:@"designerUid"];
+    [meta setObject:customerUid forKey:@"customerUid"];
+    [meta setObject:[NSNumber numberWithBool:isDesigner] forKey:@"isDesigner"];
+    
+    NSLog(@"designer & customer Uid = %@", meta);
+    
+    ChattingRoomViewController *chattingRoomViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"chattingRoomViewController"];
+    [self presentViewController:chattingRoomViewController animated:YES completion:^(){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"getDesignerAndCutomerUid" object:self userInfo:meta];
+    }];
 }
 
 

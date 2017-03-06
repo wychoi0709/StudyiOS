@@ -82,11 +82,13 @@
     
     //결과가 있으면 적절한 키로 매핑하고, 없으면 없다는 메시지를 넣는다.
     if(responseDataArray != nil || [responseDataArray count] != 0) {
+        NSLog(@"결과가 있고, 적절히 맵핑함");
 
         //리턴 결과를 DesignerList에 맵핑한다.
         [DesignerListInALocation getDesignerListObject].designerList = responseDataArray;
         
     } else {
+        NSLog(@"결과가 없어서, 모두 지움");
         
         //결과가 없으면 모든 리스트를 지운다.
         [[DesignerListInALocation getDesignerListObject].designerList removeAllObjects];

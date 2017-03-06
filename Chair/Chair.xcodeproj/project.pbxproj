@@ -33,7 +33,6 @@
 		6F26D6A31E19226E00F0C03E /* DesignerRankingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F26D6A21E19226E00F0C03E /* DesignerRankingViewController.m */; };
 		6F26D6A61E1922B400F0C03E /* SideMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F26D6A51E1922B400F0C03E /* SideMenuViewController.m */; };
 		6F3887261E6443C400D5B0DC /* GetPriceInfoOfDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3887251E6443C400D5B0DC /* GetPriceInfoOfDesigner.m */; };
-		6F3B46E01E62A1C9007ADAB4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6F3B46DF1E62A1C9007ADAB4 /* GoogleService-Info.plist */; };
 		6F3B46E31E62A91A007ADAB4 /* MeasurementHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3B46E21E62A91A007ADAB4 /* MeasurementHelper.m */; };
 		6F3B46E61E62B0DB007ADAB4 /* CheckEmailFormatHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3B46E51E62B0DB007ADAB4 /* CheckEmailFormatHelper.m */; };
 		6F48C55A1E5573FC00105EF5 /* IsTempLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F48C5591E5573FC00105EF5 /* IsTempLocation.m */; };
@@ -42,7 +41,11 @@
 		6F4D73021E2620B8005F3730 /* DesignerCancelNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F4D73011E2620B8005F3730 /* DesignerCancelNetworkService.m */; };
 		6F4D73051E2631AD005F3730 /* ConfirmCancelAboutMyDesignerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F4D73041E2631AD005F3730 /* ConfirmCancelAboutMyDesignerViewController.m */; };
 		6F4F3A8A1E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F4F3A891E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m */; };
+		6F516D4A1E69A37E0025BB96 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6F516D491E69A37E0025BB96 /* GoogleService-Info.plist */; };
 		6F6983BB1E2A119C00B36365 /* GetMyDesignerListNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F6983BA1E2A119C00B36365 /* GetMyDesignerListNetworkService.m */; };
+		6F6AE9381E654F8F00D76ED7 /* ChattingRoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F6AE9371E654F8F00D76ED7 /* ChattingRoomViewController.m */; };
+		6F6AE93E1E6550DB00D76ED7 /* SendMessageCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F6AE93D1E6550DB00D76ED7 /* SendMessageCollectionViewCell.m */; };
+		6F6AE9411E6550EB00D76ED7 /* TakenMessgaeCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F6AE9401E6550EB00D76ED7 /* TakenMessgaeCollectionViewCell.m */; };
 		6F7419F51E640451000CE39B /* DetailPriceDesignerCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F7419F41E640451000CE39B /* DetailPriceDesignerCollectionViewCell.m */; };
 		6F7419F81E640463000CE39B /* DetailPriceDesignerCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F7419F71E640463000CE39B /* DetailPriceDesignerCollectionReusableView.m */; };
 		6F99B9761E5868D900DA0250 /* ImageResizeUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F99B9751E5868D900DA0250 /* ImageResizeUtil.m */; };
@@ -101,7 +104,6 @@
 		6F26D6A51E1922B400F0C03E /* SideMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SideMenuViewController.m; sourceTree = "<group>"; };
 		6F3887241E6443C400D5B0DC /* GetPriceInfoOfDesigner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetPriceInfoOfDesigner.h; sourceTree = "<group>"; };
 		6F3887251E6443C400D5B0DC /* GetPriceInfoOfDesigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetPriceInfoOfDesigner.m; sourceTree = "<group>"; };
-		6F3B46DF1E62A1C9007ADAB4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6F3B46E11E62A91A007ADAB4 /* MeasurementHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeasurementHelper.h; sourceTree = "<group>"; };
 		6F3B46E21E62A91A007ADAB4 /* MeasurementHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeasurementHelper.m; sourceTree = "<group>"; };
 		6F3B46E41E62B0DB007ADAB4 /* CheckEmailFormatHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckEmailFormatHelper.h; sourceTree = "<group>"; };
@@ -118,8 +120,15 @@
 		6F4D73041E2631AD005F3730 /* ConfirmCancelAboutMyDesignerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ConfirmCancelAboutMyDesignerViewController.m; sourceTree = "<group>"; };
 		6F4F3A881E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RankingSectionHeaderCollectionReusableView.h; sourceTree = "<group>"; };
 		6F4F3A891E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RankingSectionHeaderCollectionReusableView.m; sourceTree = "<group>"; };
+		6F516D491E69A37E0025BB96 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6F6983B91E2A119C00B36365 /* GetMyDesignerListNetworkService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetMyDesignerListNetworkService.h; sourceTree = "<group>"; };
 		6F6983BA1E2A119C00B36365 /* GetMyDesignerListNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetMyDesignerListNetworkService.m; sourceTree = "<group>"; };
+		6F6AE9361E654F8F00D76ED7 /* ChattingRoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChattingRoomViewController.h; sourceTree = "<group>"; };
+		6F6AE9371E654F8F00D76ED7 /* ChattingRoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChattingRoomViewController.m; sourceTree = "<group>"; };
+		6F6AE93C1E6550DB00D76ED7 /* SendMessageCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendMessageCollectionViewCell.h; sourceTree = "<group>"; };
+		6F6AE93D1E6550DB00D76ED7 /* SendMessageCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendMessageCollectionViewCell.m; sourceTree = "<group>"; };
+		6F6AE93F1E6550EB00D76ED7 /* TakenMessgaeCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TakenMessgaeCollectionViewCell.h; sourceTree = "<group>"; };
+		6F6AE9401E6550EB00D76ED7 /* TakenMessgaeCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TakenMessgaeCollectionViewCell.m; sourceTree = "<group>"; };
 		6F7419F31E640451000CE39B /* DetailPriceDesignerCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailPriceDesignerCollectionViewCell.h; sourceTree = "<group>"; };
 		6F7419F41E640451000CE39B /* DetailPriceDesignerCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailPriceDesignerCollectionViewCell.m; sourceTree = "<group>"; };
 		6F7419F61E640463000CE39B /* DetailPriceDesignerCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailPriceDesignerCollectionReusableView.h; sourceTree = "<group>"; };
@@ -192,10 +201,10 @@
 				546318E91DE545F9005A3F4C /* Assets.xcassets */,
 				546318E61DE545F9005A3F4C /* Main.storyboard */,
 				546318EB1DE545F9005A3F4C /* LaunchScreen.storyboard */,
-				6F3B46DF1E62A1C9007ADAB4 /* GoogleService-Info.plist */,
+				6F516D491E69A37E0025BB96 /* GoogleService-Info.plist */,
 				546318EE1DE545F9005A3F4C /* Info.plist */,
 				546318DD1DE545F9005A3F4C /* Supporting Files */,
-				6FD890DD1E0A2A64002F01C4 /* CollectionViewItem */,
+				6FD890DD1E0A2A64002F01C4 /* Cell */,
 				6F240CDB1E163F58002C42EE /* ConstantValue */,
 				6F4F3A871E20C741005BF0B8 /* Section */,
 			);
@@ -268,6 +277,8 @@
 				6FD3A23B1E272EE20019123D /* DetailDesignerInfoViewController.m */,
 				6F1782991E4C2533002CA881 /* MyPageCustomerViewController.h */,
 				6F17829A1E4C2533002CA881 /* MyPageCustomerViewController.m */,
+				6F6AE9361E654F8F00D76ED7 /* ChattingRoomViewController.h */,
+				6F6AE9371E654F8F00D76ED7 /* ChattingRoomViewController.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -335,7 +346,7 @@
 			name = Popup;
 			sourceTree = "<group>";
 		};
-		6FD890DD1E0A2A64002F01C4 /* CollectionViewItem */ = {
+		6FD890DD1E0A2A64002F01C4 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
 				6FD890DA1E0A2A5B002F01C4 /* LocationCollectionViewCell.h */,
@@ -346,8 +357,12 @@
 				6F0C72C61E1D45C500995983 /* RankingNormalDesignerCollectionViewCell.m */,
 				6F7419F31E640451000CE39B /* DetailPriceDesignerCollectionViewCell.h */,
 				6F7419F41E640451000CE39B /* DetailPriceDesignerCollectionViewCell.m */,
+				6F6AE93C1E6550DB00D76ED7 /* SendMessageCollectionViewCell.h */,
+				6F6AE93D1E6550DB00D76ED7 /* SendMessageCollectionViewCell.m */,
+				6F6AE93F1E6550EB00D76ED7 /* TakenMessgaeCollectionViewCell.h */,
+				6F6AE9401E6550EB00D76ED7 /* TakenMessgaeCollectionViewCell.m */,
 			);
-			name = CollectionViewItem;
+			name = Cell;
 			sourceTree = "<group>";
 		};
 		8BBA568ADB08AE91F1B214A9 /* Pods */ = {
@@ -393,7 +408,7 @@
 				TargetAttributes = {
 					546318D91DE545F9005A3F4C = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = CBHNBA65SH;
+						DevelopmentTeam = ZNRXYK6RS7;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -423,7 +438,7 @@
 			files = (
 				6F0AC1621DFBD69000988A0F /* NotoSansKR-Light-Hestia.otf in Resources */,
 				546318ED1DE545F9005A3F4C /* LaunchScreen.storyboard in Resources */,
-				6F3B46E01E62A1C9007ADAB4 /* GoogleService-Info.plist in Resources */,
+				6F516D4A1E69A37E0025BB96 /* GoogleService-Info.plist in Resources */,
 				546318EA1DE545F9005A3F4C /* Assets.xcassets in Resources */,
 				6F0AC1611DFBD69000988A0F /* NotoSansKR-DemiLight-Hestia.otf in Resources */,
 				6F0AC1601DFBD69000988A0F /* NotoSansKR-Bold-Hestia.otf in Resources */,
@@ -488,9 +503,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F6AE93E1E6550DB00D76ED7 /* SendMessageCollectionViewCell.m in Sources */,
 				6F0AC1681DFBDC4B00988A0F /* SplashViewController.m in Sources */,
 				546318F71DE546B9005A3F4C /* LoginNetworkService.m in Sources */,
 				6F0AC16C1DFBE01600988A0F /* LoginViewController.m in Sources */,
+				6F6AE9411E6550EB00D76ED7 /* TakenMessgaeCollectionViewCell.m in Sources */,
 				6F4D73021E2620B8005F3730 /* DesignerCancelNetworkService.m in Sources */,
 				6FD890D91E0A2822002F01C4 /* LocationSelectModalViewController.m in Sources */,
 				6F0C72C41E1D45B400995983 /* RankingBetterDesignerCollectionViewCell.m in Sources */,
@@ -511,6 +528,7 @@
 				6F48C55D1E5576F700105EF5 /* EditMyPageNetworkService.m in Sources */,
 				6F4F3A8A1E20C779005BF0B8 /* RankingSectionHeaderCollectionReusableView.m in Sources */,
 				6FE6EF0B1E0976820017FE95 /* SignUpViewController.m in Sources */,
+				6F6AE9381E654F8F00D76ED7 /* ChattingRoomViewController.m in Sources */,
 				6F7419F81E640463000CE39B /* DetailPriceDesignerCollectionReusableView.m in Sources */,
 				6F3B46E31E62A91A007ADAB4 /* MeasurementHelper.m in Sources */,
 				6F3887261E6443C400D5B0DC /* GetPriceInfoOfDesigner.m in Sources */,
@@ -647,7 +665,7 @@
 			baseConfigurationReference = 389B981473414EC7CE682DB1 /* Pods-Chair.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = CBHNBA65SH;
+				DEVELOPMENT_TEAM = ZNRXYK6RS7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -655,7 +673,7 @@
 				INFOPLIST_FILE = Chair/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.young.wychoi0709.Chair;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.choosehair.young.chair;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -665,7 +683,7 @@
 			baseConfigurationReference = C4FA7C5C53E7EA4CCC56AB6C /* Pods-Chair.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = CBHNBA65SH;
+				DEVELOPMENT_TEAM = ZNRXYK6RS7;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
@@ -673,7 +691,7 @@
 				INFOPLIST_FILE = Chair/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.young.wychoi0709.Chair;
+				PRODUCT_BUNDLE_IDENTIFIER = kr.co.choosehair.young.chair;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

@@ -29,7 +29,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.812536159008-t7mnhsen48qljjuk8iuick1nlbdm4qdu</string>
+				<string>com.googleusercontent.apps.812536159008-kgkh6peaoo0j9crt6bucoaksetkn4pom</string>
 			</array>
 		</dict>
 	</array>
@@ -80,6 +80,8 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UrlInfoByYoung</key>
-	<string>http://192.168.0.6:3000</string>
+	<string>http://13.124.42.15:3000</string>
+	<key>realUrl</key>
+	<string>http://13.124.42.15:3000</string>
 </dict>
 </plist>

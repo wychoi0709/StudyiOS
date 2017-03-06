@@ -13,6 +13,9 @@
 #import "DetailDesignerInfoViewController.h"
 #import "MyDesignerList.h"
 #import "MyPageCustomerViewController.h"
+#import "DetailDesignerInfoViewController.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+
 
 @import Firebase;
 
@@ -34,13 +37,15 @@
 @property (weak, nonatomic) IBOutlet UIButton *firstDesignerBtn;
 @property (weak, nonatomic) IBOutlet UIButton *secondDesignerBtn;
 @property (weak, nonatomic) IBOutlet UIButton *thirdDesignerBtn;
-@property (weak, nonatomic) IBOutlet UIButton *moveDesignerRankingBtn;
 @property (weak, nonatomic) IBOutlet UIButton *moveMyInfoBtn;
+@property (weak, nonatomic) IBOutlet UIView *designerAcceptView;
 
 @property NSInteger myDesignerCount;
 @property NSMutableArray *onlyMyDesignerList;
 @property NSNotificationCenter *notificationCenter;
 @property DesignerRankingViewController *designerRankingViewController;
+@property NSMutableDictionary *userInfo;
+
 @end
 
 @implementation SideMenuViewController
@@ -104,7 +109,6 @@
     [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
 
 
-
 }
 
 - (void) moveDetailPage {
@@ -122,20 +126,6 @@
 
 }
 
-
-/**
- *  디자이너 랭킹 버튼 터치
- */
-- (IBAction)moveDesignerRankingPage:(UIButton *)sender {
-    
-    //옵저버를 없앤다.
-    [_notificationCenter removeObserver:self];
-
-    //디자이너 랭킹 페이지로 이동.
-    DesignerRankingViewController *designerRankingViewcontroller = [self.storyboard instantiateViewControllerWithIdentifier:@"designerRankingViewController"];
-    [designerRankingViewcontroller setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-    [self presentViewController:designerRankingViewcontroller animated:YES completion:nil];
-}
 
 /**
  *  내 정보 수정 버튼 터치
@@ -185,6 +175,10 @@
         [self dismissViewControllerAnimated:YES completion:nil];
         
     }
+}
+
+- (IBAction)myPageAsDesigner:(UIButton *)sender {
+    //그냥 화면 넘긴다음, 넘어간 화면에서 userInfo로 디자이너 정보 뽑으면돼. pist라서 어디서든 쓸 수 있잖아?
 }
 
 /**
@@ -275,21 +269,29 @@
             break;
     }
     
-    //어떤 뷰 컨트롤러에서 왔는지 확인하고, 버튼을 조정한다.
-    NSString *previousViewController = [[noti userInfo] objectForKey:@"whereIsThisViewControllerComeFrom"];
-
-    if([previousViewController isEqualToString:@"designerRankingViewController"]) {
-        //designerRankingviewController에서 왔다면, 특정한 표시를 한다.
-        //무슨 표시할까?
+    //이름을 매핑하고 이미지를 넣는다.
+    _userNameLabel.text = [[noti userInfo] objectForKey:@"name"];
+    NSString *userPictureUrl = [[noti userInfo] objectForKey:@"userPictureUrl"];
+    if( userPictureUrl ) {
+        [_userImageView sd_setImageWithURL:[NSURL URLWithString:userPictureUrl]];
+    }
+    _userInfo = [[noti userInfo] objectForKey:@"userInfo"];
+    
+    //등록 중인 디자이너에게 한 마디를 하고 싶다면 이용할 것
+//    Boolean isApplyDesigner = [[_userInfo objectForKey:@"applyDesigner"] boolValue];
+    Boolean isPermissionOfApply = [[_userInfo objectForKey:@"permissionOfApply"] boolValue];
+    
+    if ( isPermissionOfApply ) {
+        //view를 살린다
+        _designerAcceptView.hidden = NO;
         
-        //버튼을 비활성화 시킨다
-//        _moveDesignerRankingBtn.hidden = YES;
-    } else if([previousViewController isEqualToString:@"firstDetailDesignerInfoViewController"]){
-
-        //버튼을 모두 ON한다.
-//        _moveDesignerRankingBtn.hidden = NO;
+        //내가 등록한 선생님 뷰의 위치를 조정한다.
         
-        //들어온 디자이너 버튼을 없앤다.
+    } else {
+        //view를 없앤다.
+        _designerAcceptView.hidden = YES;
+        
+        //내가 등록한 선생님 뷰의 위치를 조정한다.
     }
 
 }

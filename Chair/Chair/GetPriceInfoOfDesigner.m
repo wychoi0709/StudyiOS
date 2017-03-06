@@ -34,8 +34,6 @@
 }
 
 
-
-
 /**
  *  [NSURLConnectionDelegate]Response에서 Header부분을 받고 호출되는 메소드
  */
