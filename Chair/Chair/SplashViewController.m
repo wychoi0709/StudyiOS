@@ -21,6 +21,9 @@
 @property NSURL *aURL;
 @property NSMutableURLRequest *aRequest;
 
+//엑티비티 인디케이터
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+
 @end
 
 @implementation SplashViewController
@@ -28,6 +31,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //인디케이터를 돌린다.
+    [_activityIndicator startAnimating];
     
     //URL String을 토대로 URL 객체를 만든 뒤, 이를 토대로 Request 객체를 생성한다.
     _aURLString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UrlInfoByYoung"];
@@ -53,11 +58,16 @@
 }
 
 
+- (BOOL)shouldAutorotate { return NO; }
+
 /**
  *  로그인뷰컨트롤러로 이동시켜주는 메소드
  */
 - (void)moveLoginViewController {
     NSLog(@"Enter moveLoginViewController Method");
+    
+    //인디케이터를 멈춘다.
+    [_activityIndicator stopAnimating];
     
     //로그인 뷰컨트롤러를 만들고 거기로 보낸다.
     LoginViewController *loginViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"loginViewController"];

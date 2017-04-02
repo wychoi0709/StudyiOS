@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface SendMessageCollectionViewCell : UICollectionViewCell
-@property (weak, nonatomic) IBOutlet UIImageView *pictureOfSendingPerson;
 @property (weak, nonatomic) IBOutlet UILabel *sendingMessageLabel;
 
 @end

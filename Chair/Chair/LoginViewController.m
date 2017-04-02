@@ -18,6 +18,7 @@
 
 @interface LoginViewController ()
 
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 
@@ -39,12 +40,18 @@ LoginNetworkService *loginNetworkService;
     
     if ([CheckEmailFormatHelper isValidEmailAddress:_emailTextField.text]) {
         
+        //로그인 요청 시작. 인디케이터를 돌린다.
+        [_activityIndicator startAnimating];
+        
         NSLog(@"로그인 전송 요청 함");
         [[FIRAuth auth] signInWithEmail:_emailTextField.text password:_passwordTextField.text completion:^(FIRUser *_Nullable user, NSError *_Nullable error) {
         
             //애러나면.. 코드 적기
             if (error) {
                 NSLog(@"이메일 로그인 중에 애러났어요..%@", error);
+                
+                //실패했으니 인디케이터를 내린다.
+                [_activityIndicator stopAnimating];
             
                 // <<<<<<<<<  할 일  >>>>>>>>>
                 // 여기에 비밀번호 잘못 입력하면 팝업 뜨도록 처리할 것
@@ -53,7 +60,7 @@ LoginNetworkService *loginNetworkService;
                 return ;
             }
         
-            //완료되면.. 코드 적고 채팅창 띄우기
+            //완료되면.. 코드 적고 랭킹 창 띄우기
             NSLog(@"유저 이메일: %@", user.email);
             NSLog(@"유저  uid: %@", user.uid);
             if (user) {
@@ -110,6 +117,9 @@ LoginNetworkService *loginNetworkService;
     
     NSLog(@"sendLoginRequest result = %@", resultData);
     
+    //로그인을 완료했으니 인디케이터를 멈춘다.
+    [_activityIndicator stopAnimating];
+    
     _designerRankingViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"designerRankingViewController"];
     //DesignerRanking 뷰 컨트롤러로 보낸다.
     [self presentViewController:_designerRankingViewController animated:YES completion:nil];
@@ -161,12 +171,19 @@ LoginNetworkService *loginNetworkService;
     _emailTextField.delegate = self;
     _passwordTextField.delegate = self;
     
+    //자동로그인을하니 인디케이터를 돌린다.
+    [_activityIndicator startAnimating];
+    
     
     //Firebase 인증이 완료된 이후에 로그인 화면을 자동으로 넘길 때 실행되는 리스너
     self.handle = [[FIRAuth auth] addAuthStateDidChangeListener:^(FIRAuth *_Nullable auth, FIRUser *_Nullable user){
         
         NSLog(@"자동로그인이에요.");
         NSLog(@"user.uid 정보에요: %@", user.uid);
+        
+        //인디케이터를 멈춘다.
+        [_activityIndicator stopAnimating];
+        
         //user가 제대로 들어왔다면
         if (user) {
             
@@ -184,11 +201,16 @@ LoginNetworkService *loginNetworkService;
     
 }
 
+- (BOOL)shouldAutorotate { return NO; }
+
 
 /**
  *  구글 로그인 클릭(AppDelegate의 메소드가 실행됨)
  */
 - (IBAction)googleLoginBtnTouched:(UIButton *)sender {
+    
+    //구글로그인을 하니 인디케이터를 돌린다.
+    [_activityIndicator startAnimating];
     
     //혹시 몰라서 자동로그인 리스너 한 번 더 날리고 시작
     [[FIRAuth auth] removeAuthStateDidChangeListener:_handle];
@@ -264,6 +286,11 @@ LoginNetworkService *loginNetworkService;
                                       NSLog(@"파이어베이스 쪽에도 잘 보냈답니다.");
                                       NSLog(@"유저 이메일: %@", user.email);
                                       NSLog(@"유저  uid: %@", user.uid);
+                                      
+                                      //구글로그인이 끝나 인디케이터를 멈춘다.
+                                      [_activityIndicator stopAnimating];
+                                      
+                                      
                                       if (user) {
                                           
                                           //MeasurementHelper는 firebase에 로그 쌓아주는 애

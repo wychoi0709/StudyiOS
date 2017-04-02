@@ -10,4 +10,14 @@
 
 @interface ChattingRoomViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UILabel *designerStageNameLabel;
+@property NSString *chatroomId;
+@property NSString *designerUid;
+@property NSString *customerUid;
+@property NSString *senderId;
+@property NSString *takerId;
+@property Boolean isDesigner;
+@property NSDictionary *takenPersonInfo;
+@property NSDictionary *sendingPersonInfo;
+
 @end

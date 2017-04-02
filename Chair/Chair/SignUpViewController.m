@@ -23,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (weak, nonatomic) IBOutlet UIButton *locationSelectBtn;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property Location *myLocation;
 @property SignUpNetworkService *signupNetworkService;
 
@@ -100,8 +101,12 @@
     
 }
 
+- (BOOL)shouldAutorotate { return NO; }
 
 -(void)didFinishSignUpRequest: (NSNotification *)noti {
+    //우리 서버 요쳥 완료. 인디케이터 날리기
+    [_activityIndicator stopAnimating];
+    
     NSLog(@"signUpRequest가 끝났다는 노티");
     [self dismissViewControllerAnimated:YES completion:nil];
 }
@@ -127,6 +132,9 @@
     
     if ([CheckEmailFormatHelper isValidEmailAddress:_emailTextField.text]) {
         
+        //인디케이터 돌리기
+        [_activityIndicator startAnimating];
+        
         //Firebase에 회원가입 요청 보내기
         [[FIRAuth auth] createUserWithEmail:_emailTextField.text password:_passwordTextField.text completion:^(FIRUser *_Nullable user, NSError *_Nullable error) {
         
@@ -135,6 +143,9 @@
                 NSLog(@"이메일 회원가입 중에 애러났어요.. %@", error);
                 
                 //비밀번호는 6자리 이상으로 만들기 팝업창 띄워주세요!!
+                
+                //애러. 인디케이터 멈추기
+                [_activityIndicator stopAnimating];
                 
                 return;
             }

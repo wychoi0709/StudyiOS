@@ -15,6 +15,7 @@
 #import "MyPageCustomerViewController.h"
 #import "DetailDesignerInfoViewController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "ColorValue.h"
 
 
 @import Firebase;
@@ -34,17 +35,39 @@
 @property (weak, nonatomic) IBOutlet UILabel *thirdDesignerCareer;
 @property (weak, nonatomic) IBOutlet UIImageView *thirdDesignerComma;
 
+
+@property (weak, nonatomic) IBOutlet UIView *firstDesignerView;
+@property (weak, nonatomic) IBOutlet UIView *firstDesignerEmptyMessageView;
+@property (weak, nonatomic) IBOutlet UIView *secondDesignerView;
+@property (weak, nonatomic) IBOutlet UIView *secondDesignerEmptyMessageView;
+@property (weak, nonatomic) IBOutlet UIView *thirdDesignerView;
+@property (weak, nonatomic) IBOutlet UIView *thirdDesignerEmptyMessageView;
+
+@property (weak, nonatomic) IBOutlet UIView *myDesignerBackground;
+@property (weak, nonatomic) IBOutlet UIView *myDesignerTextView;
+
+@property (weak, nonatomic) IBOutlet UIView *myDesignerView;
+@property (weak, nonatomic) IBOutlet UIView *myInfoEditView;
+
 @property (weak, nonatomic) IBOutlet UIButton *firstDesignerBtn;
 @property (weak, nonatomic) IBOutlet UIButton *secondDesignerBtn;
 @property (weak, nonatomic) IBOutlet UIButton *thirdDesignerBtn;
 @property (weak, nonatomic) IBOutlet UIButton *moveMyInfoBtn;
 @property (weak, nonatomic) IBOutlet UIView *designerAcceptView;
+@property (weak, nonatomic) IBOutlet UIView *messageButtonView;
 
 @property NSInteger myDesignerCount;
 @property NSMutableArray *onlyMyDesignerList;
 @property NSNotificationCenter *notificationCenter;
 @property DesignerRankingViewController *designerRankingViewController;
 @property NSMutableDictionary *userInfo;
+
+@property CGRect tempBackgroundFrame;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *myDesignerViewHeight;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *myDesignerTopBeforePermission;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *myPageViewAfterPermission;
+
 
 @end
 
@@ -61,8 +84,11 @@
     //들어온 viewController을 확인하기 위한 옵저버
     _notificationCenter = [NSNotificationCenter defaultCenter];
     [_notificationCenter addObserver:self selector:@selector(closedBtnAndPresentDesignerInfo:) name:@"guidingPreviousViewController" object:nil];
+    [_notificationCenter addObserver:self selector:@selector(closedBtnAndPresentDesignerInfo:) name:@"updateMyInfoResult" object:nil];
 
 }
+
+- (BOOL)shouldAutorotate { return NO; }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -76,42 +102,26 @@
  */
 - (IBAction)firstDesignerTouched:(UIButton *)sender {
     
-    //디테일 페이지로 이동한다.
-    [self moveDetailPage];
-
+    //사이드메뉴를 만든다.
+    _designerRankingViewController = (DesignerRankingViewController *)self.sideMenuController;
     
-    //첫번째 버튼이라는 정보를 넣고, 노티를 보낸다.
-    NSDictionary *whereIsThisViewControllerComeFrom = [NSDictionary dictionaryWithObject:@"firstDetailDesignerInfoViewController" forKey:@"whereIsThisViewControllerComeFrom"];
-    [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
+    //화면을 띄우고, 사이드 메뉴를 닫는다.
+    DetailDesignerInfoViewController *detailDesignerInfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
+    [detailDesignerInfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+    [self presentViewController:detailDesignerInfoViewController animated:YES completion:^{
+        [_designerRankingViewController hideLeftViewAnimated:NO completionHandler:nil];
+        
+        //첫번째 버튼이라는 정보를 넣고, 노티를 보낸다.
+        NSDictionary *whereIsThisViewControllerComeFrom = [NSDictionary dictionaryWithObject:@"firstDetailDesignerInfoViewController" forKey:@"whereIsThisViewControllerComeFrom"];
+        [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
+    }];
+    
+
 
 }
 
 
 - (IBAction)secondDesignerTouched:(UIButton *)sender {
-
-    //디테일 페이지로 이동한다.
-    [self moveDetailPage];
-    
-    //두번째 버튼이라는 정보를 넣고, 노티를 보낸다.
-    NSDictionary *whereIsThisViewControllerComeFrom = [NSDictionary dictionaryWithObject:@"secondDetailDesignerInfoViewController" forKey:@"whereIsThisViewControllerComeFrom"];
-    [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
-
-}
-
-
-- (IBAction)thirdDesignerTouched:(UIButton *)sender {
-    
-    //디테일 페이지로 이동한다.
-    [self moveDetailPage];
-    
-    //세번째 버튼이라는 정보를 넣고, 노티를 보낸다.
-    NSDictionary *whereIsThisViewControllerComeFrom = [NSDictionary dictionaryWithObject:@"thirdDetailDesignerInfoViewController" forKey:@"whereIsThisViewControllerComeFrom"];
-    [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
-
-
-}
-
-- (void) moveDetailPage {
 
     //사이드메뉴를 만든다.
     _designerRankingViewController = (DesignerRankingViewController *)self.sideMenuController;
@@ -122,8 +132,35 @@
     [detailDesignerInfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
     [self presentViewController:detailDesignerInfoViewController animated:YES completion:^{
         [_designerRankingViewController hideLeftViewAnimated:NO completionHandler:nil];
-    }];
+        
+        //두번째 버튼이라는 정보를 넣고, 노티를 보낸다.
+        NSDictionary *whereIsThisViewControllerComeFrom = [NSDictionary dictionaryWithObject:@"secondDetailDesignerInfoViewController" forKey:@"whereIsThisViewControllerComeFrom"];
+        [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
 
+    }];
+    
+
+}
+
+
+- (IBAction)thirdDesignerTouched:(UIButton *)sender {
+    
+    //사이드메뉴를 만든다.
+    _designerRankingViewController = (DesignerRankingViewController *)self.sideMenuController;
+    
+    
+    //화면을 띄우고, 사이드 메뉴를 닫는다.
+    DetailDesignerInfoViewController *detailDesignerInfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
+    [detailDesignerInfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+    [self presentViewController:detailDesignerInfoViewController animated:YES completion:^{
+        [_designerRankingViewController hideLeftViewAnimated:NO completionHandler:nil];
+
+        //세번째 버튼이라는 정보를 넣고, 노티를 보낸다.
+        NSDictionary *whereIsThisViewControllerComeFrom = [NSDictionary dictionaryWithObject:@"thirdDetailDesignerInfoViewController" forKey:@"whereIsThisViewControllerComeFrom"];
+        [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
+
+    }];
+    
 }
 
 
@@ -131,9 +168,6 @@
  *  내 정보 수정 버튼 터치
  */
 - (IBAction)moveMyInformationEditPage:(UIButton *)sender {
-    
-    //옵저버를 없앤다.
-    [_notificationCenter removeObserver:self];
     
     //내 정보 페이지로 이동.
     MyPageCustomerViewController *myPageCustomerViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"myPageCustomerViewController"];
@@ -178,7 +212,37 @@
 }
 
 - (IBAction)myPageAsDesigner:(UIButton *)sender {
-    //그냥 화면 넘긴다음, 넘어간 화면에서 userInfo로 디자이너 정보 뽑으면돼. pist라서 어디서든 쓸 수 있잖아?
+    
+    //사이드메뉴를 만든다.
+    _designerRankingViewController = (DesignerRankingViewController *)self.sideMenuController;
+    
+    //화면을 띄우고, 사이드 메뉴를 닫는다.
+    DetailDesignerInfoViewController *detailDesignerInfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
+    [detailDesignerInfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+    [self presentViewController:detailDesignerInfoViewController animated:YES completion:^{
+        [_designerRankingViewController hideLeftViewAnimated:NO completionHandler:nil];
+        
+        //등록된 디자이너 버튼이라는 정보를 넣고, 노티를 보낸다.
+        NSDictionary *whereIsThisViewControllerComeFrom = [NSDictionary dictionaryWithObject:@"registeredCustomerAsDesigner" forKey:@"whereIsThisViewControllerComeFrom"];
+        [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
+    }];
+    
+}
+- (IBAction)messageButtonTouched:(UIButton *)sender {
+    //사이드메뉴를 만든다.
+    _designerRankingViewController = (DesignerRankingViewController *)self.sideMenuController;
+    
+    //화면을 띄우고, 사이드 메뉴를 닫는다.
+    DetailDesignerInfoViewController *detailDesignerInfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
+    [detailDesignerInfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+    [self presentViewController:detailDesignerInfoViewController animated:YES completion:^{
+        [_designerRankingViewController hideLeftViewAnimated:NO completionHandler:nil];
+        
+        //등록된 디자이너 버튼이라는 정보를 넣고, 노티를 보낸다.
+        NSDictionary *whereIsThisViewControllerComeFrom = [NSDictionary dictionaryWithObject:@"registeredCustomerAsDesigner" forKey:@"whereIsThisViewControllerComeFrom"];
+        [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
+    }];
+
 }
 
 /**
@@ -187,54 +251,49 @@
  */
 - (void)closedBtnAndPresentDesignerInfo: (NSNotification*) noti {
     
+    NSLog(@"사이드바의 UI를 수정하기 위한 콜백 메소드로 들어옴");
+
+    //투명 배경의 크기를 조정하기 위한 변수를 만든다.
+    _tempBackgroundFrame = _myDesignerBackground.frame;
+    _tempBackgroundFrame.size.height = 0.0;
+    _tempBackgroundFrame.size.height += _myDesignerTextView.frame.size.height;
+    
     //내 디자이너 관련 정보를 뷰에 띄운다.
     switch (([MyDesignerList getMyDesignerListObject].myDesignerList).count) {
         case 0:
-            _firstDesignerBtn.hidden = YES;
-            _firstDesignerName.hidden = YES;
-            _firstDesignerCareer.hidden = YES;
-            _firstDesignerComma.hidden = YES;
-            _secondDesignerBtn.hidden = YES;
-            _secondDesignerName.hidden = YES;
-            _secondDesignerCareer.hidden = YES;
-            _secondDesignerComma.hidden = YES;
-            _thirdDesignerBtn.hidden = YES;
-            _thirdDesignerName.hidden = YES;
-            _thirdDesignerCareer.hidden = YES;
-            _thirdDesignerComma.hidden = YES;
+            _firstDesignerView.hidden = YES;
+            _secondDesignerView.hidden = YES;
+            _thirdDesignerView.hidden = YES;
+            _firstDesignerEmptyMessageView.hidden = NO;
+            _secondDesignerEmptyMessageView.hidden = YES;
+            _thirdDesignerEmptyMessageView.hidden = YES;
+            _tempBackgroundFrame.size.height += _firstDesignerEmptyMessageView.frame.size.height;
             break;
         
         case 1:
-            _firstDesignerBtn.hidden = NO;
-            _firstDesignerName.hidden = NO;
-            _firstDesignerCareer.hidden = NO;
-            _firstDesignerComma.hidden = NO;
-            _secondDesignerBtn.hidden = YES;
-            _secondDesignerName.hidden = YES;
-            _secondDesignerCareer.hidden = YES;
-            _secondDesignerComma.hidden = YES;
-            _thirdDesignerBtn.hidden = YES;
-            _thirdDesignerName.hidden = YES;
-            _thirdDesignerCareer.hidden = YES;
-            _thirdDesignerComma.hidden = YES;
+            _firstDesignerView.hidden = NO;
+            _secondDesignerView.hidden = YES;
+            _thirdDesignerView.hidden = YES;
+            _firstDesignerEmptyMessageView.hidden = YES;
+            _secondDesignerEmptyMessageView.hidden = NO;
+            _thirdDesignerEmptyMessageView.hidden = YES;
+            _tempBackgroundFrame.size.height += _firstDesignerView.frame.size.height;
+            _tempBackgroundFrame.size.height += _secondDesignerEmptyMessageView.frame.size.height;
             
             _firstDesignerName.text = [[[MyDesignerList getMyDesignerListObject] myDesignerList][0] objectForKey:@"stageName"];
             _firstDesignerCareer.text =[[[MyDesignerList getMyDesignerListObject] myDesignerList][0] objectForKey:@"careerContents"];
             break;
             
         case 2:
-            _firstDesignerBtn.hidden = NO;
-            _firstDesignerName.hidden = NO;
-            _firstDesignerCareer.hidden = NO;
-            _firstDesignerComma.hidden = NO;
-            _secondDesignerBtn.hidden = NO;
-            _secondDesignerName.hidden = NO;
-            _secondDesignerCareer.hidden = NO;
-            _secondDesignerComma.hidden = NO;
-            _thirdDesignerBtn.hidden = YES;
-            _thirdDesignerName.hidden = YES;
-            _thirdDesignerCareer.hidden = YES;
-            _thirdDesignerComma.hidden = YES;
+            _firstDesignerView.hidden = NO;
+            _secondDesignerView.hidden = NO;
+            _thirdDesignerView.hidden = YES;
+            _firstDesignerEmptyMessageView.hidden = YES;
+            _secondDesignerEmptyMessageView.hidden = YES;
+            _thirdDesignerEmptyMessageView.hidden = NO;
+            _tempBackgroundFrame.size.height += _firstDesignerView.frame.size.height;
+            _tempBackgroundFrame.size.height += _secondDesignerView.frame.size.height;
+            _tempBackgroundFrame.size.height += _thirdDesignerEmptyMessageView.frame.size.height;
             
             _firstDesignerName.text = [[[MyDesignerList getMyDesignerListObject] myDesignerList][0] objectForKey:@"stageName"];
             _firstDesignerCareer.text =[[[MyDesignerList getMyDesignerListObject] myDesignerList][0] objectForKey:@"careerContents"];
@@ -243,18 +302,15 @@
             break;
             
         case 3:
-            _firstDesignerBtn.hidden = NO;
-            _firstDesignerName.hidden = NO;
-            _firstDesignerCareer.hidden = NO;
-            _firstDesignerComma.hidden =NO;
-            _secondDesignerBtn.hidden = NO;
-            _secondDesignerName.hidden = NO;
-            _secondDesignerCareer.hidden = NO;
-            _secondDesignerComma.hidden = NO;
-            _thirdDesignerBtn.hidden = NO;
-            _thirdDesignerName.hidden = NO;
-            _thirdDesignerCareer.hidden = NO;
-            _thirdDesignerComma.hidden = NO;
+            _firstDesignerView.hidden = NO;
+            _secondDesignerView.hidden = NO;
+            _thirdDesignerView.hidden = NO;
+            _firstDesignerEmptyMessageView.hidden = YES;
+            _secondDesignerEmptyMessageView.hidden = YES;
+            _thirdDesignerEmptyMessageView.hidden = YES;
+            _tempBackgroundFrame.size.height += _firstDesignerView.frame.size.height;
+            _tempBackgroundFrame.size.height += _secondDesignerView.frame.size.height;
+            _tempBackgroundFrame.size.height += _thirdDesignerView.frame.size.height;
             
             _firstDesignerName.text = [[[MyDesignerList getMyDesignerListObject] myDesignerList][0] objectForKey:@"stageName"];
             _firstDesignerCareer.text =[[[MyDesignerList getMyDesignerListObject] myDesignerList][0] objectForKey:@"careerContents"];
@@ -269,30 +325,64 @@
             break;
     }
     
-    //이름을 매핑하고 이미지를 넣는다.
-    _userNameLabel.text = [[noti userInfo] objectForKey:@"name"];
-    NSString *userPictureUrl = [[noti userInfo] objectForKey:@"userPictureUrl"];
-    if( userPictureUrl ) {
-        [_userImageView sd_setImageWithURL:[NSURL URLWithString:userPictureUrl]];
-    }
-    _userInfo = [[noti userInfo] objectForKey:@"userInfo"];
+    //내 디자이너 뷰의 위치와 배경을 조정한다.
+    _tempBackgroundFrame.size.height += 13.0;
     
-    //등록 중인 디자이너에게 한 마디를 하고 싶다면 이용할 것
-//    Boolean isApplyDesigner = [[_userInfo objectForKey:@"applyDesigner"] boolValue];
+    //userInfo 뺐음.
+    _userInfo = [[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"] mutableCopy];
+
+    //이름을 매핑하고 이미지를 넣는다.
+    _userNameLabel.text = [_userInfo objectForKey:@"name"];
+    NSString *userPictureUrl = [_userInfo objectForKey:@"filename"];
+    NSString *urlString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UrlInfoByYoung"];
+    NSString *pictureUrl = [urlString stringByAppendingString:userPictureUrl];
+
+    if( pictureUrl ) {
+        [_userImageView sd_setImageWithURL:[NSURL URLWithString:pictureUrl]];
+        
+        self.userImageView.layer.borderWidth = 3.0f;
+        self.userImageView.layer.borderColor = ([ColorValue getColorValueObject].brownColorChair).CGColor;
+        self.userImageView.layer.cornerRadius = self.userImageView.frame.size.width / 2;
+        self.userImageView.clipsToBounds = YES;
+    }
+
     Boolean isPermissionOfApply = [[_userInfo objectForKey:@"permissionOfApply"] boolValue];
     
     if ( isPermissionOfApply ) {
         //view를 살린다
         _designerAcceptView.hidden = NO;
-        
-        //내가 등록한 선생님 뷰의 위치를 조정한다.
-        
+
     } else {
         //view를 없앤다.
         _designerAcceptView.hidden = YES;
         
-        //내가 등록한 선생님 뷰의 위치를 조정한다.
+        //내가 등록한 선생님 뷰를 조정한다.
+        //콜렉션뷰 위치 수정
+        NSLayoutConstraint *newTopConstraintForDesignerAcceptview =
+        [NSLayoutConstraint constraintWithItem:_myDesignerView
+                                     attribute:NSLayoutAttributeTop
+                                     relatedBy:NSLayoutRelationEqual
+                                        toItem:_userImageView
+                                     attribute:NSLayoutAttributeBottom
+                                    multiplier:1.0
+                                      constant:24.0];
+        [self.view addConstraint:newTopConstraintForDesignerAcceptview];
+        [self.view removeConstraint:_myDesignerTopBeforePermission];
+        
+        [self.view updateConstraints];
     }
+    
+    Boolean isTakenMessage = [[_userInfo objectForKey:@"isTakenMessage"] boolValue];
+    
+    if ( isTakenMessage ) {
+        _messageButtonView.hidden = NO;
+    } else {
+        _messageButtonView.hidden = YES;
+    }
+    
+    
+    //컨스트레인트 수정으로 내가 등록산 선생님보기 뷰의 높이 변경
+    _myDesignerViewHeight.constant = _tempBackgroundFrame.size.height;
 
 }
 

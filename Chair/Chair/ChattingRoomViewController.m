@@ -9,6 +9,11 @@
 #import "ChattingRoomViewController.h"
 #import "SendMessageCollectionViewCell.h"
 #import "TakenMessgaeCollectionViewCell.h"
+#import "ColorValue.h"
+#import "ChatInfoNetworkService.h"
+
+#import <SDWebImage/UIImageView+WebCache.h>
+
 
 @import Firebase;
 
@@ -21,20 +26,27 @@
     
 }
 @property (weak, nonatomic) IBOutlet UITextField *messageTextField;
-@property (weak, nonatomic) IBOutlet UIImageView *myPictureForSendingMsg;
 @property (weak, nonatomic) IBOutlet UILabel *textFieldForInputTextCount;
 @property (weak, nonatomic) IBOutlet UICollectionView *chattingCollectionView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
+@property (weak, nonatomic) IBOutlet UIView *opaqueViewForLoading;
+@property (weak, nonatomic) IBOutlet UILabel *textLeghtNumber;
+
 
 //Firebase 관련 객체들
 @property (strong, nonatomic) FIRDatabaseReference *ref;
 @property (strong, nonatomic) NSMutableArray<FIRDataSnapshot *> *messages;
 
-@property NSString *chatroomId;
-@property NSString *designerUid;
-@property NSString *customerUid;
+
+
 @property NSString *lastMessage;
 @property NSString *timestamp;
-@property Boolean isDesigner;
+
+@property Boolean isFirstMessage;   //새로 메시지를 보냈니?
+
+@property NSString *urlString;
+
+@property ChatInfoNetworkService *chatInfoNetworkService;
 
 @end
 
@@ -49,16 +61,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _msglength = 10;
-    _messages = [[NSMutableArray alloc] init];
-    
-    _chattingCollectionView.delegate = self;
-    _chattingCollectionView.dataSource = self;
+    //초기 세팅
+    [self initSettingForThisVC];
     
     //노티 옵저버를 등록한다.
     [self applyNotiObserver];
     
-    _messageTextField.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -68,8 +76,9 @@
 
 - (void)dealloc {
     
-    
 }
+
+- (BOOL)shouldAutorotate { return NO; }
 
 
 
@@ -115,6 +124,14 @@
     
         TakenMessgaeCollectionViewCell *takenMessgaeCollectionViewCell =[collectionView dequeueReusableCellWithReuseIdentifier:@"takenMessgaeCollectionViewCell" forIndexPath:indexPath];
         takenMessgaeCollectionViewCell.takenMessageLabel.text = text;
+        
+        //프로필 사진을 세팅한다.
+        NSString *pictureUrl = [_urlString stringByAppendingString:[_takenPersonInfo objectForKey:@"filename"]];
+        [takenMessgaeCollectionViewCell.pictureOfTakenPerson sd_setImageWithURL:[NSURL URLWithString:pictureUrl]];
+        takenMessgaeCollectionViewCell.pictureOfTakenPerson.layer.borderWidth = 3.0f;
+        takenMessgaeCollectionViewCell.pictureOfTakenPerson.layer.borderColor = ([ColorValue getColorValueObject].brownColorChair).CGColor;
+        takenMessgaeCollectionViewCell.pictureOfTakenPerson.layer.cornerRadius = takenMessgaeCollectionViewCell.pictureOfTakenPerson.frame.size.width / 2;
+        takenMessgaeCollectionViewCell.pictureOfTakenPerson.clipsToBounds = YES;
         return takenMessgaeCollectionViewCell;
     }
 }
@@ -142,7 +159,12 @@
     if (!text) {
         return YES;
     }
+    //현재 길이를 만든다
     long newLength = text.length + string.length - range.length;
+    
+    //현재 길이를 텍스트에 넣는다.
+    _textLeghtNumber.text = [[NSNumber numberWithLong: newLength] stringValue];
+    
     return (newLength <= _msglength);
 }
 
@@ -175,17 +197,26 @@
 #pragma mark - keyboard movements
 - (void)keyboardWillShow:(NSNotification *)notification
 {
-    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    NSLog(@"키보드가 나타나니 화면을 올린다!!!");
+    
+    //키보드 사이즈를 구한다.
+    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    
+    NSLog(@"키보드 높이: %f", keyboardSize.height);
+    NSLog(@"뷰 y오리진의 위치: %f", self.view.frame.origin.y);
     
     [UIView animateWithDuration:0.3 animations:^{
         CGRect f = self.view.frame;
         f.origin.y = -keyboardSize.height;
         self.view.frame = f;
+        NSLog(@"계산결과의 y오리진: %f", f.origin.y);
     }];
 }
 
 -(void)keyboardWillHide:(NSNotification *)notification
 {
+    NSLog(@"키보드가 없어지니 화면을 내린다!!!");
+    
     [UIView animateWithDuration:0.3 animations:^{
         CGRect f = self.view.frame;
         f.origin.y = 0.0f;
@@ -221,8 +252,11 @@
     //    [[[[_ref child:@"chatmetas"] child:_chatroomId] childByAutoId] setValue:mdata];
     
     
+    
     //닫는다.
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:^(){
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"backToCustomerList" object:nil];
+    }];
     
 }
 
@@ -267,25 +301,52 @@
     
     //firebase의 데이터베이스에 데이터를 푸쉬한다. (messages라는 곳에 child로 넣는데, 새로운 ID를 자동 생성해서 mdata를 집어넣는다)
     [[[[_ref child:@"messages"] child:_chatroomId] childByAutoId] setValue:mdata];
+    
+    //첫 메시지이니깐, 내 서버에 통보한다.
+    if ( _isFirstMessage ) {
+    
+        // 내 서버에 첫 메시지 보냈음을 통보하는 메시지(보내는 사람, 받는 사람 uid 보내기)
+        [_chatInfoNetworkService messageSendingWithSender:_senderId withTaker:_takerId];
+        
+        _isFirstMessage = NO;
+    }
 }
 
 //노티 옵저버를 등록한다.
 - (void) applyNotiObserver {
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+
+    //키보드 나타나거나, 없어질 때의 노티를 등록한다.
+    [notificationCenter addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillChangeFrameNotification object:nil];
+    [notificationCenter addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
     
-    [notificationCenter addObserver:self selector:@selector(getDesignerAndCutomerUid:) name:@"getDesignerAndCutomerUid" object:nil];
+    [notificationCenter addObserver:self selector:@selector(getDesignerAndCutomerInfo:) name:@"getDesignerAndCutomerUid" object:nil];
     [notificationCenter addObserver:self selector:@selector(afterGetChatroomIdInfo:) name:@"getChatroomIdInfo" object:nil];
     
     //텍스트 필드에서 키보드 없애는 코드
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissKeyboard)];
     [self.view addGestureRecognizer:tap];
-    
-    //키보드 나타나거나, 없어질 때의 노티를 등록한다.
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+
 }
 
+//노티 세팅 모아둠
+- (void) initSettingForThisVC {
+    _msglength = 30;
+    _messages = [[NSMutableArray alloc] init];
+    
+    //기본값은 "오늘의 첫 메시지"
+    _isFirstMessage = YES;
+    
+    //이미지 처리를 위한 기본 URL 확보
+    _urlString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UrlInfoByYoung"];
+    
+    _chatInfoNetworkService = [[ChatInfoNetworkService alloc] init];
+    
+    _chattingCollectionView.delegate = self;
+    _chattingCollectionView.dataSource = self;
 
+    _messageTextField.delegate = self;
+}
 
 /*****************************************************************
  *   << 노티 관련 콜백 메소드 >>
@@ -315,20 +376,58 @@
         
         [self.chattingCollectionView scrollToItemAtIndexPath:lastIndexPath atScrollPosition:UICollectionViewScrollPositionBottom animated:YES];
         NSLog(@"콜렉션 뷰 아래로 보내기");
+        
     }];
+    
+    //끝났으면 인디케이터 없앰
+    [_activityIndicator stopAnimating];
+    _opaqueViewForLoading.hidden = YES;
+
 }
 
-- (void) getDesignerAndCutomerUid:(NSNotification*)noti {
-    NSLog(@"getDesignerAndCutomerUid 콜백 진입");
+- (void) getDesignerAndCutomerInfo:(NSNotification*)noti {
+    NSLog(@"getDesignerAndCutomerInfo 콜백 진입");
     
-    _designerUid =[[noti userInfo] objectForKey:@"designerUid"];
-    _customerUid =[[noti userInfo] objectForKey:@"customerUid"];
     _isDesigner = [[[noti userInfo] objectForKey:@"isDesigner"] boolValue];
     
-    NSLog(@"designerUid: %@", _designerUid);
-    NSLog(@"custoemrUid: %@", _customerUid);
-    NSLog(@"isDesigner : %@", [NSNumber numberWithBool:_isDesigner]);
+    if ( _isDesigner ) {
+        //디자이너 등록이 완료된 디나이너가 들어왔다면,
+        
+        //디자이너, 고객 관련 정보를 추출한다.
+        _takenPersonInfo = [[noti userInfo] objectForKey:@"customerInfo"];
+        _sendingPersonInfo = [[noti userInfo] objectForKey:@"designerInfo"];
+        
+        _designerUid = [_sendingPersonInfo objectForKey:@"uid"];
+        _customerUid = [_takenPersonInfo objectForKey:@"uid"];
+        
+        _takerId = [_takenPersonInfo objectForKey:@"id"];
+        _senderId = [_sendingPersonInfo objectForKey:@"id"];
+        
+        //디자이너 예명 라벨에 예명을 넣는다.
+        _designerStageNameLabel.text = [_sendingPersonInfo objectForKey:@"stageName"];
+        
+    } else {
+        //일반 고객이 들어왔다면,
     
+        //디자이너, 고객 관련 정보를 추출한다.
+        _takenPersonInfo = [[noti userInfo] objectForKey:@"designerInfo"];
+        _sendingPersonInfo = [[noti userInfo] objectForKey:@"userInfo"];
+    
+        _designerUid = [_takenPersonInfo objectForKey:@"uid"];
+        _customerUid = [_sendingPersonInfo objectForKey:@"uid"];
+        
+        _takerId = [_takenPersonInfo objectForKey:@"customer_id"];
+        _senderId = [_sendingPersonInfo objectForKey:@"id"];
+        
+        //디자이너 예명 라벨에 예명을 넣는다.
+        _designerStageNameLabel.text = [_takenPersonInfo objectForKey:@"stageName"];
+        
+    }
+    
+    NSLog(@"designerUid: %@", _designerUid);
+    NSLog(@"customerUid: %@", _customerUid);
+    NSLog(@"isDesigner : %@", [NSNumber numberWithBool:_isDesigner]);
+
     //Firebase의 설정을 세팅한다.
     [self configureDatabase];
 }
@@ -344,6 +443,10 @@
  */
 - (void)configureDatabase {
     NSLog(@"configureDatabase 진입(파이어베이스의 데이터베이스 설정하는 메소드)");
+    
+    //우선 인디케이터를 돌린다.
+    [_activityIndicator startAnimating];
+    _opaqueViewForLoading.hidden = NO;
 
     //ref를 설정한다.
     _ref = [[FIRDatabase database] reference];
@@ -363,6 +466,9 @@
             _chatroomId = [postDict objectForKey:@"chatroomId"];
             NSLog(@"chatroomId: %@", _chatroomId);
         }
+        
+        //내 서버로 메시지를 읽었다는 신호를 날리기
+        [_chatInfoNetworkService messageReadingWithSender:_senderId withTaker:_takerId];
         
         //노티를 날린다.
         [[NSNotificationCenter defaultCenter] postNotificationName:@"getChatroomIdInfo" object:self userInfo:nil];

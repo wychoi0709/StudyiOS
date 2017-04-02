@@ -15,7 +15,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.1</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -80,7 +80,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UrlInfoByYoung</key>
-	<string>http://13.124.42.15:3000</string>
+	<string>http://192.168.219.148:3000</string>
 	<key>realUrl</key>
 	<string>http://13.124.42.15:3000</string>
 </dict>

@@ -15,6 +15,7 @@
 #import "ConfirmCancelAboutMyDesignerViewController.h"
 #import "MyDesignerList.h"
 #import "DesignerListInALocation.h"
+#import "CustomerListModalViewController.h"
 
 //Price 콜렉션뷰 관련 import
 #import "DetailPriceDesignerCollectionViewCell.h"
@@ -23,6 +24,7 @@
 
 //채팅룸 관련 import
 #import "ChattingRoomViewController.h"
+#import "BasicButton.h"
 
 #import <SDWebImage/UIImageView+WebCache.h>
 
@@ -40,6 +42,14 @@
 @property (weak, nonatomic) IBOutlet UILabel *designerClosedDay;
 @property (weak, nonatomic) IBOutlet UIButton *myDesignerButton;
 @property (weak, nonatomic) IBOutlet UIButton *notMyDesignerButton;
+@property (weak, nonatomic) IBOutlet UIButton *chattingRoomButton;
+@property (weak, nonatomic) IBOutlet UIView *infoAfterPermissionView;
+@property (weak, nonatomic) IBOutlet UIView *messageButtonAndIconView;
+@property (weak, nonatomic) IBOutlet UIView *brownLineAfterDesignerPermission;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *topConstraintAboutPriceCollectionView;
+@property (weak, nonatomic) IBOutlet UIView *viewOfPriceCollectionView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *bottomConstraintAboutPriceCollectionVeiw;
+@property (weak, nonatomic) IBOutlet BasicButton *myCustomerButton;
 
 //기타 필요한 정보들
 @property NSMutableDictionary *userInfo;
@@ -61,6 +71,9 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *priceCollectionView;
 @property NSMutableArray *priceInfo;
 
+//자신이 등록된 디자이너일 경우
+@property Boolean amIDesigner;
+
 
 @end
 
@@ -72,10 +85,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    //노티 옵저버를 등록한다.
-    [self applyNotiObserver];
     //NSUserDefault의 customerId, LocationId, gender 값을 빼낸다.
     [self extractUserInfo];
+    
+    //노티 옵저버를 등록한다.
+    [self applyNotiObserver];
     
     _priceCollectionView.delegate = self;
     _priceCollectionView.dataSource = self;
@@ -87,6 +101,7 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (BOOL)shouldAutorotate { return NO; }
 
 
 /**
@@ -97,14 +112,21 @@
 -(void) settingBasicDataForDetailPage:(NSNotification*)noti{
     NSLog(@"settingBasicDataForDetailPage 콜백 진입");
     
+    _amIDesigner = NO;
+    
     //어떤 버튼인지 파악한 뒤, 디자이너 정보를 설정한다.
     NSString *whereIsThisViewControllerComeFrom = [[noti userInfo] objectForKey:@"whereIsThisViewControllerComeFrom"];
-    if([whereIsThisViewControllerComeFrom isEqualToString:@"firstDetailDesignerInfoViewController"]) {
+    if ([whereIsThisViewControllerComeFrom isEqualToString:@"firstDetailDesignerInfoViewController"]) {
         _designerInfo = [[MyDesignerList getMyDesignerListObject] myDesignerList][0];
-    } else if([whereIsThisViewControllerComeFrom isEqualToString:@"secondDetailDesignerInfoViewController"]) {
+    } else if ([whereIsThisViewControllerComeFrom isEqualToString:@"secondDetailDesignerInfoViewController"]) {
         _designerInfo = [[MyDesignerList getMyDesignerListObject] myDesignerList][1];
-    } else if([whereIsThisViewControllerComeFrom isEqualToString:@"thirdDetailDesignerInfoViewController"]) {
+    } else if ([whereIsThisViewControllerComeFrom isEqualToString:@"thirdDetailDesignerInfoViewController"]) {
         _designerInfo = [[MyDesignerList getMyDesignerListObject] myDesignerList][2];
+    } else if ([whereIsThisViewControllerComeFrom isEqualToString:@"registeredCustomerAsDesigner"]){
+        _designerInfo = [_userInfo objectForKey:@"designer"];
+        
+        _amIDesigner = YES;
+        
     } else {
         _designerInfo = [[noti userInfo] objectForKey:@"designerInfo"];
     }
@@ -192,14 +214,11 @@
 //채팅방으로 이동하는 버튼을 터치했음.
 - (IBAction)moveChatroom:(UIButton *)sender {
     
-    NSString *designerUid = [_designerInfo objectForKey:@"uid"];
-    NSString *customerUid = [_userInfo objectForKey:@"uid"];
     Boolean isDesigner = NO;
-
     
     NSMutableDictionary *meta = [[NSMutableDictionary alloc] init];
-    [meta setObject:designerUid forKey:@"designerUid"];
-    [meta setObject:customerUid forKey:@"customerUid"];
+    [meta setObject:_designerInfo forKey:@"designerInfo"];
+    [meta setObject:_userInfo forKey:@"userInfo"];
     [meta setObject:[NSNumber numberWithBool:isDesigner] forKey:@"isDesigner"];
     
     NSLog(@"designer & customer Uid = %@", meta);
@@ -210,6 +229,16 @@
     }];
 }
 
+- (IBAction)myCustomerButtonTouched:(BasicButton *)sender {
+    
+    //모달창을 만들고 투명한 모달 스타일로 설정해서 띄운다.
+    CustomerListModalViewController *customerListModalViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"customerListModalViewController"];
+    customerListModalViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    [customerListModalViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+    
+    [self presentViewController:customerListModalViewController animated:YES completion:nil];
+    
+}
 
 /**
  *  콜렉션 뷰 관련 메소드들
@@ -294,13 +323,59 @@
     _designerFemaleCustomerNumber.text = [[_designerInfo objectForKey:@"femaleCustomerCount"] stringValue];
     _designerHairShopName.text =[[_designerInfo objectForKey:@"hairshop"] objectForKey:@"hairshopName"];
     _designerClosedDay.text = [_designerInfo objectForKey:@"closingDay"];
-    Boolean isMyDesigner = [[_designerInfo objectForKey:@"isMyDesigner"] boolValue];
-    if(isMyDesigner) {
-        _myDesignerButton.hidden = NO;
-        _notMyDesignerButton.hidden = YES;
-    } else {
+    
+    //디자이너 등록을 마친 customer가 자기 페이지로 들어온 경우임.
+    if(_amIDesigner) {
+        
+        //인포 정보, 고객보기 버튼 활성화
+        _infoAfterPermissionView.hidden = NO;
+        _myCustomerButton.hidden = NO;
+        
+        //채팅버튼을 없앨 것. 디자이너 등록/취소 버튼을 없앨 것.
+        _messageButtonAndIconView.hidden = YES;
         _myDesignerButton.hidden = YES;
-        _notMyDesignerButton.hidden = NO;
+        _notMyDesignerButton.hidden = YES;
+        
+        //콜렉션뷰 위치 수정
+        NSLayoutConstraint *newTopConstraintForCollectionView =
+        [NSLayoutConstraint constraintWithItem:_viewOfPriceCollectionView
+                                     attribute:NSLayoutAttributeTop
+                                     relatedBy:NSLayoutRelationEqual
+                                        toItem:_brownLineAfterDesignerPermission
+                                     attribute:NSLayoutAttributeBottom
+                                    multiplier:1.0
+                                      constant:0.0];
+        
+        [self.view addConstraint:newTopConstraintForCollectionView];
+        [self.view removeConstraint:_topConstraintAboutPriceCollectionView];
+        
+        NSLayoutConstraint *newBottomConstraintForCollectionView =
+        [NSLayoutConstraint constraintWithItem:_viewOfPriceCollectionView
+                                     attribute:NSLayoutAttributeBottom
+                                     relatedBy:NSLayoutRelationEqual
+                                        toItem:_infoAfterPermissionView
+                                     attribute:NSLayoutAttributeTop
+                                    multiplier:1.0
+                                      constant:0.0];
+        
+        [self.view addConstraint:newBottomConstraintForCollectionView];
+        [self.view removeConstraint:_bottomConstraintAboutPriceCollectionVeiw];
+        
+        [self.view updateConstraints];
+        
+    //일반 디자이너 페이지에 들어온 경우임.
+    } else {
+        Boolean isMyDesigner = [[_designerInfo objectForKey:@"isMyDesigner"] boolValue];
+        if(isMyDesigner) {
+            _myDesignerButton.hidden = NO;
+            _notMyDesignerButton.hidden = YES;
+        } else {
+            _myDesignerButton.hidden = YES;
+            _notMyDesignerButton.hidden = NO;
+        }
+        
+        _infoAfterPermissionView.hidden = YES;
+        _myCustomerButton.hidden = YES;
     }
     
     //디자이너 이미지 URL, 헤어샵 이미지 URL을 추출하여 이미지를 설정한다.
@@ -315,9 +390,11 @@
     _designerImage.layer.borderWidth = 3.0f;
     _designerImage.layer.borderColor = ([ColorValue getColorValueObject].brownColorChair).CGColor;
     _designerImage.layer.cornerRadius = _designerImage.frame.size.width / 2;
+    _designerImage.clipsToBounds = YES;
     
     [_designerHairShopImage sd_setImageWithURL:[NSURL URLWithString:hairshopPictureUrl]];
     _designerHairShopImage.layer.cornerRadius = _designerHairShopImage.frame.size.width / 2;
+    _designerHairShopImage.clipsToBounds = YES;
 }
 
 //결과에 따라서 내 디자이너 등록을 반영한다.

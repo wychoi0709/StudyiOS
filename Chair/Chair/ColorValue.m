@@ -35,8 +35,8 @@
         _grayColorChair = [UIColor colorWithRed:0.93333333333333 green:0.93333333333333 blue:0.93725490196078 alpha:1];
         _brownColorChair = [UIColor colorWithRed:0.73725490196078 green:0.63529411764706 blue:0.55686274509804 alpha:1];
         _thickGrayColorChair = [UIColor colorWithRed:0.47058823529412 green:0.47843137254902 blue:0.50196078431373 alpha:1];
-        //_whiteColorChair;
-        //_blueColorChair;
+        _whiteColorChair = [UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:1];
+        _blueColorChair;
 
     }
     return self;

@@ -11,6 +11,8 @@
 #import "Location.h"
 #import "ImageResizeUtil.h"
 #import "EditMyPageNetworkService.h"
+#import <SDWebImage/UIImageView+WebCache.h>
+#import "ColorValue.h"
 
 @interface MyPageCustomerViewController ()
 
@@ -24,6 +26,8 @@
 @property Location *location;
 @property NSString *locationText;
 @property NSData *myImageData;
+@property NSString* urlString;
+@property NSString* pictureUrl;
 
 //페이지에 필요한 것들
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
@@ -46,6 +50,7 @@
     //노티 옵저버 등록(장소 선택 이후 콜백 / )
     _notificationCenter = [NSNotificationCenter defaultCenter];
     [_notificationCenter addObserver:self selector:@selector(afterLocationSelect:) name:@"changeMyLocation" object:nil];
+    [_notificationCenter addObserver:self selector:@selector(afterUpdateMyInfoResult:) name:@"updateMyInfoResult" object:nil];
     
     //데이터 로딩, UIView에 세팅
     [self basicDataLoading];
@@ -57,6 +62,8 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (BOOL)shouldAutorotate { return NO; }
 
 
 /**
@@ -73,14 +80,32 @@
     [self dataSettingInUIView];
 }
 
+- (void)afterUpdateMyInfoResult:(NSNotification*)noti{
+    
+    NSLog(@"업데이트 결과가 왔고, 콜백 메소드");
+    
+    //데이터 다시 로딩, UIView에 다시 세팅
+    [self basicDataLoading];
+    [self dataSettingInUIView];
+}
+
+
 /* 이미지 선택 이후 실행되는 콜백 메소드 */
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
     
     UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
-    UIImage *resizedImage = [ImageResizeUtil imageWithImage:chosenImage scaledToSize:CGSizeMake(100, 100)];
+    UIImage *resizedImage = [ImageResizeUtil imageWithImage:chosenImage scaledToSize:CGSizeMake(50, 50)];
     
-    self.myPictureImageView.image = resizedImage;
+    _myPictureImageView.image = resizedImage;
+    
+    //코너를 동그랗게 만든다.
+    _myPictureImageView.layer.borderWidth = 3.0f;
+    _myPictureImageView.layer.borderColor = ([ColorValue getColorValueObject].brownColorChair).CGColor;
+    _myPictureImageView.layer.cornerRadius = _myPictureImageView.frame.size.width / 2;
+    _myPictureImageView.clipsToBounds = YES;
+    
     _myImageData = UIImagePNGRepresentation(resizedImage);
+    
     
     [picker dismissViewControllerAnimated:YES completion:NULL];
 }
@@ -96,6 +121,9 @@
  *  현재 뷰컨트롤러 닫기 버튼 터치
  */
 - (IBAction)closeBtnTouched:(UIButton *)sender {
+    //모든 옵저버를 지운다.
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -152,8 +180,15 @@
     //이후 콜백할 때는 Ranking과 Side 메뉴에도 적용되도록 해야한다. 거기서 나왔기 때문.
     NSString *gender;
     if(_isMale) { gender = @"M"; } else { gender = @"F"; }
+    
+    //userInfo에 filename이 있는지 여부도 같이 보낸다.
+    Boolean isFilenameInUserInfo = false;
+    if( [_userInfo objectForKey:@"filename"] ) {
+        isFilenameInUserInfo = true;
+    }
+    
     EditMyPageNetworkService *editMyPageNetworkService = [[EditMyPageNetworkService alloc] init];
-    [editMyPageNetworkService editMyInfo:_customerId withLocationId:_locationId withGender:gender withName:_nameLabel.text withPicture:_myImageData];
+    [editMyPageNetworkService editMyInfo:_customerId withLocationId:_locationId withGender:gender withName:_nameLabel.text withPicture:_myImageData withIsFilenameInUserInfo: [NSNumber numberWithBool:isFilenameInUserInfo]  withUid: [_userInfo objectForKey:@"uid"]];
     
     [self setLocationIntoUserInfo];
 }
@@ -181,11 +216,17 @@
     _location.cityDetail = [[_userInfo objectForKey:@"location"] objectForKey:@"cityDetail"];
     _location.location = [[_userInfo objectForKey:@"location"] objectForKey:@"location"];
     _location.locationDetail = [[_userInfo objectForKey:@"location"] objectForKey:@"locationDetail"];
+    
+    //이미지 세팅할 것 URL 불러와서 앞에 붙이고 SD뭐시기로 넣어!
+    _urlString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UrlInfoByYoung"];
+    _pictureUrl = [_urlString stringByAppendingString:[_userInfo  objectForKey:@"filename"]];
+    NSLog(@"pictureUrl: %@", _pictureUrl);
 
 }
 
 /* UIView에 데이터를 세팅한다. */
 - (void)dataSettingInUIView {
+    
     _nameLabel.text = [_userInfo objectForKey:@"name"];
     if(_isMale) {
         _imageGenderSelecterFemale.hidden = YES;
@@ -195,6 +236,14 @@
         _imageGenderSelecterMale.hidden = YES;
     }
     _locationLabel.text = _locationText;
+    
+    [_myPictureImageView sd_setImageWithURL:[NSURL URLWithString:_pictureUrl]];
+    _myPictureImageView.layer.borderWidth = 3.0f;
+    _myPictureImageView.layer.borderColor = ([ColorValue getColorValueObject].brownColorChair).CGColor;
+    _myPictureImageView.layer.cornerRadius = _myPictureImageView.frame.size.width / 2;
+    _myPictureImageView.clipsToBounds = YES;
+
+    
 }
 
 /* 장소 수정 모달 띄우기 */
@@ -236,18 +285,11 @@
     NSLog(@"doAfterAlbumChoice");
     UIImagePickerController * picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
+    picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    picker.allowsEditing = YES;
     
-    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-        
-        NSLog(@"앨범이 있으니, 있다고 설정하고 알람을 띄움");
-        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        picker.allowsEditing = YES;
-        
-        [self presentViewController:picker animated:YES completion:nil];
-        
-    } else {
-        NSLog(@"앨범이 없음(오류)");
-    }
+    [self presentViewController:picker animated:YES completion:nil];
+    
 }
 
 /* 앨범,카메라 피커에서 카메라 선택했을 때 */
@@ -255,17 +297,9 @@
     NSLog(@"doAfterCameraChoice");
     UIImagePickerController * picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
+    picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    picker.allowsEditing = YES;
     
-    if([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        
-        NSLog(@"카메라가 있으니 카메라를 띄움");
-        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        picker.allowsEditing = YES;
-        
-        [self presentViewController:picker animated:YES completion:nil];
-        
-    } else {
-        NSLog(@"카메라가 없음");
-    }
+    [self presentViewController:picker animated:YES completion:nil];
 }
 @end

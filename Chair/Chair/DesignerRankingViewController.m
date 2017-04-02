@@ -38,6 +38,7 @@
 @property (weak, nonatomic) IBOutlet UIView *emptyDesignerImage;
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UIButton *invisibleButtonForSideMenu;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 
 @property DesignerRankingNetworkService *designerRankingNetworkService;
 @property LocationSelectModalViewController *locationSelectModalViewController;
@@ -103,7 +104,8 @@
     //성별에 따라 genderButton의 타이틀 텍스트를 변경한다.
     [self changeGenderButtonTitleTextByGender];
     
-    //ranking 정보 불러오는 네트워크 요청을 실시한다
+    //인디케이터를 돌리고 ranking 정보 불러오는 네트워크 요청을 실시한다
+    [_activityIndicator startAnimating];
     _designerRankingNetworkService = [[DesignerRankingNetworkService alloc] init];
     [_designerRankingNetworkService callDesignerListByLocationIdRequest:_customerId withLocationId:_locationId withGender:_gender];
     
@@ -129,6 +131,8 @@
     self.rankingCollectionView.delaysContentTouches = NO;
     
 }
+
+- (BOOL)shouldAutorotate { return NO; }
 
 /**
  *  메모리 경고 떴을 때 불리는 메소드
@@ -369,6 +373,9 @@
     
     NSLog(@"designerListDidLoad()로 들어옴");
     
+    //인디케이터를 멈춘다.
+    [_activityIndicator stopAnimating];
+    
     //만약 DesignerList안에 있는 designerlist가 비어있다면, 해당 지역에 등록된 디자이너가 없다는 Image를 덮어 씌우고 아니면 갱신한다.
     if(([DesignerListInALocation getDesignerListObject].designerList).count == 0){
         //imagehidden 값을 변경하거나 애니메이션을 줄 것
@@ -498,10 +505,12 @@
         betterDesignerCell.betterDesignerImage.layer.borderWidth = 3.0f;
         betterDesignerCell.betterDesignerImage.layer.borderColor = ([ColorValue getColorValueObject].brownColorChair).CGColor;
         betterDesignerCell.betterDesignerImage.layer.cornerRadius = betterDesignerCell.betterDesignerImage.frame.size.width / 2;
+        betterDesignerCell.betterDesignerImage.clipsToBounds = YES;
         
         //betterDesigner의 헤어샵 이미지를 세팅하고, 동그라미로 만든다.
         [betterDesignerCell.betterDesignerHairShopImage sd_setImageWithURL:[NSURL URLWithString:hairshopPictureUrl]];
         betterDesignerCell.betterDesignerHairShopImage.layer.cornerRadius = betterDesignerCell.betterDesignerHairShopImage.frame.size.width / 2;
+        betterDesignerCell.betterDesignerHairShopImage.clipsToBounds = YES;
 
         //betterDesigner는 순위를 세팅한다.
         switch (indexPath.row) {
@@ -572,10 +581,12 @@
         normalDesignerCell.normalDesignerImage.layer.borderWidth = 3.0f;
         normalDesignerCell.normalDesignerImage.layer.borderColor = ([ColorValue getColorValueObject].brownColorChair).CGColor;
         normalDesignerCell.normalDesignerImage.layer.cornerRadius = normalDesignerCell.normalDesignerImage.frame.size.width / 2;
+        normalDesignerCell.normalDesignerImage.clipsToBounds = YES;
         
         //normalDesigner의 헤어샵 이미지를 세팅하고, 동그라미로 만든다.
         [normalDesignerCell.normalDesignerHairShopImage sd_setImageWithURL:[NSURL URLWithString:hairshopPictureUrl]];
         normalDesignerCell.normalDesignerHairShopImage.layer.cornerRadius = normalDesignerCell.normalDesignerHairShopImage.frame.size.width / 2;
+        normalDesignerCell.normalDesignerHairShopImage.clipsToBounds = YES;
 
         return normalDesignerCell;
         
@@ -616,11 +627,6 @@
  */
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    //디자이너 디테일 뷰컨트롤러를 생성한다.
-    DetailDesignerInfoViewController *detailDesignerinfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
-    [detailDesignerinfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-    [self presentViewController:detailDesignerinfoViewController animated:YES completion:nil];
-    
     //디자이너 정보와, 어떤 뷰컨트롤러에서 보내는지에 대한 정보를 담아서 보낸다.
     NSDictionary *designerInfo = ([DesignerListInALocation getDesignerListObject].designerList)[indexPath.row];
     NSString *whereIsThisViewControllerComeFrom = @"designerRankingVeiwController";
@@ -628,7 +634,13 @@
     [tempDic setObject:designerInfo forKey:@"designerInfo"];
     [tempDic setObject:whereIsThisViewControllerComeFrom forKey:@"whereIsthisViewControllerComeFrom"];
     NSDictionary *resultDic = tempDic;
-    [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:resultDic];
+    
+    //디자이너 디테일 뷰컨트롤러를 생성하고 위에서 만든 정보를 담아 노티를 쏜다!
+    DetailDesignerInfoViewController *detailDesignerinfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
+    [detailDesignerinfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+    [self presentViewController:detailDesignerinfoViewController animated:YES completion:^{
+        [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:resultDic];
+    }];
     
 }
 
