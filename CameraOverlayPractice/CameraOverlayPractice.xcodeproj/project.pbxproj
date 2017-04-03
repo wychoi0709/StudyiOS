@@ -13,6 +13,7 @@
 		6F86CBDC1E70DE66002D3A0B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F86CBDA1E70DE66002D3A0B /* Main.storyboard */; };
 		6F86CBDE1E70DE66002D3A0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6F86CBDD1E70DE66002D3A0B /* Assets.xcassets */; };
 		6F86CBE11E70DE66002D3A0B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6F86CBDF1E70DE66002D3A0B /* LaunchScreen.storyboard */; };
+		6F86CBEA1E70DFD5002D3A0B /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F86CBE91E70DFD5002D3A0B /* CameraViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,8 @@
 		6F86CBDD1E70DE66002D3A0B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6F86CBE01E70DE66002D3A0B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6F86CBE21E70DE66002D3A0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6F86CBE81E70DFD5002D3A0B /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
+		6F86CBE91E70DFD5002D3A0B /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +70,8 @@
 				6F86CBDF1E70DE66002D3A0B /* LaunchScreen.storyboard */,
 				6F86CBE21E70DE66002D3A0B /* Info.plist */,
 				6F86CBD11E70DE66002D3A0B /* Supporting Files */,
+				6F86CBE81E70DFD5002D3A0B /* CameraViewController.h */,
+				6F86CBE91E70DFD5002D3A0B /* CameraViewController.m */,
 			);
 			path = CameraOverlayPractice;
 			sourceTree = "<group>";
@@ -152,6 +157,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6F86CBD91E70DE66002D3A0B /* ViewController.m in Sources */,
+				6F86CBEA1E70DFD5002D3A0B /* CameraViewController.m in Sources */,
 				6F86CBD61E70DE66002D3A0B /* AppDelegate.m in Sources */,
 				6F86CBD31E70DE66002D3A0B /* main.m in Sources */,
 			);
