@@ -13,7 +13,7 @@
 
 @interface ConfirmChoiceAboutMyDesignerViewController ()
 
-@property NSDictionary *designerInfo;
+
 
 @end
 
@@ -26,19 +26,11 @@
  */
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSNotificationCenter *notiCenter = [NSNotificationCenter defaultCenter];
-    [notiCenter addObserver:self selector:@selector(loadInformations:) name:@"userAndDesignerInfo" object:nil];
+    NSLog(@"내 디자이너 등록 확인창 ViewDidLoad 시작");
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-}
-
-/**
- *  현 VC가 없어질 떄 실행되는 메소드
- */
-- (void)viewDidDisappear:(BOOL)animated{
-     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 
@@ -56,22 +48,23 @@
  */
 - (IBAction)confrimBtnTouched:(UIButton *)sender {
     
+    //내 정보에서 성별정보를 가져와서 isMale을 확인한다.
+    NSDictionary *userInfo = [[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"];
+    NSString *gender = [userInfo objectForKey:@"sex"];
+    Boolean isMale;
+    if( [gender isEqualToString:@"M"] ){
+        isMale = true;
+    } else {
+        isMale = false;
+    }
+    
     //만약 해당 지역의 디자이너 리스트에 현 디자이너가 있다면, DesignerListInALocation에 값을 넣고(MyDesignerList는 자동 갱신), 아니면 MyDesignerList에 넣는다.
     if([[DesignerListInALocation getDesignerListObject] isMyDesignerInThisLocation:_designerInfo]) {
-        [[DesignerListInALocation getDesignerListObject] addMyDesignerInThisLocation:_designerInfo];
+        [[DesignerListInALocation getDesignerListObject] addMyDesignerInThisLocation:_designerInfo withIsMale: isMale];
     } else {
-        [[MyDesignerList getMyDesignerListObject] addMyDesigner:_designerInfo];
+        [[MyDesignerList getMyDesignerListObject] addMyDesigner:_designerInfo withIsMale: isMale];
     }
     [self dismissViewControllerAnimated:YES completion:nil];
-}
-
-
-/**
- *  << 옵저버에 대한 콜백 메소드 >>
- *  확인 모달 창에 진입한 뒤 디자이너, 회원 정보를 받는 콜백 메소드
- */
--(void) loadInformations:(NSNotification*) noti {
-    _designerInfo = [[noti userInfo] objectForKey:@"designerInfo"];
 }
 
 @end

@@ -10,4 +10,6 @@
 
 @interface ConfirmChoiceAboutMyDesignerViewController : UIViewController
 
+@property NSDictionary *designerInfo;
+
 @end

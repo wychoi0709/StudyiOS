@@ -13,6 +13,7 @@
 #import "EditMyPageNetworkService.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "ColorValue.h"
+#import "NameEditModalViewController.h"
 
 @interface MyPageCustomerViewController ()
 
@@ -39,7 +40,9 @@
 
 @end
 
-@implementation MyPageCustomerViewController
+@implementation MyPageCustomerViewController{
+    NSString* nameString;
+}
 
 /**
  *  << 생명 주기 관련 메소드 >>
@@ -51,11 +54,15 @@
     _notificationCenter = [NSNotificationCenter defaultCenter];
     [_notificationCenter addObserver:self selector:@selector(afterLocationSelect:) name:@"changeMyLocation" object:nil];
     [_notificationCenter addObserver:self selector:@selector(afterUpdateMyInfoResult:) name:@"updateMyInfoResult" object:nil];
+    [_notificationCenter addObserver:self selector:@selector(afterNameEdited:) name:@"nameEdited" object:nil];
     
     //데이터 로딩, UIView에 세팅
     [self basicDataLoading];
-    [self dataSettingInUIView];
     
+}
+
+- (void)viewWillLayoutSubviews{
+    [self dataSettingInUIView];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -89,17 +96,24 @@
     [self dataSettingInUIView];
 }
 
+- (void) afterNameEdited:(NSNotification*)noti{
+    NSLog(@"afterNameEdited 콜백 메소드 실행");
+    nameString = [[noti userInfo] objectForKey:@"editedName"];
+    
+    [self dataSettingInUIView];
+}
+
 
 /* 이미지 선택 이후 실행되는 콜백 메소드 */
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info{
     
     UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
-    UIImage *resizedImage = [ImageResizeUtil imageWithImage:chosenImage scaledToSize:CGSizeMake(50, 50)];
+    UIImage *resizedImage = [ImageResizeUtil imageWithImage:chosenImage scaledToSize:CGSizeMake(100, 100)];
     
-    _myPictureImageView.image = resizedImage;
+    [_myPictureImageView setImage:resizedImage];
     
     //코너를 동그랗게 만든다.
-    _myPictureImageView.layer.borderWidth = 3.0f;
+    _myPictureImageView.layer.borderWidth = 1.8f;
     _myPictureImageView.layer.borderColor = ([ColorValue getColorValueObject].brownColorChair).CGColor;
     _myPictureImageView.layer.cornerRadius = _myPictureImageView.frame.size.width / 2;
     _myPictureImageView.clipsToBounds = YES;
@@ -153,6 +167,12 @@
 
 /* 이름 수정 버튼 터치 */
 - (IBAction)nameEditBtnTouched:(UIButton *)sender {
+    NameEditModalViewController *nameEditModalViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"nameEditModalViewController"];
+    nameEditModalViewController.name = _nameLabel.text;
+    
+    nameEditModalViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    [nameEditModalViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
+    [self presentViewController:nameEditModalViewController animated:YES completion:nil];
 }
 
 /* 여성 라디오 버튼 터치 */
@@ -191,6 +211,8 @@
     [editMyPageNetworkService editMyInfo:_customerId withLocationId:_locationId withGender:gender withName:_nameLabel.text withPicture:_myImageData withIsFilenameInUserInfo: [NSNumber numberWithBool:isFilenameInUserInfo]  withUid: [_userInfo objectForKey:@"uid"]];
     
     [self setLocationIntoUserInfo];
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 
@@ -208,6 +230,7 @@
     _gender = [_userInfo objectForKey:@"sex"];
     if([_gender isEqualToString:@"M"]) { _isMale = true; } else { _isMale = false; }
     _locationText =[[_userInfo objectForKey:@"location"] objectForKey:@"location"];
+    nameString = [_userInfo objectForKey:@"name"];
     
     //하아.. 로케이션 VO 괜히 만들어서 고생 중ㅠㅠ
     _location = [[Location alloc] init];
@@ -220,6 +243,8 @@
     //이미지 세팅할 것 URL 불러와서 앞에 붙이고 SD뭐시기로 넣어!
     _urlString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UrlInfoByYoung"];
     _pictureUrl = [_urlString stringByAppendingString:[_userInfo  objectForKey:@"filename"]];
+    
+    [_myPictureImageView sd_setImageWithURL:[NSURL URLWithString:_pictureUrl]];
     NSLog(@"pictureUrl: %@", _pictureUrl);
 
 }
@@ -227,7 +252,7 @@
 /* UIView에 데이터를 세팅한다. */
 - (void)dataSettingInUIView {
     
-    _nameLabel.text = [_userInfo objectForKey:@"name"];
+    _nameLabel.text = nameString;
     if(_isMale) {
         _imageGenderSelecterFemale.hidden = YES;
         _imageGenderSelecterMale.hidden = NO;
@@ -237,10 +262,11 @@
     }
     _locationLabel.text = _locationText;
     
-    [_myPictureImageView sd_setImageWithURL:[NSURL URLWithString:_pictureUrl]];
-    _myPictureImageView.layer.borderWidth = 3.0f;
+    //코너를 동그랗게 만든다.
+    _myPictureImageView.layer.borderWidth = 1.8f;
     _myPictureImageView.layer.borderColor = ([ColorValue getColorValueObject].brownColorChair).CGColor;
     _myPictureImageView.layer.cornerRadius = _myPictureImageView.frame.size.width / 2;
+    NSLog(@"width: %f", _myPictureImageView.frame.size.width);
     _myPictureImageView.clipsToBounds = YES;
 
     

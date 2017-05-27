@@ -10,4 +10,9 @@
 
 @interface DetailDesignerInfoViewController : UIViewController<UICollectionViewDelegate, UICollectionViewDataSource>
 
+@property NSDictionary *designerInfo;
+
+//자신이 등록된 디자이너일 경우
+@property Boolean amIDesigner;
+
 @end

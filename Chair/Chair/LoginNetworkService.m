@@ -11,18 +11,6 @@
 @implementation LoginNetworkService
 
 /**
- *  초기화 함수(아직 초기화할게 없음)
- */
-- (instancetype)init
-{
-    self = [super init];
-    if (self) {
-        
-    }
-    return self;
-}
-
-/**
  *  로그인을 위한 HTTP 요청 (비동기)
  */
 - (void)sendLoginAsynchronousRequest:(NSString*)uid{

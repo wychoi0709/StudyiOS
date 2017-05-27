@@ -16,6 +16,7 @@
 #import "MyDesignerList.h"
 #import "DesignerListInALocation.h"
 #import "CustomerListModalViewController.h"
+#import "StyleWebViewController.h"
 
 //Price 콜렉션뷰 관련 import
 #import "DetailPriceDesignerCollectionViewCell.h"
@@ -42,9 +43,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *designerClosedDay;
 @property (weak, nonatomic) IBOutlet UIButton *myDesignerButton;
 @property (weak, nonatomic) IBOutlet UIButton *notMyDesignerButton;
+
 @property (weak, nonatomic) IBOutlet UIButton *chattingRoomButton;
+
 @property (weak, nonatomic) IBOutlet UIView *infoAfterPermissionView;
-@property (weak, nonatomic) IBOutlet UIView *messageButtonAndIconView;
 @property (weak, nonatomic) IBOutlet UIView *brownLineAfterDesignerPermission;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *topConstraintAboutPriceCollectionView;
 @property (weak, nonatomic) IBOutlet UIView *viewOfPriceCollectionView;
@@ -53,7 +55,6 @@
 
 //기타 필요한 정보들
 @property NSMutableDictionary *userInfo;
-@property NSDictionary *designerInfo;
 @property Location *location;
 @property NSNotificationCenter *notificationCenter;
 
@@ -71,13 +72,17 @@
 @property (weak, nonatomic) IBOutlet UICollectionView *priceCollectionView;
 @property NSMutableArray *priceInfo;
 
-//자신이 등록된 디자이너일 경우
-@property Boolean amIDesigner;
-
-
 @end
 
-@implementation DetailDesignerInfoViewController
+@implementation DetailDesignerInfoViewController{
+    NSString *stageName;
+    NSString *careerContents;
+    NSInteger maleCustomerCount;
+    NSInteger femaleCustomerCount;
+    NSString *hairshopName;
+    NSString *closingDay;
+    Boolean isMyDesigner;
+}
 
 /**
  *  << 생명주기 관련 메소드 >>
@@ -88,13 +93,27 @@
     //NSUserDefault의 customerId, LocationId, gender 값을 빼낸다.
     [self extractUserInfo];
     
+    [self extractDesignerInfo];
+    
     //노티 옵저버를 등록한다.
     [self applyNotiObserver];
     
     _priceCollectionView.delegate = self;
     _priceCollectionView.dataSource = self;
+    
+    //가격 정보를 가져온다.
+    GetPriceInfoOfDesigner *getPriceInfoIfDesigner = [[GetPriceInfoOfDesigner alloc] init];
+    [getPriceInfoIfDesigner getPriceInfoOfDesignerRequest:[[_designerInfo objectForKey:@"id"] intValue] withHairshopId:[[[_designerInfo objectForKey:@"hairshop"] objectForKey:@"id"] intValue]];
+    
 
 }
+
+// 
+- (void)viewWillLayoutSubviews{
+    NSLog(@"viewWillLayoutSubviews가 호출됨");
+    [self setDesignerUiAsDesignerInfo];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -107,37 +126,6 @@
 /**
  *  << 콜백 메소드 >>
  */
-
-//페이지 로딩 이후 데이터 세팅 콜백 메소드
--(void) settingBasicDataForDetailPage:(NSNotification*)noti{
-    NSLog(@"settingBasicDataForDetailPage 콜백 진입");
-    
-    _amIDesigner = NO;
-    
-    //어떤 버튼인지 파악한 뒤, 디자이너 정보를 설정한다.
-    NSString *whereIsThisViewControllerComeFrom = [[noti userInfo] objectForKey:@"whereIsThisViewControllerComeFrom"];
-    if ([whereIsThisViewControllerComeFrom isEqualToString:@"firstDetailDesignerInfoViewController"]) {
-        _designerInfo = [[MyDesignerList getMyDesignerListObject] myDesignerList][0];
-    } else if ([whereIsThisViewControllerComeFrom isEqualToString:@"secondDetailDesignerInfoViewController"]) {
-        _designerInfo = [[MyDesignerList getMyDesignerListObject] myDesignerList][1];
-    } else if ([whereIsThisViewControllerComeFrom isEqualToString:@"thirdDetailDesignerInfoViewController"]) {
-        _designerInfo = [[MyDesignerList getMyDesignerListObject] myDesignerList][2];
-    } else if ([whereIsThisViewControllerComeFrom isEqualToString:@"registeredCustomerAsDesigner"]){
-        _designerInfo = [_userInfo objectForKey:@"designer"];
-        
-        _amIDesigner = YES;
-        
-    } else {
-        _designerInfo = [[noti userInfo] objectForKey:@"designerInfo"];
-    }
-    
-    //designerInfo에 따라서 디자이너 UI를 재설정한다.
-    [self setDesignerUiAsDesignerInfo];
-    
-    GetPriceInfoOfDesigner *getPriceInfoIfDesigner = [[GetPriceInfoOfDesigner alloc] init];
-    [getPriceInfoIfDesigner getPriceInfoOfDesignerRequest:[[_designerInfo objectForKey:@"id"] intValue] withHairshopId:[[[_designerInfo objectForKey:@"hairshop"] objectForKey:@"id"] intValue]];
-
-}
 
 //내 디자이너 등록이 완료된 이후 콜백 메소드
 - (void) afterDesignerAddNetwork: (NSNotification *) noti {
@@ -214,6 +202,8 @@
 //채팅방으로 이동하는 버튼을 터치했음.
 - (IBAction)moveChatroom:(UIButton *)sender {
     
+    NSLog(@"채팅방 이동 버튼 클릭");
+    
     Boolean isDesigner = NO;
     
     NSMutableDictionary *meta = [[NSMutableDictionary alloc] init];
@@ -229,7 +219,10 @@
     }];
 }
 
+//내 고객 보기 버튼을 터치한 경우.
 - (IBAction)myCustomerButtonTouched:(BasicButton *)sender {
+    
+    NSLog(@"내 고객 보기 버튼 클릭");
     
     //모달창을 만들고 투명한 모달 스타일로 설정해서 띄운다.
     CustomerListModalViewController *customerListModalViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"customerListModalViewController"];
@@ -239,6 +232,22 @@
     [self presentViewController:customerListModalViewController animated:YES completion:nil];
     
 }
+
+//스타일 보기 버튼을 터치한 경우.
+- (IBAction)viewStyleBtnTouched:(UIButton *)sender {
+    
+    NSLog(@"스타일 보기 버튼 클릭");
+    
+    StyleWebViewController *styleWebViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"styleWebViewController"];
+    
+    styleWebViewController.urlForStylePage = [_designerInfo objectForKey:@"styleUrl"];
+    styleWebViewController.nameStringOfDesigner = [_designerInfo objectForKey:@"stageName"];
+    
+    [self presentViewController:styleWebViewController animated:YES completion:nil];
+    
+}
+
+
 
 /**
  *  콜렉션 뷰 관련 메소드들
@@ -291,8 +300,10 @@
 
 //노티 옵저버를 등록한다.
 - (void) applyNotiObserver {
+    
+    NSLog(@"노티 옵저버 등록");
+    
     _notificationCenter = [NSNotificationCenter defaultCenter];
-    [_notificationCenter addObserver:self selector:@selector(settingBasicDataForDetailPage:) name:@"informationsForDetailDesignerPage" object:nil];
     [_notificationCenter addObserver:self selector:@selector(afterDesignerCancelNetwork:) name:@"cancelMyDesignerResult" object:nil];
     [_notificationCenter addObserver:self selector:@selector(afterDesignerAddNetwork:) name:@"addMyDesignerResult" object:nil];
     [_notificationCenter addObserver:self selector:@selector(afterGetPriceInfoOfDesignerNetwork:) name:@"priceRequestResult" object:nil];
@@ -300,6 +311,9 @@
 
 //NSUserDefault의 customerId, LocationId, gender 값을 빼낸다.
 - (void) extractUserInfo{
+    
+    NSLog(@"userInfo 추출");
+    
     _userInfo = [[NSMutableDictionary alloc] init];
     _standardDefault = [NSUserDefaults standardUserDefaults];
     _userInfo = [[_standardDefault objectForKey:@"userInfo"] mutableCopy]; //mutableCopy는 NSDictionary to NSMutableDictionary 과정
@@ -313,16 +327,30 @@
     }
 }
 
+- (void) extractDesignerInfo{
+    //라벨, 버튼 UI를 설정한다.
+    stageName = [_designerInfo objectForKey:@"stageName"];
+    careerContents = [_designerInfo objectForKey:@"careerContents"];
+    maleCustomerCount = [[_designerInfo objectForKey:@"maleCustomerCount"] integerValue];
+    femaleCustomerCount = [[_designerInfo objectForKey:@"femaleCustomerCount"] integerValue];
+    hairshopName =[[_designerInfo objectForKey:@"hairshop"] objectForKey:@"hairshopName"];
+    closingDay = [_designerInfo objectForKey:@"closingDay"];
+    isMyDesigner = [[_designerInfo objectForKey:@"isMyDesigner"] boolValue];
+}
+
+
 //designerInfo에 따라서 디자이너 UI를 재설정한다.
 - (void) setDesignerUiAsDesignerInfo {
     
+    NSLog(@"UI 갱신 시작");
+    
     //라벨, 버튼 UI를 설정한다.
-    _designerName.text = [_designerInfo objectForKey:@"stageName"];
-    _designerPosition.text = [_designerInfo objectForKey:@"careerContents"];
-    _designerMaleCustomerNumber.text = [[_designerInfo objectForKey:@"maleCustomerCount"] stringValue];
-    _designerFemaleCustomerNumber.text = [[_designerInfo objectForKey:@"femaleCustomerCount"] stringValue];
-    _designerHairShopName.text =[[_designerInfo objectForKey:@"hairshop"] objectForKey:@"hairshopName"];
-    _designerClosedDay.text = [_designerInfo objectForKey:@"closingDay"];
+    _designerName.text = stageName;
+    _designerPosition.text = careerContents;
+    _designerMaleCustomerNumber.text = [NSString stringWithFormat:@"%ld", maleCustomerCount];
+    _designerFemaleCustomerNumber.text = [NSString stringWithFormat:@"%ld", femaleCustomerCount];
+    _designerHairShopName.text = hairshopName;
+    _designerClosedDay.text = closingDay;
     
     //디자이너 등록을 마친 customer가 자기 페이지로 들어온 경우임.
     if(_amIDesigner) {
@@ -332,40 +360,12 @@
         _myCustomerButton.hidden = NO;
         
         //채팅버튼을 없앨 것. 디자이너 등록/취소 버튼을 없앨 것.
-        _messageButtonAndIconView.hidden = YES;
+        _chattingRoomButton.hidden = YES;
         _myDesignerButton.hidden = YES;
         _notMyDesignerButton.hidden = YES;
         
-        //콜렉션뷰 위치 수정
-        NSLayoutConstraint *newTopConstraintForCollectionView =
-        [NSLayoutConstraint constraintWithItem:_viewOfPriceCollectionView
-                                     attribute:NSLayoutAttributeTop
-                                     relatedBy:NSLayoutRelationEqual
-                                        toItem:_brownLineAfterDesignerPermission
-                                     attribute:NSLayoutAttributeBottom
-                                    multiplier:1.0
-                                      constant:0.0];
-        
-        [self.view addConstraint:newTopConstraintForCollectionView];
-        [self.view removeConstraint:_topConstraintAboutPriceCollectionView];
-        
-        NSLayoutConstraint *newBottomConstraintForCollectionView =
-        [NSLayoutConstraint constraintWithItem:_viewOfPriceCollectionView
-                                     attribute:NSLayoutAttributeBottom
-                                     relatedBy:NSLayoutRelationEqual
-                                        toItem:_infoAfterPermissionView
-                                     attribute:NSLayoutAttributeTop
-                                    multiplier:1.0
-                                      constant:0.0];
-        
-        [self.view addConstraint:newBottomConstraintForCollectionView];
-        [self.view removeConstraint:_bottomConstraintAboutPriceCollectionVeiw];
-        
-        [self.view updateConstraints];
-        
     //일반 디자이너 페이지에 들어온 경우임.
     } else {
-        Boolean isMyDesigner = [[_designerInfo objectForKey:@"isMyDesigner"] boolValue];
         if(isMyDesigner) {
             _myDesignerButton.hidden = NO;
             _notMyDesignerButton.hidden = YES;
@@ -387,7 +387,7 @@
     NSLog(@"hairshopPictureUrl: %@", hairshopPictureUrl);
     
     [_designerImage sd_setImageWithURL:[NSURL URLWithString:pictureUrl]];
-    _designerImage.layer.borderWidth = 3.0f;
+    _designerImage.layer.borderWidth = 1.8f;
     _designerImage.layer.borderColor = ([ColorValue getColorValueObject].brownColorChair).CGColor;
     _designerImage.layer.cornerRadius = _designerImage.frame.size.width / 2;
     _designerImage.clipsToBounds = YES;
@@ -400,18 +400,17 @@
 //결과에 따라서 내 디자이너 등록을 반영한다.
 - (void) applyToResultOfMyDesignerAdd:(NSString*) result {
     if([result isEqualToString:@"success"]) {
-        _myDesignerButton.hidden = NO;
-        _notMyDesignerButton.hidden = YES;
+        NSLog(@"내 디자이너 등록 성공! 성공 이후 정보 변경");
+        
+        isMyDesigner = true;
         
         if(_isMale){
-            NSInteger maleCount = [[_designerInfo objectForKey:@"maleCustomerCount"] integerValue];
-            maleCount++;
-            _designerMaleCustomerNumber.text = [NSString stringWithFormat: @"%ld", (long)maleCount];
+            maleCustomerCount++;
         } else {
-            NSInteger femaleCount = [[_designerInfo objectForKey:@"femaleCustomerCount"] integerValue];
-            femaleCount++;
-            _designerFemaleCustomerNumber.text = [NSString stringWithFormat: @"%ld", (long)femaleCount];
+            femaleCustomerCount++;
         }
+        
+        [self setDesignerUiAsDesignerInfo];
     }
 }
 
@@ -419,24 +418,25 @@
 - (void) applyToResultOfMyDesignerCancel:(NSString*) result {
     
     if([result isEqualToString:@"success"]) {
-        _myDesignerButton.hidden = YES;
-        _notMyDesignerButton.hidden = NO;
+        NSLog(@"내 디자이너 취소 성공! 성공 이후 정보 변경");
+        isMyDesigner = false;
         
         if(_isMale){
-            NSInteger maleCount = [[_designerInfo objectForKey:@"maleCustomerCount"] integerValue];
-            maleCount--;
-            _designerMaleCustomerNumber.text = [NSString stringWithFormat: @"%ld", (long)maleCount];
+            maleCustomerCount--;
         } else {
-            NSInteger femaleCount = [[_designerInfo objectForKey:@"femaleCustomerCount"] integerValue];
-            femaleCount--;
-            _designerFemaleCustomerNumber.text = [NSString stringWithFormat: @"%ld", (long)femaleCount];
+            femaleCustomerCount--;
         }
+        
+        [self setDesignerUiAsDesignerInfo];
     }
     
 }
 
 //3명 모두 찼다는 모달창 띄우기
 - (void) presentFullChoiceAboutMyDesignerVC {
+    
+    NSLog(@"풀 방 모달 띄우기 시작");
+    
     //3명이 가득찼다는 모달창 만들기
     FullChoiceAboutMyDesignerViewController *fullChoiceAboutMyDesignerViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"fullChoiceAboutMyDesignerViewController"];
     
@@ -450,27 +450,25 @@
 
 //내 디자이너 등록을 확인하는 모달창에 정보를 보내면서 모달창을 띄운다.
 - (void) presentConfirmChoicAboutMyDesignerVCWithData{
-    //필요한 정보를 Dictionary에 담는다.
-    NSMutableDictionary *tempMutableDic = [[NSMutableDictionary alloc] init];
-    [tempMutableDic setObject:_userInfo forKey:@"userInfo"];
-    [tempMutableDic setObject:_designerInfo forKey:@"designerInfo"];
     
-    NSDictionary *userAndDesignerinfo = tempMutableDic;
-    
+    NSLog(@"내 디자이너 등록 확인 모달창 띄우기");
     
     //모달 창을 띄우고, 정보를 NSNotificationCenter로 보낸다.
     ConfirmChoiceAboutMyDesignerViewController *confirmChoiceAboutMyDesignerViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"confirmChoiceAboutMyDesignerViewController"];
+    confirmChoiceAboutMyDesignerViewController.designerInfo = _designerInfo;
     
     //배경이 투명한 모달 스타일로 만들어준 뒤, 뷰컨트롤러를 띄우고, 노티를 보낸다.
     confirmChoiceAboutMyDesignerViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     [confirmChoiceAboutMyDesignerViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-    [self presentViewController:confirmChoiceAboutMyDesignerViewController animated:YES completion:^{
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"userAndDesignerInfo" object:self userInfo:userAndDesignerinfo];
-    }];
+    [self presentViewController:confirmChoiceAboutMyDesignerViewController animated:YES completion:nil];
+    
 }
 
 //내 디자이너 취소를 위한 정보를 보내면서 모달을 띄운다.
 - (void) presentConfirmCancelAboutMyDesignerViewControllerVCWithData{
+    
+    NSLog(@"내 디자이너 취소 확인 모달창 띄우기");
+    
     //필요한 정보를 Dictionary에 담는다.
     NSMutableDictionary *tempMutableDic = [[NSMutableDictionary alloc] init];
     [tempMutableDic setObject:_userInfo forKey:@"userInfo"];
@@ -487,5 +485,16 @@
     [self presentViewController:confirmCancelAboutMyDesignerViewController animated:YES completion:^{
         [[NSNotificationCenter defaultCenter] postNotificationName:@"userAndDesignerInfo" object:self userInfo:userAndDesignerinfo];
     }];
+}
+
+
+/**
+ *  화면 넓이에 따라서 셀의 크기를 조정해주는 코드
+ */
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    float cellWidth = self.view.frame.size.width;
+    float cellHeight = cellWidth * 3.2f / 38.1f;
+
+    return CGSizeMake(cellWidth, cellHeight);
 }
 @end

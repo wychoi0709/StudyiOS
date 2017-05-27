@@ -54,7 +54,7 @@
  *  << 내 디자이너 관리 메소드 >>
  *  내 디자이너로 추가한다.
  */
--(void) addMyDesigner:(NSDictionary*)designer {
+-(void) addMyDesigner:(NSDictionary*)designer withIsMale:(Boolean)isMale{
     
     //들어온 디자이너의 정보를 변경한다.
     NSMutableDictionary *tempDic = [designer mutableCopy];
@@ -66,7 +66,7 @@
     
     //네트워크로 추가했다는 정보를 보낸다.
     NSInteger designerId = [[designer objectForKey:@"id"] integerValue];
-    [[[DesignerAddNetworkService alloc] init] addMyDesignerRequest:_customerId withDesignerId:designerId];
+    [[[DesignerAddNetworkService alloc] init] addMyDesignerRequest:_customerId withDesignerId:designerId withIsMale:isMale];
     
     //정렬한다.
     [self sortMyDesignerList];
@@ -75,7 +75,7 @@
 /**
  *  해당 디자이너를 제외한다.
  */
--(void) removeMyDesigner:(NSDictionary*)designer {
+-(void) removeMyDesigner:(NSDictionary*)designer withIsMale:(Boolean)isMale{
     //삭제한다.
     for(int i = 0; i < _myDesignerList.count; i++) {
         if([_myDesignerList[i] objectForKey:@"id"] == [designer objectForKey:@"id"]) {
@@ -85,7 +85,7 @@
     
     //네트워크로 취소했다는 정보를 보낸다.
     NSInteger designerId = [[designer objectForKey:@"id"] integerValue];
-    [[[DesignerCancelNetworkService alloc] init] cancelMyDesignerRequest:_customerId withDesignerId:designerId];
+    [[[DesignerCancelNetworkService alloc] init] cancelMyDesignerRequest:_customerId withDesignerId:designerId withIsMale:isMale];
     
     //정렬한다.
     [self sortMyDesignerList];

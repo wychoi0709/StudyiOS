@@ -12,6 +12,7 @@
 #import "MeasurementHelper.h"
 #import "DesignerRankingViewController.h"
 #import "CheckEmailFormatHelper.h"
+#import "BasicButton.h"
 #import "SocialLoginNetworkService.h"
 
 @import Firebase;
@@ -21,6 +22,11 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UITextField *emailTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
+@property (weak, nonatomic) IBOutlet UIView *errorView;
+
+@property (weak, nonatomic) IBOutlet UILabel *errorLabelTitle;
+@property (weak, nonatomic) IBOutlet UILabel *errorLabelText1;
+@property (weak, nonatomic) IBOutlet UILabel *errorLabelText2;
 
 @property(strong, nonatomic) FIRAuthStateDidChangeListenerHandle handle;
 
@@ -49,6 +55,32 @@ LoginNetworkService *loginNetworkService;
             //애러나면.. 코드 적기
             if (error) {
                 NSLog(@"이메일 로그인 중에 애러났어요..%@", error);
+                _errorView.hidden = NO;
+                
+                switch (error.code) {
+                    case FIRAuthErrorCodeInvalidEmail:
+                        _errorLabelTitle.text = @"잘못된 이메일 주소";
+                        _errorLabelText1.text = @"잘못된 이메일 주소입니다..";
+                        _errorLabelText2.text = @"이메일 주소를 확인해주세요.";
+                        break;
+                    case FIRAuthErrorCodeNetworkError:
+                        _errorLabelTitle.text = @"네트워크 접속 실패";
+                        _errorLabelText1.text = @"네트워크 요청에 실패했습니다.";
+                        _errorLabelText2.text = @"인터넷 연결 상태를 확인해주세요.";
+                        break;
+                    case FIRAuthErrorCodeUserNotFound:
+                        _errorLabelTitle.text = @"없는 이메일 주소";
+                        _errorLabelText1.text = @"등록된 이메일이 없습니다.";
+                        _errorLabelText2.text = @"이메일 주소를 확인해주세요.";
+                        break;
+                    case FIRAuthErrorCodeWrongPassword:
+                        _errorLabelTitle.text = @"잘못된 비밀번호";
+                        _errorLabelText1.text = @"비밀번호가 일치하지 않습니다.";
+                        _errorLabelText2.text = @"다시 시도해주세요.";
+
+                    default:
+                        break;
+                }
                 
                 //실패했으니 인디케이터를 내린다.
                 [_activityIndicator stopAnimating];
@@ -240,6 +272,13 @@ LoginNetworkService *loginNetworkService;
     //뷰컨트롤러를 띄운다.
     [self presentViewController:signUpViewController animated:YES completion:nil];
 
+}
+
+
+- (IBAction)errorConfirmBtnTouched:(BasicButton *)sender {
+    
+    _errorView.hidden = YES;
+    
 }
 
 

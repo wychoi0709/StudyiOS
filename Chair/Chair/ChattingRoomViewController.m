@@ -69,14 +69,9 @@
     
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+- (void)didReceiveMemoryWarning { [super didReceiveMemoryWarning]; }
 
-- (void)dealloc {
-    
-}
+- (void)dealloc {}
 
 - (BOOL)shouldAutorotate { return NO; }
 
@@ -112,11 +107,21 @@
         isSendingMessage = NO;
     }
 
+    // text 총길이를 15로 나눠서 몫의 수만큼 for문을 돌린다.
+    // 15번째 이후 문자에 '/n'을 넣는다.
+    NSInteger lineNumber = (text.length)/15;
+    for( int i = 0; i < lineNumber; i ++ ){
+        NSMutableString *mu = [NSMutableString stringWithString:text];
+        [mu insertString:@"\n" atIndex:15 * (i+1)];
+        text = mu;
+    }
+    
     //sendingMessage면 해당 셀을 반환하고,
     if ( isSendingMessage ) {
         
         SendMessageCollectionViewCell *sendMessageCollectionViewCell =[collectionView dequeueReusableCellWithReuseIdentifier:@"sendMessageCollectionViewCell" forIndexPath:indexPath];
         sendMessageCollectionViewCell.sendingMessageLabel.text = text;
+        
         return sendMessageCollectionViewCell;
         
     //takenMessage면 해당 셀을 반환한다.
@@ -128,7 +133,7 @@
         //프로필 사진을 세팅한다.
         NSString *pictureUrl = [_urlString stringByAppendingString:[_takenPersonInfo objectForKey:@"filename"]];
         [takenMessgaeCollectionViewCell.pictureOfTakenPerson sd_setImageWithURL:[NSURL URLWithString:pictureUrl]];
-        takenMessgaeCollectionViewCell.pictureOfTakenPerson.layer.borderWidth = 3.0f;
+        takenMessgaeCollectionViewCell.pictureOfTakenPerson.layer.borderWidth = 1.8f;
         takenMessgaeCollectionViewCell.pictureOfTakenPerson.layer.borderColor = ([ColorValue getColorValueObject].brownColorChair).CGColor;
         takenMessgaeCollectionViewCell.pictureOfTakenPerson.layer.cornerRadius = takenMessgaeCollectionViewCell.pictureOfTakenPerson.frame.size.width / 2;
         takenMessgaeCollectionViewCell.pictureOfTakenPerson.clipsToBounds = YES;
@@ -227,11 +232,7 @@
 /**
  *  키보드 날리는 함수
  */
--(void)dismissKeyboard {
-    
-    [_messageTextField resignFirstResponder];
-    
-}
+-(void)dismissKeyboard { [_messageTextField resignFirstResponder]; }
 
 
 
@@ -468,7 +469,7 @@
         }
         
         //내 서버로 메시지를 읽었다는 신호를 날리기
-        [_chatInfoNetworkService messageReadingWithSender:_senderId withTaker:_takerId];
+        [_chatInfoNetworkService messageReadingWithSender:_takerId withTaker:_senderId];
         
         //노티를 날린다.
         [[NSNotificationCenter defaultCenter] postNotificationName:@"getChatroomIdInfo" object:self userInfo:nil];
@@ -477,6 +478,25 @@
         NSLog(@"%@", error.localizedDescription);
     }];
     
+}
+
+/**
+ *  화면 넓이에 따라서 셀의 크기를 조정해주는 코드
+ */
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    float cellWidth = self.view.frame.size.width;
+    float cellHeight = cellWidth * 5.0f / 38.1f;
+    
+    //텍스트가 줄바꿈 되면, 높이를 유동적으로 늘려준다.
+    FIRDataSnapshot *messageSnapshot = _messages[indexPath.row];
+    NSDictionary<NSString *, NSString *> *message = messageSnapshot.value;
+    NSString *text = message[@"text"];
+    NSInteger lineNumber = (text.length)/15;
+    for ( int i = 1; i < lineNumber + 1; i++ ) {
+        cellHeight += cellWidth * 2.2f / 38.1f;
+    }
+    
+    return CGSizeMake(cellWidth, cellHeight);
 }
 
 @end

@@ -39,20 +39,35 @@
 /**
  *  해당 디자이너가 해당 지역의 디자이너로 속해있다면, 내 디자이너로 등록한다.
  */
--(void) addMyDesignerInThisLocation:(NSDictionary*)designer {
+-(void) addMyDesignerInThisLocation:(NSDictionary*)designer withIsMale:(Boolean)isMale {
 
     for(int i = 0; i < _designerList.count; i++) {
         if([_designerList[i] objectForKey:@"id"] == [designer objectForKey:@"id"]) {
             
-            //지금 지역의 디자이너 정보를 변경한다.
+            //지금 지역 해당 디자이너의 isMyDesigner 정보를 true로 바꾼다.
             NSMutableDictionary *tempDic = [[NSMutableDictionary alloc] init];
             NSDictionary *oldDict = (NSDictionary *)[_designerList objectAtIndex:i];
             [tempDic addEntriesFromDictionary:oldDict];
             [tempDic setObject:@"true" forKey:@"isMyDesigner"];
+            
+            //지금 지역 해당 디자이너의 고객 수를 1 올린다.
+            if (isMale) {
+                NSInteger maleCustomerCount = [[oldDict objectForKey:@"maleCustomerCount"] integerValue];
+                maleCustomerCount++;
+                [tempDic setObject:[NSNumber numberWithInteger:maleCustomerCount] forKey:@"maleCustomerCount"];
+            } else {
+                NSInteger femaleCustomerCount = [[oldDict objectForKey:@"femaleCustomerCount"] integerValue];
+                femaleCustomerCount++;
+                [tempDic setObject:[NSNumber numberWithInteger:femaleCustomerCount] forKey:@"femaleCustomerCount"];
+            }
+
+            //디자이너 리스트를 갱신한다.
             [_designerList replaceObjectAtIndex:i withObject:tempDic];
             
+            
             //토탈 내 디자이너 리스트에 디자이너를 추가한다.
-            [[MyDesignerList getMyDesignerListObject] addMyDesigner:designer];
+            [[MyDesignerList getMyDesignerListObject] addMyDesigner:tempDic withIsMale:isMale];
+            break;
         }
     }
 }
@@ -60,7 +75,7 @@
 /**
  *  해당 지역의 내 디자이너 등록을 취소한다.
  */
--(void) removeMyDesignerInThisLocation:(NSDictionary*)designer {
+-(void) removeMyDesignerInThisLocation:(NSDictionary*)designer withIsMale:(Boolean)isMale {
     for(int i = 0; i < _designerList.count; i++) {
         if([_designerList[i] objectForKey:@"id"] == [designer objectForKey:@"id"]) {
             
@@ -69,10 +84,23 @@
             NSDictionary *oldDict = (NSDictionary *)[_designerList objectAtIndex:i];
             [tempDic addEntriesFromDictionary:oldDict];
             [tempDic setObject:@"false" forKey:@"isMyDesigner"];
+            
+            //지금 지역 해당 디자이너의 고객 수를 1 내린다.
+            if (isMale) {
+                NSInteger maleCustomerCount = [[oldDict objectForKey:@"maleCustomerCount"] integerValue];
+                maleCustomerCount--;
+                [tempDic setObject:[NSNumber numberWithInteger:maleCustomerCount] forKey:@"maleCustomerCount"];
+            } else {
+                NSInteger femaleCustomerCount = [[oldDict objectForKey:@"femaleCustomerCount"] integerValue];
+                femaleCustomerCount--;
+                [tempDic setObject:[NSNumber numberWithInteger:femaleCustomerCount] forKey:@"femaleCustomerCount"];
+            }
+            
             [_designerList replaceObjectAtIndex:i withObject:tempDic];
             
             //토탈 내 디자이너 리스트에서 지운다.
-            [[MyDesignerList getMyDesignerListObject] removeMyDesigner:designer];
+            [[MyDesignerList getMyDesignerListObject] removeMyDesigner:tempDic withIsMale:isMale];
+            break;
         }
     }
 }

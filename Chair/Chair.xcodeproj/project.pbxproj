@@ -27,12 +27,14 @@
 		6F17829B1E4C2533002CA881 /* MyPageCustomerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F17829A1E4C2533002CA881 /* MyPageCustomerViewController.m */; };
 		6F192D881E62FCFC0002A0EB /* SocialLoginNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F192D871E62FCFC0002A0EB /* SocialLoginNetworkService.m */; };
 		6F1BE7CE1E28D9D10094A55A /* DesignerListInALocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F1BE7CD1E28D9D10094A55A /* DesignerListInALocation.m */; };
+		6F1E12DB1EAB499200B19468 /* NameEditModalViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F1E12DA1EAB499200B19468 /* NameEditModalViewController.m */; };
 		6F240CDE1E164062002C42EE /* ColorValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F240CDD1E164062002C42EE /* ColorValue.m */; };
 		6F26D6991E18C0E900F0C03E /* Location.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F26D6981E18C0E900F0C03E /* Location.m */; };
 		6F26D69C1E18CDE500F0C03E /* SignUpNetworkService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F26D69B1E18CDE500F0C03E /* SignUpNetworkService.m */; };
 		6F26D6A31E19226E00F0C03E /* DesignerRankingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F26D6A21E19226E00F0C03E /* DesignerRankingViewController.m */; };
 		6F26D6A61E1922B400F0C03E /* SideMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F26D6A51E1922B400F0C03E /* SideMenuViewController.m */; };
 		6F3887261E6443C400D5B0DC /* GetPriceInfoOfDesigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3887251E6443C400D5B0DC /* GetPriceInfoOfDesigner.m */; };
+		6F3896CA1ECD7763006B85C2 /* StyleWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3896C91ECD7763006B85C2 /* StyleWebViewController.m */; };
 		6F3B46E31E62A91A007ADAB4 /* MeasurementHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3B46E21E62A91A007ADAB4 /* MeasurementHelper.m */; };
 		6F3B46E61E62B0DB007ADAB4 /* CheckEmailFormatHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F3B46E51E62B0DB007ADAB4 /* CheckEmailFormatHelper.m */; };
 		6F48C55A1E5573FC00105EF5 /* IsTempLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F48C5591E5573FC00105EF5 /* IsTempLocation.m */; };
@@ -97,6 +99,8 @@
 		6F192D871E62FCFC0002A0EB /* SocialLoginNetworkService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SocialLoginNetworkService.m; sourceTree = "<group>"; };
 		6F1BE7CC1E28D9D10094A55A /* DesignerListInALocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DesignerListInALocation.h; sourceTree = "<group>"; };
 		6F1BE7CD1E28D9D10094A55A /* DesignerListInALocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DesignerListInALocation.m; sourceTree = "<group>"; };
+		6F1E12D91EAB499200B19468 /* NameEditModalViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NameEditModalViewController.h; sourceTree = "<group>"; };
+		6F1E12DA1EAB499200B19468 /* NameEditModalViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NameEditModalViewController.m; sourceTree = "<group>"; };
 		6F240CDC1E164062002C42EE /* ColorValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorValue.h; sourceTree = "<group>"; };
 		6F240CDD1E164062002C42EE /* ColorValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ColorValue.m; sourceTree = "<group>"; };
 		6F26D6971E18C0E900F0C03E /* Location.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Location.h; sourceTree = "<group>"; };
@@ -109,6 +113,8 @@
 		6F26D6A51E1922B400F0C03E /* SideMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SideMenuViewController.m; sourceTree = "<group>"; };
 		6F3887241E6443C400D5B0DC /* GetPriceInfoOfDesigner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GetPriceInfoOfDesigner.h; sourceTree = "<group>"; };
 		6F3887251E6443C400D5B0DC /* GetPriceInfoOfDesigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GetPriceInfoOfDesigner.m; sourceTree = "<group>"; };
+		6F3896C81ECD7763006B85C2 /* StyleWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StyleWebViewController.h; sourceTree = "<group>"; };
+		6F3896C91ECD7763006B85C2 /* StyleWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StyleWebViewController.m; sourceTree = "<group>"; };
 		6F3B46E11E62A91A007ADAB4 /* MeasurementHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MeasurementHelper.h; sourceTree = "<group>"; };
 		6F3B46E21E62A91A007ADAB4 /* MeasurementHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MeasurementHelper.m; sourceTree = "<group>"; };
 		6F3B46E41E62B0DB007ADAB4 /* CheckEmailFormatHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckEmailFormatHelper.h; sourceTree = "<group>"; };
@@ -296,6 +302,8 @@
 				6F17829A1E4C2533002CA881 /* MyPageCustomerViewController.m */,
 				6F6AE9361E654F8F00D76ED7 /* ChattingRoomViewController.h */,
 				6F6AE9371E654F8F00D76ED7 /* ChattingRoomViewController.m */,
+				6F3896C81ECD7763006B85C2 /* StyleWebViewController.h */,
+				6F3896C91ECD7763006B85C2 /* StyleWebViewController.m */,
 			);
 			name = ViewController;
 			sourceTree = "<group>";
@@ -365,6 +373,8 @@
 				6FD890D81E0A2822002F01C4 /* LocationSelectModalViewController.m */,
 				6F850B4F1E890FD600A72934 /* CustomerListModalViewController.h */,
 				6F850B501E890FD600A72934 /* CustomerListModalViewController.m */,
+				6F1E12D91EAB499200B19468 /* NameEditModalViewController.h */,
+				6F1E12DA1EAB499200B19468 /* NameEditModalViewController.m */,
 			);
 			name = Popup;
 			sourceTree = "<group>";
@@ -532,6 +542,7 @@
 				6F0AC1681DFBDC4B00988A0F /* SplashViewController.m in Sources */,
 				546318F71DE546B9005A3F4C /* LoginNetworkService.m in Sources */,
 				6F0AC16C1DFBE01600988A0F /* LoginViewController.m in Sources */,
+				6F3896CA1ECD7763006B85C2 /* StyleWebViewController.m in Sources */,
 				6F6AE9411E6550EB00D76ED7 /* TakenMessgaeCollectionViewCell.m in Sources */,
 				6F4D73021E2620B8005F3730 /* DesignerCancelNetworkService.m in Sources */,
 				6FD890D91E0A2822002F01C4 /* LocationSelectModalViewController.m in Sources */,
@@ -569,6 +580,7 @@
 				6F99B9761E5868D900DA0250 /* ImageResizeUtil.m in Sources */,
 				6F4D72FF1E261A06005F3730 /* DesignerAddNetworkService.m in Sources */,
 				6F240CDE1E164062002C42EE /* ColorValue.m in Sources */,
+				6F1E12DB1EAB499200B19468 /* NameEditModalViewController.m in Sources */,
 				6F0C72C71E1D45C500995983 /* RankingNormalDesignerCollectionViewCell.m in Sources */,
 				6F48C55A1E5573FC00105EF5 /* IsTempLocation.m in Sources */,
 				6F6E6BA21E8CC2E2009B4E0D /* CustomerListNetworkService.m in Sources */,

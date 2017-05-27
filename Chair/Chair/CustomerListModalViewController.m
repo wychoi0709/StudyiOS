@@ -29,6 +29,11 @@
 
 @implementation CustomerListModalViewController
 
+
+//고객 리스트가 좀 이상해! 다시 봐바
+
+
+
 /*****************************************************************
  *   << 생명주기 관련 메소드 >>
  *****************************************************************/
@@ -122,6 +127,7 @@
     NSLog(@"backToCustomerList 진입");
     [self initSettingForThisVC];
 }
+
 /*****************************************************************
  *   << 내가 만든 메소드 >>
  *****************************************************************/
@@ -142,6 +148,7 @@
 }
 
 - (void) applyNotiObserver {
+ 
     NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter addObserver:self selector:@selector(getcustomerListResult:) name:@"customerListResult" object:nil];
     [notificationCenter addObserver:self selector:@selector(getNoCustomerListResult:) name:@"noCustomerListResult" object:nil];
@@ -167,7 +174,7 @@
     NSString *pictureUrl = [_urlString stringByAppendingString:[aCustomer objectForKey:@"filename"]];
     [customerListCollectionViewCell.customerImageView sd_setImageWithURL:[NSURL URLWithString:pictureUrl]];
     //코너를 동그랗게 만든다.
-    customerListCollectionViewCell.customerImageView.layer.borderWidth = 2.0f;
+    customerListCollectionViewCell.customerImageView.layer.borderWidth = 1.5f;
     customerListCollectionViewCell.customerImageView.layer.borderColor = ([ColorValue getColorValueObject].brownColorChair).CGColor;
     customerListCollectionViewCell.customerImageView.layer.cornerRadius = customerListCollectionViewCell.customerImageView.frame.size.width / 2;
     customerListCollectionViewCell.customerImageView.clipsToBounds = YES;
@@ -194,6 +201,19 @@
     
     [customerListCollectionViewCell.messageButton addTarget:self action:@selector(messageButtonTouched:) forControlEvents:UIControlEventTouchUpInside];
     
+    
+    
+    
+    
+    //버튼 안에 있는 이미지 크키 조정하기 가능한가?
+//    customerListCollectionViewCell.messageButton.imageView.frame = CGRectMake(customerListCollectionViewCell.messageButton.imageView.frame.origin.x, customerListCollectionViewCell.messageButton.imageView.frame.origin.y, customerListCollectionViewCell.messageButton.imageView.frame.size.width * 2, customerListCollectionViewCell.messageButton.imageView.frame.size.height * 2);
+    
+    
+    
+    
+    
+    
+    
     return customerListCollectionViewCell;
 }
 
@@ -210,7 +230,7 @@
  */
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     float cellWidth = self.myCustomerCollectionView.frame.size.width;
-    float cellHeight = cellWidth * 12.8f / 38.1f;
+    float cellHeight = cellWidth * 10.0f / 38.1f;
     
     return CGSizeMake(cellWidth, cellHeight);
 }

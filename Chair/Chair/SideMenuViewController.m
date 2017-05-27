@@ -68,6 +68,8 @@
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *myDesignerTopBeforePermission;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *myPageViewAfterPermission;
 
+@property NSUserDefaults *standardDefault;
+
 
 @end
 
@@ -79,26 +81,22 @@
  */
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
     //들어온 viewController을 확인하기 위한 옵저버
     _notificationCenter = [NSNotificationCenter defaultCenter];
     [_notificationCenter addObserver:self selector:@selector(closedBtnAndPresentDesignerInfo:) name:@"guidingPreviousViewController" object:nil];
-    [_notificationCenter addObserver:self selector:@selector(closedBtnAndPresentDesignerInfo:) name:@"updateMyInfoResult" object:nil];
+    [_notificationCenter addObserver:self selector:@selector(afterChangedUserInfo:) name:@"updateMyInfoResult" object:nil];
 
 }
 
 - (BOOL)shouldAutorotate { return NO; }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+- (void)didReceiveMemoryWarning { [super didReceiveMemoryWarning]; }
 
 
 /**
  *  << 버튼 터치 메소드 >>
- *  첫번째 디자이너 터치
+ *  디자이너 터치
  */
 - (IBAction)firstDesignerTouched:(UIButton *)sender {
     
@@ -108,15 +106,10 @@
     //화면을 띄우고, 사이드 메뉴를 닫는다.
     DetailDesignerInfoViewController *detailDesignerInfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
     [detailDesignerInfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-    [self presentViewController:detailDesignerInfoViewController animated:YES completion:^{
-        [_designerRankingViewController hideLeftViewAnimated:NO completionHandler:nil];
-        
-        //첫번째 버튼이라는 정보를 넣고, 노티를 보낸다.
-        NSDictionary *whereIsThisViewControllerComeFrom = [NSDictionary dictionaryWithObject:@"firstDetailDesignerInfoViewController" forKey:@"whereIsThisViewControllerComeFrom"];
-        [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
-    }];
     
-
+    detailDesignerInfoViewController.amIDesigner = NO;
+    detailDesignerInfoViewController.designerInfo = [[MyDesignerList getMyDesignerListObject] myDesignerList][0];
+    [self presentViewController:detailDesignerInfoViewController animated:YES completion:nil];
 
 }
 
@@ -126,20 +119,14 @@
     //사이드메뉴를 만든다.
     _designerRankingViewController = (DesignerRankingViewController *)self.sideMenuController;
     
-    
     //화면을 띄우고, 사이드 메뉴를 닫는다.
     DetailDesignerInfoViewController *detailDesignerInfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
     [detailDesignerInfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-    [self presentViewController:detailDesignerInfoViewController animated:YES completion:^{
-        [_designerRankingViewController hideLeftViewAnimated:NO completionHandler:nil];
-        
-        //두번째 버튼이라는 정보를 넣고, 노티를 보낸다.
-        NSDictionary *whereIsThisViewControllerComeFrom = [NSDictionary dictionaryWithObject:@"secondDetailDesignerInfoViewController" forKey:@"whereIsThisViewControllerComeFrom"];
-        [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
-
-    }];
     
-
+    detailDesignerInfoViewController.amIDesigner = NO;
+    detailDesignerInfoViewController.designerInfo = [[MyDesignerList getMyDesignerListObject] myDesignerList][1];
+    [self presentViewController:detailDesignerInfoViewController animated:YES completion:nil];
+    
 }
 
 
@@ -148,19 +135,13 @@
     //사이드메뉴를 만든다.
     _designerRankingViewController = (DesignerRankingViewController *)self.sideMenuController;
     
-    
     //화면을 띄우고, 사이드 메뉴를 닫는다.
     DetailDesignerInfoViewController *detailDesignerInfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
     [detailDesignerInfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-    [self presentViewController:detailDesignerInfoViewController animated:YES completion:^{
-        [_designerRankingViewController hideLeftViewAnimated:NO completionHandler:nil];
-
-        //세번째 버튼이라는 정보를 넣고, 노티를 보낸다.
-        NSDictionary *whereIsThisViewControllerComeFrom = [NSDictionary dictionaryWithObject:@"thirdDetailDesignerInfoViewController" forKey:@"whereIsThisViewControllerComeFrom"];
-        [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
-
-    }];
     
+    detailDesignerInfoViewController.amIDesigner = NO;
+    detailDesignerInfoViewController.designerInfo = [[MyDesignerList getMyDesignerListObject] myDesignerList][2];
+    [self presentViewController:detailDesignerInfoViewController animated:YES completion:nil];
 }
 
 
@@ -219,31 +200,14 @@
     //화면을 띄우고, 사이드 메뉴를 닫는다.
     DetailDesignerInfoViewController *detailDesignerInfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
     [detailDesignerInfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-    [self presentViewController:detailDesignerInfoViewController animated:YES completion:^{
-        [_designerRankingViewController hideLeftViewAnimated:NO completionHandler:nil];
-        
-        //등록된 디자이너 버튼이라는 정보를 넣고, 노티를 보낸다.
-        NSDictionary *whereIsThisViewControllerComeFrom = [NSDictionary dictionaryWithObject:@"registeredCustomerAsDesigner" forKey:@"whereIsThisViewControllerComeFrom"];
-        [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
-    }];
+    
+    detailDesignerInfoViewController.amIDesigner = YES;
+    detailDesignerInfoViewController.designerInfo = [_userInfo objectForKey:@"designer"];
+    
+    [self presentViewController:detailDesignerInfoViewController animated:YES completion:nil];
     
 }
-- (IBAction)messageButtonTouched:(UIButton *)sender {
-    //사이드메뉴를 만든다.
-    _designerRankingViewController = (DesignerRankingViewController *)self.sideMenuController;
-    
-    //화면을 띄우고, 사이드 메뉴를 닫는다.
-    DetailDesignerInfoViewController *detailDesignerInfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
-    [detailDesignerInfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-    [self presentViewController:detailDesignerInfoViewController animated:YES completion:^{
-        [_designerRankingViewController hideLeftViewAnimated:NO completionHandler:nil];
-        
-        //등록된 디자이너 버튼이라는 정보를 넣고, 노티를 보낸다.
-        NSDictionary *whereIsThisViewControllerComeFrom = [NSDictionary dictionaryWithObject:@"registeredCustomerAsDesigner" forKey:@"whereIsThisViewControllerComeFrom"];
-        [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:whereIsThisViewControllerComeFrom];
-    }];
 
-}
 
 /**
  *  << 콜백 관련 메소드 >>
@@ -326,32 +290,45 @@
     }
     
     //내 디자이너 뷰의 위치와 배경을 조정한다.
-    _tempBackgroundFrame.size.height += 13.0;
+    _tempBackgroundFrame.size.height += 9.0;
+    
+    [self presentUIFromUserInfo];
+
+}
+
+- (void)afterChangedUserInfo:(NSNotification*)noti {
+    [self presentUIFromUserInfo];
+}
+
+/**
+ *  NSUserDefault의 값을 통해 UI를 갱신한다.
+ */
+-(void) presentUIFromUserInfo{
     
     //userInfo 뺐음.
     _userInfo = [[[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"] mutableCopy];
-
+    
     //이름을 매핑하고 이미지를 넣는다.
     _userNameLabel.text = [_userInfo objectForKey:@"name"];
     NSString *userPictureUrl = [_userInfo objectForKey:@"filename"];
     NSString *urlString = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"UrlInfoByYoung"];
     NSString *pictureUrl = [urlString stringByAppendingString:userPictureUrl];
-
+    
     if( pictureUrl ) {
         [_userImageView sd_setImageWithURL:[NSURL URLWithString:pictureUrl]];
         
-        self.userImageView.layer.borderWidth = 3.0f;
+        self.userImageView.layer.borderWidth = 1.5f;
         self.userImageView.layer.borderColor = ([ColorValue getColorValueObject].brownColorChair).CGColor;
         self.userImageView.layer.cornerRadius = self.userImageView.frame.size.width / 2;
         self.userImageView.clipsToBounds = YES;
     }
-
+    
     Boolean isPermissionOfApply = [[_userInfo objectForKey:@"permissionOfApply"] boolValue];
     
     if ( isPermissionOfApply ) {
         //view를 살린다
         _designerAcceptView.hidden = NO;
-
+        
     } else {
         //view를 없앤다.
         _designerAcceptView.hidden = YES;
@@ -381,10 +358,10 @@
     }
     
     
-    //컨스트레인트 수정으로 내가 등록산 선생님보기 뷰의 높이 변경
+    //컨스트레인트 수정으로 내가 등록한 선생님보기 뷰의 높이 변경
     _myDesignerViewHeight.constant = _tempBackgroundFrame.size.height;
-
 }
+
 
 /**
  *  <사이드 메뉴 라이브러리 관련 메소드>

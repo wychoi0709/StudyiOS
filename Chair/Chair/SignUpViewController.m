@@ -13,6 +13,7 @@
 #import "DesignerRankingViewController.h"
 #import "MeasurementHelper.h"
 #import "CheckEmailFormatHelper.h"
+#import "BasicButton.h"
 
 @import Firebase;
 
@@ -26,6 +27,11 @@
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property Location *myLocation;
 @property SignUpNetworkService *signupNetworkService;
+@property (weak, nonatomic) IBOutlet UIView *errorView;
+
+@property (weak, nonatomic) IBOutlet UILabel *errorLabelTitle;
+@property (weak, nonatomic) IBOutlet UILabel *errorLabelText1;
+@property (weak, nonatomic) IBOutlet UILabel *errorLabelText2;
 
 @end
 
@@ -53,6 +59,13 @@
 - (IBAction)closedBtnTouched:(UIButton *)sender {
     
     [self dismissViewControllerAnimated:YES completion:nil];
+    
+}
+
+
+- (IBAction)errorConfirmBtnTouched:(BasicButton *)sender {
+    
+    _errorView.hidden = YES;
     
 }
 
@@ -141,8 +154,32 @@
             //애러나면.. 코드 적기
             if (error) {
                 NSLog(@"이메일 회원가입 중에 애러났어요.. %@", error);
+                _errorView.hidden = NO;
                 
-                //비밀번호는 6자리 이상으로 만들기 팝업창 띄워주세요!!
+                switch (error.code) {
+                    case FIRAuthErrorCodeInvalidEmail:
+                        _errorLabelTitle.text = @"잘못된 이메일 주소";
+                        _errorLabelText1.text = @"잘못된 이메일 주소입니다..";
+                        _errorLabelText2.text = @"이메일 주소를 확인해주세요.";
+                        break;
+                    case FIRAuthErrorCodeNetworkError:
+                        _errorLabelTitle.text = @"네트워크 접속 실패";
+                        _errorLabelText1.text = @"네트워크 요청에 실패했습니다.";
+                        _errorLabelText2.text = @"인터넷 연결 상태를 확인해주세요.";
+                        break;
+                    case FIRAuthErrorCodeEmailAlreadyInUse:
+                        _errorLabelTitle.text = @"중복된 이메일 주소";
+                        _errorLabelText1.text = @"이미 사용중인 이메일 주소입니다.";
+                        _errorLabelText2.text = @"다시 시도해주세요.";
+                        break;
+                    case FIRAuthErrorCodeWrongPassword:
+                        _errorLabelTitle.text = @"잘못된 비밀번호";
+                        _errorLabelText1.text = @"비밀번호가 일치하지 않습니다.";
+                        _errorLabelText2.text = @"다시 시도해주세요.";
+                        
+                    default:
+                        break;
+                }
                 
                 //애러. 인디케이터 멈추기
                 [_activityIndicator stopAnimating];
@@ -157,7 +194,11 @@
     
     } else {
         NSLog(@"이메일 형식이 아닙니다. 팝업창 만들어주세요!");
-        //팝업을 띄운다.
+        _errorView.hidden = NO;
+        _errorLabelTitle.text = @"잘못된 이메일 주소";
+        _errorLabelText1.text = @"잘못된 이메일 주소입니다..";
+        _errorLabelText2.text = @"이메일 주소를 확인해주세요.";
+        
     }
     
 }

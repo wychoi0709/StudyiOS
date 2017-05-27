@@ -20,6 +20,6 @@
 @property NSMutableURLRequest *aRequest;
 
 //내 디자이너를 추가하는 네트워크 요청(고객id, 디자이너id)
-- (void)addMyDesignerRequest:(NSInteger)customerId withDesignerId:(NSInteger)designerId;
+- (void)addMyDesignerRequest:(NSInteger)customerId withDesignerId:(NSInteger)designerId withIsMale:(Boolean)isMale;
 
 @end

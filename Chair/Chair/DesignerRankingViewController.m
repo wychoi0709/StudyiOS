@@ -90,19 +90,8 @@
     _searchBar.hidden = YES;
     _invisibleButtonForSideMenu.hidden = YES;
     
-    //NSUserDefault의 customerId, LocationId, gender 값을 빼낸다.
-    _userInfo = [[NSMutableDictionary alloc] init];
-    _standardDefault = [NSUserDefaults standardUserDefaults];
-    _userInfo = [[_standardDefault objectForKey:@"userInfo"] mutableCopy]; //mutableCopy는 NSDictionary to NSMutableDictionary 과정
-    _customerId = [[_userInfo objectForKey:@"id"] integerValue];
-    _locationId = [[_userInfo objectForKey:@"location_id"] integerValue];
-    _gender = [_userInfo objectForKey:@"sex"];
-    
-    //location label을 세팅한다.
-    _locationLabel.text = [[_userInfo objectForKey:@"location"] objectForKey:@"location"];
-    
-    //성별에 따라 genderButton의 타이틀 텍스트를 변경한다.
-    [self changeGenderButtonTitleTextByGender];
+    //NSUserDefault의 값을 통해 UI를 갱신한다.
+    [self presentUIFromUserInfo];
     
     //인디케이터를 돌리고 ranking 정보 불러오는 네트워크 요청을 실시한다
     [_activityIndicator startAnimating];
@@ -113,11 +102,7 @@
     [[[GetMyDesignerListNetworkService alloc] init] getMyDesignerListRequest:_customerId];
 
     //옵저버 지정(콜백에서 Array 갱신하고, collectionview도 갱신할 것)
-    _notificationCenter = [NSNotificationCenter defaultCenter];
-    [_notificationCenter addObserver:self selector:@selector(designerListDidLoad:) name:@"designerListResult" object:_designerRankingNetworkService];
-    [_notificationCenter addObserver:self selector:@selector(changeTempLocation:) name:@"changeMyLocation" object:_locationSelectModalViewController];
-    [_notificationCenter addObserver:self selector:@selector(afterDesignerAddNetwork:) name:@"addMyDesignerResult" object:nil];
-    [_notificationCenter addObserver:self selector:@selector(afterDesignerCancelNetwork:) name:@"cancelMyDesignerResult" object:nil];
+    [self settingNotification];
     
     //SideMenu 만들고 설정하기
     _mySideMenuViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"SideMenuViewController"];
@@ -343,21 +328,14 @@
 
         if (_targetIndexPath != nil){
             
-            //필요한 정보를 Dictionary에 담는다.
-            NSMutableDictionary *tempMutableDic = [[NSMutableDictionary alloc] init];
-            [tempMutableDic setObject:(([DesignerListInALocation getDesignerListObject].designerList)[_targetIndexPath.row]) forKey:@"designerInfo"];
-            
-            NSDictionary *designerinfo = tempMutableDic;
-            
             //모달 창을 띄우고, 정보를 NSNotificationCenter로 보낸다.
             ConfirmChoiceAboutMyDesignerViewController *confirmChoiceAboutMyDesignerViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"confirmChoiceAboutMyDesignerViewController"];
+            confirmChoiceAboutMyDesignerViewController.designerInfo = ([DesignerListInALocation getDesignerListObject].designerList)[_targetIndexPath.row];
             
             //배경이 투명한 모달 스타일로 만들어준 뒤, 뷰컨트롤러를 띄우고, 노티를 보낸다.
             confirmChoiceAboutMyDesignerViewController.modalPresentationStyle = UIModalPresentationOverCurrentContext;
             [confirmChoiceAboutMyDesignerViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-            [self presentViewController:confirmChoiceAboutMyDesignerViewController animated:YES completion:^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"userAndDesignerInfo" object:self userInfo:designerinfo];
-            }];        
+            [self presentViewController:confirmChoiceAboutMyDesignerViewController animated:YES completion:nil];
         }
     }
 }
@@ -446,6 +424,17 @@
     }
 }
 
+- (void)afterChangedUserInfo:(NSNotification*)noti {
+    [self presentUIFromUserInfo];
+    
+    //내가 디자이너면, 디자이너 리스트를 갱신한다.
+    Boolean isPermissionOfApply = [[_userInfo objectForKey:@"permissionOfApply"] boolValue];
+    if ( isPermissionOfApply ) {
+        [_designerRankingNetworkService callDesignerListByLocationIdRequest:_customerId withLocationId:_locationId withGender:_gender];
+    }
+    
+}
+
 
 /**
  *  <지금부터 CollectionView 관련 메소드>
@@ -473,7 +462,7 @@
     
     
     //1위부터 10위까지는 betterDesignerCell
-    if(indexPath.row < 10) {
+    if(indexPath.row < 3) {
         
         //betterDesignerCell을 만든다.
         RankingBetterDesignerCollectionViewCell *betterDesignerCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"rankingBetterDesignerCollectionViewCell" forIndexPath:indexPath];
@@ -502,7 +491,7 @@
         
         //betterDesigner의 프로필 사진을 세팅한다.
         [betterDesignerCell.betterDesignerImage sd_setImageWithURL:[NSURL URLWithString:pictureUrl]];
-        betterDesignerCell.betterDesignerImage.layer.borderWidth = 3.0f;
+        betterDesignerCell.betterDesignerImage.layer.borderWidth = 1.8f;
         betterDesignerCell.betterDesignerImage.layer.borderColor = ([ColorValue getColorValueObject].brownColorChair).CGColor;
         betterDesignerCell.betterDesignerImage.layer.cornerRadius = betterDesignerCell.betterDesignerImage.frame.size.width / 2;
         betterDesignerCell.betterDesignerImage.clipsToBounds = YES;
@@ -578,7 +567,7 @@
         
         //normalDesigner의 프로필 사진을 세팅한다.
         [normalDesignerCell.normalDesignerImage sd_setImageWithURL:[NSURL URLWithString:pictureUrl]];
-        normalDesignerCell.normalDesignerImage.layer.borderWidth = 3.0f;
+        normalDesignerCell.normalDesignerImage.layer.borderWidth = 1.8f;
         normalDesignerCell.normalDesignerImage.layer.borderColor = ([ColorValue getColorValueObject].brownColorChair).CGColor;
         normalDesignerCell.normalDesignerImage.layer.cornerRadius = normalDesignerCell.normalDesignerImage.frame.size.width / 2;
         normalDesignerCell.normalDesignerImage.clipsToBounds = YES;
@@ -587,6 +576,10 @@
         [normalDesignerCell.normalDesignerHairShopImage sd_setImageWithURL:[NSURL URLWithString:hairshopPictureUrl]];
         normalDesignerCell.normalDesignerHairShopImage.layer.cornerRadius = normalDesignerCell.normalDesignerHairShopImage.frame.size.width / 2;
         normalDesignerCell.normalDesignerHairShopImage.clipsToBounds = YES;
+        
+        //버튼의 콜백 메소드를 등록한다.
+        [normalDesignerCell.myDesignerButton addTarget:self action:@selector(cancelMyDesignerButton:) forControlEvents:UIControlEventTouchUpInside];
+        [normalDesignerCell.notMyDesignerButton addTarget:self action:@selector(addMyDesignerButton:) forControlEvents:UIControlEventTouchUpInside];
 
         return normalDesignerCell;
         
@@ -627,20 +620,14 @@
  */
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     
-    //디자이너 정보와, 어떤 뷰컨트롤러에서 보내는지에 대한 정보를 담아서 보낸다.
-    NSDictionary *designerInfo = ([DesignerListInALocation getDesignerListObject].designerList)[indexPath.row];
-    NSString *whereIsThisViewControllerComeFrom = @"designerRankingVeiwController";
-    NSMutableDictionary *tempDic = [[NSMutableDictionary alloc] init];
-    [tempDic setObject:designerInfo forKey:@"designerInfo"];
-    [tempDic setObject:whereIsThisViewControllerComeFrom forKey:@"whereIsthisViewControllerComeFrom"];
-    NSDictionary *resultDic = tempDic;
-    
-    //디자이너 디테일 뷰컨트롤러를 생성하고 위에서 만든 정보를 담아 노티를 쏜다!
+    //디자이너 디테일 뷰컨트롤러를 생성하고 위에서 만든 정보를 담아 디테일 페이지를 오픈한다.
     DetailDesignerInfoViewController *detailDesignerinfoViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"detailDesignerInfoViewController"];
+    
+    detailDesignerinfoViewController.amIDesigner = NO;
+    detailDesignerinfoViewController.designerInfo = ([DesignerListInALocation getDesignerListObject].designerList)[indexPath.row];
+    
     [detailDesignerinfoViewController setModalTransitionStyle:UIModalTransitionStyleCrossDissolve];
-    [self presentViewController:detailDesignerinfoViewController animated:YES completion:^{
-        [_notificationCenter postNotificationName:@"informationsForDetailDesignerPage" object:self userInfo:resultDic];
-    }];
+    [self presentViewController:detailDesignerinfoViewController animated:YES completion:nil];
     
 }
 
@@ -652,13 +639,39 @@
     float cellWidth = self.view.frame.size.width;
     float cellHeight;
     
-    if(indexPath.row < 10) {
-        cellHeight = cellWidth * 12.8f / 38.1f;
+    if(indexPath.row < 3) {
+        cellHeight = cellWidth * 13.6f / 38.1f;
     } else {
         cellHeight = cellWidth * 10.92f / 38.1f;
     }
     return CGSizeMake(cellWidth, cellHeight);
 }
 
+/**
+ *  NSUserDefault의 값을 통해 UI를 갱신한다.
+ */
+-(void) presentUIFromUserInfo{
+    //NSUserDefault의 customerId, LocationId, gender 값을 빼낸다.
+    _userInfo = [[NSMutableDictionary alloc] init];
+    _standardDefault = [NSUserDefaults standardUserDefaults];
+    _userInfo = [[_standardDefault objectForKey:@"userInfo"] mutableCopy]; //mutableCopy는 NSDictionary to NSMutableDictionary 과정
+    _customerId = [[_userInfo objectForKey:@"id"] integerValue];
+    _locationId = [[_userInfo objectForKey:@"location_id"] integerValue];
+    _gender = [_userInfo objectForKey:@"sex"];
+    
+    //location label을 세팅한다.
+    _locationLabel.text = [[_userInfo objectForKey:@"location"] objectForKey:@"location"];
+    
+    //성별에 따라 genderButton의 타이틀 텍스트를 변경한다.
+    [self changeGenderButtonTitleTextByGender];
+}
 
+- (void) settingNotification{
+    _notificationCenter = [NSNotificationCenter defaultCenter];
+    [_notificationCenter addObserver:self selector:@selector(designerListDidLoad:) name:@"designerListResult" object:_designerRankingNetworkService];
+    [_notificationCenter addObserver:self selector:@selector(changeTempLocation:) name:@"changeMyLocation" object:_locationSelectModalViewController];
+    [_notificationCenter addObserver:self selector:@selector(afterDesignerAddNetwork:) name:@"addMyDesignerResult" object:nil];
+    [_notificationCenter addObserver:self selector:@selector(afterDesignerCancelNetwork:) name:@"cancelMyDesignerResult" object:nil];
+    [_notificationCenter addObserver:self selector:@selector(afterChangedUserInfo:) name:@"updateMyInfoResult" object:nil];
+}
 @end

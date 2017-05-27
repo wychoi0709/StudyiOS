@@ -87,6 +87,15 @@
     
 }
 
+
+/**
+ *  [NSURLConnectionDelegate]
+ */
+- (NSCachedURLResponse *)connection:(NSURLConnection *)connection willCacheResponse:(NSCachedURLResponse*)cachedResponse {
+    // Return nil to indicate not necessary to store a cached response for this connection
+    return nil;
+}
+
 /**
  *  [NSURLConnectionDelegate]Response에서 데이터를 받은 뒤 메소드
  */
@@ -113,7 +122,13 @@
 }
 
 
-
+/**
+ *  [NSURLConnectionDelegate]애러나면 실행되는 코드
+ */
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    // The request has failed for some reason!
+    // Check the error var
+}
 
 - (NSData *)createBodyWithBoundary:(NSString *)boundary
                         parameters:(NSDictionary *)parameters

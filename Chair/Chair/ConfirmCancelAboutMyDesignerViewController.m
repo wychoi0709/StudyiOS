@@ -55,11 +55,21 @@
  */
 - (IBAction)confrimBtnTouched:(UIButton *)sender {
 
+    //내 정보에서 성별정보를 가져와서 isMale을 확인한다.
+    NSDictionary *userInfo = [[NSUserDefaults standardUserDefaults] objectForKey:@"userInfo"];
+    NSString *gender = [userInfo objectForKey:@"sex"];
+    Boolean isMale;
+    if( [gender isEqualToString:@"M"] ){
+        isMale = true;
+    } else {
+        isMale = false;
+    }
+    
     //만약 해당 지역의 디자이너 리스트에 현 디자이너가 있다면, DesignerListInALocation에 값을 빼고(MyDesignerList는 자동 갱신), 아니면 MyDesignerList의 값을 뺀다.
     if([[DesignerListInALocation getDesignerListObject] isMyDesignerInThisLocation:_designerInfo]) {
-        [[DesignerListInALocation getDesignerListObject] removeMyDesignerInThisLocation:_designerInfo];
+        [[DesignerListInALocation getDesignerListObject] removeMyDesignerInThisLocation:_designerInfo withIsMale: isMale];
     } else {
-        [[MyDesignerList getMyDesignerListObject] removeMyDesigner:_designerInfo];
+        [[MyDesignerList getMyDesignerListObject] removeMyDesigner:_designerInfo withIsMale: isMale];
     }
     
     [self dismissViewControllerAnimated:YES completion:nil];

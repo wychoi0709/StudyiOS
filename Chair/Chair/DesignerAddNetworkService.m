@@ -10,7 +10,7 @@
 
 @implementation DesignerAddNetworkService
 
-- (void)addMyDesignerRequest:(NSInteger)customerId withDesignerId:(NSInteger)designerId {
+- (void)addMyDesignerRequest:(NSInteger)customerId withDesignerId:(NSInteger)designerId withIsMale:(Boolean)isMale{
     NSLog(@"DesignerAddNetworkService의 비동기 요청으로 들어옴");
     
     //URL String을 토대로 URL 객체를 만든 뒤, 이를 토대로 Request 객체를 생성한다.
@@ -27,7 +27,8 @@
     //body에 전송할 변수를 넣는다.
     NSDictionary* bodyObject = @{
                                  @"customer_id": [NSNumber numberWithInteger:customerId],
-                                 @"designer_id": [NSNumber numberWithInteger:designerId]
+                                 @"designer_id": [NSNumber numberWithInteger:designerId],
+                                 @"isMale": [NSNumber numberWithBool:isMale]
                                  };
     _aRequest.HTTPBody = [NSJSONSerialization dataWithJSONObject:bodyObject options:kNilOptions error:nil];
     

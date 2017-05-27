@@ -14,8 +14,8 @@
 
 +(DesignerListInALocation *) getDesignerListObject;
 -(instancetype) init;
--(void) addMyDesignerInThisLocation:(NSDictionary*)designer ;
--(void) removeMyDesignerInThisLocation:(NSDictionary*)designer;
+-(void) addMyDesignerInThisLocation:(NSDictionary*)designer withIsMale:(Boolean)isMale;
+-(void) removeMyDesignerInThisLocation:(NSDictionary*)designer withIsMale:(Boolean)isMale;
 -(Boolean) isMyDesignerInThisLocation:(NSDictionary*)designer;
 
 @end
